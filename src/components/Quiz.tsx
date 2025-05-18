@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuiz } from '../context/QuizContext';
 import { quizQuestions } from '../utils/quizData';
 import { calculateResults } from '../utils/scoring';
@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { ChevronLeft, Flag, Lock, Puzzle } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Quiz: React.FC = () => {
   const { 
@@ -19,6 +20,9 @@ const Quiz: React.FC = () => {
     setResults,
     setCurrentStep
   } = useQuiz();
+  
+  // Animation direction state
+  const [direction, setDirection] = useState<"left" | "right">("left");
   
   // Calculate progress percentage
   const progress = Math.round(((currentQuestionIndex + 1) / quizQuestions.length) * 100);
@@ -35,6 +39,7 @@ const Quiz: React.FC = () => {
   
   // Handle moving to next question
   const handleNextQuestion = () => {
+    setDirection("left");
     if (currentQuestionIndex < quizQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
@@ -44,6 +49,7 @@ const Quiz: React.FC = () => {
   
   // Handle moving to previous question
   const handlePreviousQuestion = () => {
+    setDirection("right");
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
@@ -74,27 +80,76 @@ const Quiz: React.FC = () => {
     }
   };
   
+  // Animation variants
+  const cardVariants = {
+    enterFromRight: {
+      x: "100%",
+      opacity: 0
+    },
+    enterFromLeft: {
+      x: "-100%",
+      opacity: 0
+    },
+    center: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        x: { type: "spring", stiffness: 300, damping: 30 },
+        opacity: { duration: 0.4 }
+      }
+    },
+    exitToLeft: {
+      x: "-100%",
+      opacity: 0,
+      transition: {
+        x: { type: "spring", stiffness: 300, damping: 30 },
+        opacity: { duration: 0.4 }
+      }
+    },
+    exitToRight: {
+      x: "100%",
+      opacity: 0,
+      transition: {
+        x: { type: "spring", stiffness: 300, damping: 30 },
+        opacity: { duration: 0.4 }
+      }
+    }
+  };
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight' || e.key === 'Enter') {
+        // Check if the current question has a response before allowing navigation
+        const hasResponse = responses.some(r => r.questionId === quizQuestions[currentQuestionIndex].id);
+        if (hasResponse) {
+          handleNextQuestion();
+        }
+      } else if (e.key === 'ArrowLeft') {
+        handlePreviousQuestion();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [currentQuestionIndex, responses]);
+  
   return (
-    <div className="min-h-screen bg-fia-white">
-      <div className="fia-container py-8">
-        <div className="fia-stepper mb-8">
-          <div className="fia-stepper-item">
-            <div className="w-10 h-10 rounded-full bg-fia-yellow/30 text-fia-charcoal flex items-center justify-center mr-3 text-base font-bold">✓</div>
-            <span className="font-medium">Personal Info</span>
-          </div>
-          <div className="w-16 h-[2px] bg-fia-yellow mx-3"></div>
-          <div className="fia-stepper-item fia-stepper-item-active">
-            <div className="w-10 h-10 rounded-full bg-fia-yellow text-fia-charcoal flex items-center justify-center mr-3 text-base font-bold">2</div>
-            <span className="font-medium">Quiz</span>
-          </div>
-          <div className="w-16 h-[2px] bg-fia-border mx-3"></div>
-          <div className="fia-stepper-item">
-            <div className="w-10 h-10 rounded-full bg-fia-border text-fia-textLight flex items-center justify-center mr-3 text-base font-bold">3</div>
-            <span className="font-medium">Results</span>
-          </div>
-        </div>
-        
-        <div className="mb-12 p-6 bg-fia-white rounded-lg border-2 border-fia-border shadow-md animate-fade-in">
+    <motion.div 
+      className="min-h-screen bg-fia-white overflow-hidden fixed inset-0"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <div className="fia-container py-8 h-full flex flex-col">
+        <motion.div 
+          className="mb-12 p-6 bg-fia-white rounded-lg border-2 border-fia-border shadow-md"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           <div className="flex items-center justify-between mb-3">
             <div>
               <span className="text-base font-medium text-fia-charcoal">
@@ -108,35 +163,60 @@ const Quiz: React.FC = () => {
             </div>
           </div>
           <Progress value={progress} className="h-3 bg-fia-border/30">
-            <div className="h-full bg-fia-yellow" style={{ width: `${progress}%` }} />
+            <motion.div 
+              className="h-full bg-fia-yellow"
+              initial={{ width: `${progress - 10}%` }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.7, ease: "easeInOut" }}
+            />
           </Progress>
-        </div>
+        </motion.div>
         
         {currentQuestionIndex > 0 && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="mb-6 hover:bg-fia-white font-medium flex items-center"
-            onClick={handlePreviousQuestion}
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
           >
-            <ChevronLeft className="h-5 w-5 mr-1" />
-            Previous question
-          </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="mb-6 hover:bg-fia-white font-medium flex items-center"
+              onClick={handlePreviousQuestion}
+            >
+              <ChevronLeft className="h-5 w-5 mr-1" />
+              Previous question
+            </Button>
+          </motion.div>
         )}
         
-        <div className="fia-flashcard-container">
-          <div className="absolute inset-0 bg-subtle-dots opacity-10"></div>
-          {getQuestionIcon(currentQuestionIndex)}
+        <div className="fia-flashcard-container flex-1 flex items-center justify-center relative">
+          <div className="absolute inset-0 bg-fia-teal bg-subtle-dots opacity-10"></div>
+          <div className="absolute top-10 left-1/2 transform -translate-x-1/2">
+            {getQuestionIcon(currentQuestionIndex)}
+          </div>
           
-          {currentQuestionIndex < quizQuestions.length && (
-            <QuizQuestion 
-              question={quizQuestions[currentQuestionIndex]} 
-              onNext={handleNextQuestion}
-            />
-          )}
+          <AnimatePresence initial={false} mode="wait">
+            <motion.div 
+              key={currentQuestionIndex}
+              custom={direction}
+              variants={cardVariants}
+              initial={direction === "right" ? "enterFromLeft" : "enterFromRight"}
+              animate="center"
+              exit={direction === "right" ? "exitToRight" : "exitToLeft"}
+              className="w-full max-w-3xl"
+            >
+              {currentQuestionIndex < quizQuestions.length && (
+                <QuizQuestion 
+                  question={quizQuestions[currentQuestionIndex]} 
+                  onNext={handleNextQuestion}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
