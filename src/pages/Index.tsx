@@ -5,7 +5,6 @@ import IntakeForm from '../components/IntakeForm';
 import Quiz from '../components/Quiz';
 import ResultPage from '../components/ResultPage';
 import { Button } from '@/components/ui/button';
-import { MotionButton } from '@/components/ui/motion-button';
 import { useQuiz } from '../context/QuizContext';
 import { ChevronRight, Flag, Lock, Puzzle } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -66,7 +65,7 @@ const Landing: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.7 }}
             >
-              <MotionButton
+              <Button
                 onClick={() => setCurrentStep('intake')}
                 className="fia-cta-button group"
                 whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)" }}
@@ -74,7 +73,7 @@ const Landing: React.FC = () => {
               >
                 Begin Self-Assessment
                 <ChevronRight className="ml-1 group-hover:translate-x-1 transition-transform" />
-              </MotionButton>
+              </Button>
             </motion.div>
           </div>
         </div>

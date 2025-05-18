@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Question, QuizResponse } from '../types/quiz';
 import { useQuiz } from '../context/QuizContext';
 import { Button } from "@/components/ui/button";
-import { MotionButton } from "@/components/ui/motion-button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -306,7 +305,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.5 }}
       >
-        <MotionButton
+        <Button
           onClick={handleSubmit}
           disabled={isButtonDisabled()}
           className={`fia-cta-button group ${isAnswered ? 'animate-pulse-once' : ''}`}
@@ -315,7 +314,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
         >
           Continue
           <ChevronRight className="ml-1 group-hover:translate-x-1 transition-transform" />
-        </MotionButton>
+        </Button>
       </motion.div>
     </motion.div>
   );
