@@ -71,154 +71,196 @@ const IntakeForm: React.FC = () => {
   };
 
   return (
-    <div className="fia-container py-8">
-      <Card className="fia-card">
-        <div className="mb-8">
-          <h2 className="fia-heading mb-2">Before we begin</h2>
-          <p className="text-fia-textLight">Please share a bit about yourself before taking the quiz.</p>
+    <div className="min-h-screen bg-fia-background py-12">
+      <div className="fia-container">
+        <div className="fia-stepper mb-8">
+          <div className="fia-stepper-item fia-stepper-item-active">
+            <div className="w-8 h-8 rounded-full bg-fia-accent text-white flex items-center justify-center mr-2 text-sm">1</div>
+            <span>Personal Info</span>
+          </div>
+          <div className="w-12 h-[2px] bg-fia-border mx-2"></div>
+          <div className="fia-stepper-item">
+            <div className="w-8 h-8 rounded-full bg-fia-border text-fia-textLight flex items-center justify-center mr-2 text-sm">2</div>
+            <span>Quiz</span>
+          </div>
+          <div className="w-12 h-[2px] bg-fia-border mx-2"></div>
+          <div className="fia-stepper-item">
+            <div className="w-8 h-8 rounded-full bg-fia-border text-fia-textLight flex items-center justify-center mr-2 text-sm">3</div>
+            <span>Results</span>
+          </div>
         </div>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Email */}
-          <div className="space-y-2">
-            <Label htmlFor="email" className="fia-label">
-              Email <span className="text-red-500">*</span>
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setEmailError('');
-              }}
-              className={`fia-input ${emailError ? 'border-red-500' : ''}`}
-              placeholder="your@email.com"
-              required
-            />
-            {emailError && <p className="text-sm text-red-500">{emailError}</p>}
+        <Card className="fia-card animate-fade-in">
+          <div className="mb-8">
+            <h2 className="fia-heading mb-3">Before we begin</h2>
+            <p className="text-fia-textLight">Please share a bit about yourself before taking the quiz.</p>
           </div>
           
-          {/* Age Range */}
-          <div className="space-y-2">
-            <Label htmlFor="age-range" className="fia-label">
-              Age Range <span className="text-red-500">*</span>
-            </Label>
-            <Select value={ageRange} onValueChange={setAgeRange} required>
-              <SelectTrigger id="age-range" className="fia-input">
-                <SelectValue placeholder="Select age range" />
-              </SelectTrigger>
-              <SelectContent>
-                {ageRangeOptions.map(option => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          {/* Gender Identity */}
-          <div className="space-y-2">
-            <Label htmlFor="gender-identity" className="fia-label">
-              Gender Identity <span className="text-red-500">*</span>
-            </Label>
-            <Select value={genderIdentity} onValueChange={setGenderIdentity} required>
-              <SelectTrigger id="gender-identity" className="fia-input">
-                <SelectValue placeholder="Select gender identity" />
-              </SelectTrigger>
-              <SelectContent>
-                {genderOptions.map(option => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          {/* Relationship Status */}
-          <div className="space-y-2">
-            <Label htmlFor="relationship-status" className="fia-label">
-              Relationship Status <span className="text-red-500">*</span>
-            </Label>
-            <Select value={relationshipStatus} onValueChange={setRelationshipStatus} required>
-              <SelectTrigger id="relationship-status" className="fia-input">
-                <SelectValue placeholder="Select relationship status" />
-              </SelectTrigger>
-              <SelectContent>
-                {relationshipOptions.map(option => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          {/* Emotional Safety Slider */}
-          <div className="space-y-4">
-            <Label className="fia-label">
-              How emotionally safe do you feel in your closest relationships?
-            </Label>
-            <div className="space-y-6">
-              <Slider
-                value={[emotionalSafety]}
-                min={0}
-                max={10}
-                step={1}
-                onValueChange={values => setEmotionalSafety(values[0])}
-              />
-              <div className="flex justify-between text-sm text-fia-textLight">
-                <span>0 - Not at all safe</span>
-                <span>10 - Extremely safe</span>
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="p-6 bg-fia-background rounded-lg border border-fia-border">
+              <h3 className="text-lg font-dmserif mb-4">About You</h3>
+              
+              {/* Email */}
+              <div className="space-y-3 mb-6">
+                <Label htmlFor="email" className="fia-label">
+                  Email <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setEmailError('');
+                  }}
+                  className={`fia-input ${emailError ? 'border-red-500 ring-1 ring-red-500' : 'focus:border-fia-accent'}`}
+                  placeholder="your@email.com"
+                  required
+                />
+                {emailError && <p className="text-sm text-red-500">{emailError}</p>}
               </div>
-              <div className="text-center font-medium">
-                Current: {emotionalSafety}
-              </div>
-            </div>
-          </div>
-          
-          {/* Pre-traits Checkboxes */}
-          <div className="space-y-3">
-            <Label className="fia-label">Do any of these apply to you? (Optional)</Label>
-            <div className="space-y-3">
-              {preTraitsOptions.map(option => (
-                <div key={option.value} className="flex items-start space-x-2">
-                  <Checkbox
-                    id={option.value}
-                    checked={preTraits.includes(option.value)}
-                    onCheckedChange={() => handlePreTraitChange(option.value)}
-                  />
-                  <Label 
-                    htmlFor={option.value}
-                    className="cursor-pointer text-base font-normal leading-snug"
-                  >
-                    {option.label}
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Age Range */}
+                <div className="space-y-3">
+                  <Label htmlFor="age-range" className="fia-label">
+                    Age Range <span className="text-red-500">*</span>
                   </Label>
+                  <Select value={ageRange} onValueChange={setAgeRange} required>
+                    <SelectTrigger id="age-range" className="fia-input">
+                      <SelectValue placeholder="Select age range" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ageRangeOptions.map(option => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-              ))}
+                
+                {/* Gender Identity */}
+                <div className="space-y-3">
+                  <Label htmlFor="gender-identity" className="fia-label">
+                    Gender Identity <span className="text-red-500">*</span>
+                  </Label>
+                  <Select value={genderIdentity} onValueChange={setGenderIdentity} required>
+                    <SelectTrigger id="gender-identity" className="fia-input">
+                      <SelectValue placeholder="Select gender identity" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {genderOptions.map(option => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              
+              {/* Relationship Status */}
+              <div className="space-y-3 mt-6">
+                <Label htmlFor="relationship-status" className="fia-label">
+                  Relationship Status <span className="text-red-500">*</span>
+                </Label>
+                <Select value={relationshipStatus} onValueChange={setRelationshipStatus} required>
+                  <SelectTrigger id="relationship-status" className="fia-input">
+                    <SelectValue placeholder="Select relationship status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {relationshipOptions.map(option => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-          </div>
-          
-          {/* Consent Message */}
-          <div className="rounded-md bg-fia-gray p-4 text-sm leading-relaxed">
-            <p>
-              This is not therapy or diagnosis. It's a mirror — built to help you reflect 
-              on how you show up when things get complicated. Everything you share is 
-              private and never sold.
-            </p>
-          </div>
-          
-          {/* Submit Button */}
-          <Button 
-            type="submit" 
-            className="fia-btn-primary w-full"
-          >
-            Begin the Quiz
-          </Button>
-        </form>
-      </Card>
+            
+            {/* Emotional Safety Section */}
+            <div className="p-6 bg-fia-background rounded-lg border border-fia-border">
+              <h3 className="text-lg font-dmserif mb-4">Emotional Safety</h3>
+              
+              {/* Emotional Safety Slider */}
+              <div className="space-y-4">
+                <Label className="fia-label">
+                  How emotionally safe do you feel in your closest relationships?
+                </Label>
+                <div className="space-y-6 px-4">
+                  <div className="relative pt-6">
+                    <Slider
+                      value={[emotionalSafety]}
+                      min={0}
+                      max={10}
+                      step={1}
+                      onValueChange={values => setEmotionalSafety(values[0])}
+                      className="z-10"
+                    />
+                    <div 
+                      className="absolute top-0 left-0 bg-fia-accent text-white px-3 py-1 rounded-md transform -translate-x-1/2 transition-all" 
+                      style={{ left: `${emotionalSafety * 10}%` }}
+                    >
+                      {emotionalSafety}
+                    </div>
+                  </div>
+                  <div className="flex justify-between text-sm text-fia-textLight">
+                    <span>Not at all safe</span>
+                    <span>Extremely safe</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Pre-traits Section */}
+            <div className="p-6 bg-fia-background rounded-lg border border-fia-border">
+              <h3 className="text-lg font-dmserif mb-4">Behavioral Patterns</h3>
+              
+              {/* Pre-traits Checkboxes */}
+              <div className="space-y-3">
+                <Label className="fia-label">Do any of these apply to you? (Optional)</Label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {preTraitsOptions.map(option => (
+                    <div key={option.value} className="flex items-start space-x-3 p-4 border border-fia-border rounded-lg bg-white hover:bg-fia-background/60 transition-colors">
+                      <Checkbox
+                        id={option.value}
+                        checked={preTraits.includes(option.value)}
+                        onCheckedChange={() => handlePreTraitChange(option.value)}
+                        className="mt-1"
+                      />
+                      <Label 
+                        htmlFor={option.value}
+                        className="cursor-pointer text-base font-normal leading-snug"
+                      >
+                        {option.label}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            {/* Consent Message */}
+            <div className="rounded-lg bg-fia-background border border-fia-border p-5 text-sm leading-relaxed">
+              <p>
+                This is not therapy or diagnosis. It's a mirror — built to help you reflect 
+                on how you show up when things get complicated. Everything you share is 
+                private and never sold.
+              </p>
+            </div>
+            
+            {/* Submit Button */}
+            <Button 
+              type="submit" 
+              className="fia-btn-primary w-full"
+            >
+              Begin the Quiz
+            </Button>
+          </form>
+        </Card>
+      </div>
     </div>
   );
 };

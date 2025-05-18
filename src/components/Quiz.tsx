@@ -65,41 +65,62 @@ const Quiz: React.FC = () => {
   };
   
   return (
-    <div className="fia-container py-8">
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-2">
-          <div>
-            <span className="text-sm text-fia-textLight">
-              Question {currentQuestionIndex + 1} of {quizQuestions.length}
-            </span>
+    <div className="min-h-screen bg-fia-background py-12">
+      <div className="fia-container">
+        <div className="fia-stepper mb-8">
+          <div className="fia-stepper-item">
+            <div className="w-8 h-8 rounded-full bg-fia-accent/30 text-fia-accent flex items-center justify-center mr-2 text-sm">✓</div>
+            <span>Personal Info</span>
           </div>
-          <div>
-            <span className="text-sm font-medium">
-              {progress}%
-            </span>
+          <div className="w-12 h-[2px] bg-fia-accent mx-2"></div>
+          <div className="fia-stepper-item fia-stepper-item-active">
+            <div className="w-8 h-8 rounded-full bg-fia-accent text-white flex items-center justify-center mr-2 text-sm">2</div>
+            <span>Quiz</span>
+          </div>
+          <div className="w-12 h-[2px] bg-fia-border mx-2"></div>
+          <div className="fia-stepper-item">
+            <div className="w-8 h-8 rounded-full bg-fia-border text-fia-textLight flex items-center justify-center mr-2 text-sm">3</div>
+            <span>Results</span>
           </div>
         </div>
-        <Progress value={progress} className="h-2" />
+        
+        <div className="mb-8 p-6 bg-white rounded-lg border border-fia-border shadow-sm animate-fade-in">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <span className="text-sm text-fia-textLight">
+                Question {currentQuestionIndex + 1} of {quizQuestions.length}
+              </span>
+            </div>
+            <div>
+              <span className="text-sm font-medium">
+                {progress}%
+              </span>
+            </div>
+          </div>
+          <Progress value={progress} className="h-2" />
+        </div>
+        
+        {currentQuestionIndex > 0 && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mb-4 hover:bg-fia-background"
+            onClick={handlePreviousQuestion}
+          >
+            <ChevronLeft className="h-4 w-4 mr-1" />
+            Previous question
+          </Button>
+        )}
+        
+        <div className="transition-all duration-300 transform">
+          {currentQuestionIndex < quizQuestions.length && (
+            <QuizQuestion 
+              question={quizQuestions[currentQuestionIndex]} 
+              onNext={handleNextQuestion}
+            />
+          )}
+        </div>
       </div>
-      
-      {currentQuestionIndex > 0 && (
-        <Button
-          variant="ghost"
-          size="sm"
-          className="mb-4"
-          onClick={handlePreviousQuestion}
-        >
-          <ChevronLeft className="h-4 w-4 mr-1" />
-          Previous question
-        </Button>
-      )}
-      
-      {currentQuestionIndex < quizQuestions.length && (
-        <QuizQuestion 
-          question={quizQuestions[currentQuestionIndex]} 
-          onNext={handleNextQuestion}
-        />
-      )}
     </div>
   );
 };

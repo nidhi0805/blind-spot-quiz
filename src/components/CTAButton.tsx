@@ -12,10 +12,10 @@ const CTAButton: React.FC<CTAButtonProps> = ({ name, url, isPrimary = false }) =
   return (
     <Button 
       variant={isPrimary ? "default" : "outline"}
-      className={`px-6 py-3 font-medium transition-all transform hover:scale-105 duration-200 shadow-sm hover:shadow ${
+      className={`px-6 py-3 font-medium transition-all transform hover:scale-105 duration-200 ${
         isPrimary 
-          ? "bg-primary hover:bg-primary/90" 
-          : "bg-fia-blue text-fia-text hover:bg-fia-blue/90"
+          ? "bg-fia-accent hover:bg-fia-accent/90 shadow-md" 
+          : "bg-white text-fia-accent border-fia-accent/20 hover:bg-fia-accent/5"
       }`}
       asChild
     >

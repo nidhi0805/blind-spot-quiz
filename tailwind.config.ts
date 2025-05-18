@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -65,13 +64,24 @@ export default {
 				},
 				// FIA Quiz custom colors
 				fia: {
+					background: '#FAF9F6',
+					text: '#2C2C2C',
+					accent: '#4B48D3',
+					secondary: '#FFFFFF',
+					border: '#E0E0E0',
+					// Profile colors
+					dreamer: '#CABCF3',
+					peacemaker: '#A7D8DE',
+					caregiver: '#F8D5C3',
+					rebel: '#FFD6D1',
+					achiever: '#E4E2DD',
+					// Original colors - keeping for compatibility
 					blue: '#D3E4FD',
 					purple: '#E5DEFF',
 					pink: '#FFDEE2',
 					peach: '#FDE1D3',
 					gray: '#F1F0FB',
 					offwhite: '#F9F9F9',
-					text: '#4A4A4A',
 					textLight: '#6E6E6E'
 				}
 			},
@@ -84,7 +94,8 @@ export default {
 				inter: ['Inter', 'sans-serif'],
 				dmsans: ['DM Sans', 'sans-serif'],
 				georgia: ['Georgia', 'serif'],
-				playfair: ['Playfair Display', 'serif']
+				playfair: ['Playfair Display', 'serif'],
+				dmserif: ['DM Serif Display', 'serif']
 			},
 			keyframes: {
 				'accordion-down': {

@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@400;500;600;700&family=DM+Serif+Display:wght@400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,16 +7,16 @@
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 240 10% 29%;
+    --background: 60 30% 98%;
+    --foreground: 220 14% 18%;
 
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 29%;
+    --card-foreground: 220 14% 18%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 29%;
+    --popover-foreground: 220 14% 18%;
 
-    --primary: 233 54% 48%;
+    --primary: 242 57% 55%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 240 5% 96%;
@@ -25,17 +25,17 @@
     --muted: 240 5% 96%;
     --muted-foreground: 240 4% 46%;
 
-    --accent: 236 77% 95%;
-    --accent-foreground: 240 6% 10%;
+    --accent: 242 57% 55%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 233 54% 48%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 242 57% 55%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 
   * {
@@ -43,7 +43,7 @@
   }
 
   body {
-    @apply bg-fia-offwhite text-fia-text font-inter;
+    @apply bg-fia-background text-fia-text font-inter;
   }
 }
 
@@ -61,27 +61,27 @@
   }
   
   .fia-card {
-    @apply bg-white rounded-lg border border-slate-100 shadow-md p-6 transition-all hover:shadow-lg;
+    @apply bg-fia-secondary rounded-xl border border-fia-border shadow-md p-8 transition-all hover:shadow-lg;
   }
   
   .fia-btn-primary {
-    @apply bg-primary text-white px-6 py-2 rounded-md hover:opacity-90 transition-all transform hover:scale-[1.02] shadow-sm hover:shadow;
+    @apply bg-fia-accent text-white px-6 py-3 rounded-lg hover:opacity-90 transition-all transform hover:scale-[1.03] shadow-md hover:shadow-lg;
   }
   
   .fia-btn-secondary {
-    @apply bg-fia-blue text-fia-text px-6 py-2 rounded-md hover:opacity-90 transition-all transform hover:scale-[1.02] shadow-sm hover:shadow;
+    @apply bg-white text-fia-accent border border-fia-accent/20 px-6 py-3 rounded-lg hover:bg-fia-accent/5 transition-all transform hover:scale-[1.03] shadow-sm hover:shadow;
   }
   
   .fia-question {
-    @apply mb-8 p-8 bg-white rounded-lg border border-slate-100 shadow-md transition-all animate-fade-in;
+    @apply mb-8 p-8 bg-fia-secondary rounded-xl border border-fia-border shadow-md transition-all animate-fade-in;
   }
 
   .fia-input {
-    @apply p-3 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm;
+    @apply p-4 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-fia-accent/30 shadow-sm;
   }
   
   .fia-label {
-    @apply block mb-2 text-sm font-medium text-fia-text;
+    @apply block mb-3 text-sm font-medium text-fia-text;
   }
   
   .fia-radio-group {
@@ -89,19 +89,23 @@
   }
   
   .fia-radio-label {
-    @apply flex items-center space-x-2 p-4 border rounded-md cursor-pointer hover:bg-fia-offwhite transition-all shadow-sm hover:shadow;
+    @apply flex items-center space-x-3 p-5 border border-fia-border rounded-lg cursor-pointer hover:bg-fia-background transition-all shadow-sm hover:shadow;
   }
   
   .fia-checkbox-label {
-    @apply flex items-start space-x-2 p-4 border rounded-md cursor-pointer hover:bg-fia-offwhite transition-all shadow-sm hover:shadow;
+    @apply flex items-start space-x-3 p-5 border border-fia-border rounded-lg cursor-pointer hover:bg-fia-background transition-all shadow-sm hover:shadow;
   }
 
   .fia-result-card {
-    @apply p-8 bg-white rounded-lg border border-slate-100 shadow-md mb-6 transition-all hover:shadow-lg;
+    @apply p-8 bg-white rounded-xl border border-fia-border shadow-md mb-8 transition-all hover:shadow-lg;
+  }
+  
+  .fia-result-section {
+    @apply p-6 border border-fia-border rounded-lg bg-fia-background mb-6;
   }
   
   .fia-stepper {
-    @apply flex justify-center items-center space-x-2 mb-6 text-sm text-fia-textLight;
+    @apply flex justify-center items-center space-x-4 mb-8 text-sm text-fia-textLight;
   }
   
   .fia-stepper-item {
@@ -109,6 +113,72 @@
   }
   
   .fia-stepper-item-active {
-    @apply font-medium text-primary;
+    @apply font-medium text-fia-accent;
   }
+  
+  .fia-profile-bar {
+    @apply h-10 rounded-lg overflow-hidden relative mb-5 bg-fia-border/30;
+  }
+  
+  .fia-tool-card {
+    @apply p-6 border border-fia-border rounded-lg bg-white transition-all transform hover:scale-[1.02] hover:shadow-md;
+  }
+  
+  .fia-section-title {
+    @apply text-lg font-medium mb-3 font-dmserif;
+  }
+  
+  .profile-dreamer {
+    @apply bg-fia-dreamer;
+  }
+  
+  .profile-peacemaker {
+    @apply bg-fia-peacemaker;
+  }
+  
+  .profile-caregiver {
+    @apply bg-fia-caregiver;
+  }
+  
+  .profile-rebel {
+    @apply bg-fia-rebel;
+  }
+  
+  .profile-achiever {
+    @apply bg-fia-achiever;
+  }
+}
+
+/* Additional animations */
+@keyframes slideUp {
+  0% {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease forwards;
+}
+
+.animate-slide-up-delay-1 {
+  animation: slideUp 0.5s ease forwards;
+  animation-delay: 0.1s;
+  opacity: 0;
+}
+
+.animate-slide-up-delay-2 {
+  animation: slideUp 0.5s ease forwards;
+  animation-delay: 0.2s;
+  opacity: 0;
+}
+
+.animate-slide-up-delay-3 {
+  animation: slideUp 0.5s ease forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
 }

@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
+import { Check } from "lucide-react";
 
 interface QuizQuestionProps {
   question: Question;
@@ -107,11 +108,19 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
             className="fia-radio-group"
           >
             {question.answers?.map(answer => (
-              <div key={answer.id} className="fia-radio-label">
+              <div 
+                key={answer.id} 
+                className={`fia-radio-label transition-all ${
+                  selectedOption === answer.id ? 'border-fia-accent bg-fia-accent/5 shadow' : ''
+                }`}
+              >
                 <RadioGroupItem value={answer.id} id={answer.id} className="mr-2" />
                 <Label htmlFor={answer.id} className="flex-grow cursor-pointer">
                   {answer.text}
                 </Label>
+                {selectedOption === answer.id && (
+                  <Check className="h-5 w-5 text-fia-accent ml-2 animate-scale-in" />
+                )}
               </div>
             ))}
           </RadioGroup>
@@ -121,7 +130,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
         return (
           <div className="space-y-3">
             {question.answers?.map(answer => (
-              <div key={answer.id} className="fia-checkbox-label">
+              <div 
+                key={answer.id} 
+                className={`fia-checkbox-label transition-all ${
+                  selectedOptions.includes(answer.id) ? 'border-fia-accent bg-fia-accent/5 shadow' : ''
+                }`}
+              >
                 <Checkbox
                   id={answer.id}
                   checked={selectedOptions.includes(answer.id)}
@@ -138,24 +152,26 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
       
       case 'image-select':
         return (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {question.answers?.map(answer => (
               <div 
                 key={answer.id}
                 className={`
-                  border rounded-md p-3 cursor-pointer transition
-                  ${selectedOption === answer.id ? 'border-primary ring-2 ring-primary/20' : 'hover:bg-fia-offwhite'}
+                  border rounded-lg p-4 cursor-pointer transition-all
+                  ${selectedOption === answer.id ? 
+                    'border-fia-accent ring-2 ring-fia-accent/20 shadow-md' : 
+                    'hover:bg-fia-background border-fia-border'}
                 `}
                 onClick={() => setSelectedOption(answer.id)}
               >
-                <div className="aspect-square bg-fia-gray rounded-md mb-3 overflow-hidden">
+                <div className="aspect-square bg-fia-background rounded-md mb-4 overflow-hidden">
                   <img 
                     src={answer.imageSrc || "/placeholder.svg"} 
                     alt={answer.text}
                     className="w-full h-full object-cover" 
                   />
                 </div>
-                <p className="text-center text-sm">{answer.text}</p>
+                <p className="text-center">{answer.text}</p>
               </div>
             ))}
           </div>
@@ -163,20 +179,26 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
       
       case 'slider':
         return (
-          <div className="space-y-6">
-            <Slider
-              value={[sliderValue]}
-              min={question.min || 0}
-              max={question.max || 10}
-              step={1}
-              onValueChange={values => setSliderValue(values[0])}
-            />
-            <div className="flex justify-between text-sm text-fia-textLight">
-              <span>{question.minLabel || "0"}</span>
-              <span>{question.maxLabel || "10"}</span>
+          <div className="space-y-8 py-4">
+            <div className="relative pt-6">
+              <Slider
+                value={[sliderValue]}
+                min={question.min || 0}
+                max={question.max || 10}
+                step={1}
+                onValueChange={values => setSliderValue(values[0])}
+                className="z-10"
+              />
+              <div 
+                className="absolute top-0 left-0 bg-fia-accent text-white px-3 py-1 rounded-md transform -translate-x-1/2 transition-all" 
+                style={{ left: `${((sliderValue - (question.min || 0)) / ((question.max || 10) - (question.min || 0))) * 100}%` }}
+              >
+                {sliderValue}
+              </div>
             </div>
-            <div className="text-center font-medium">
-              Selected: {sliderValue}
+            <div className="flex justify-between text-sm text-fia-textLight mt-6">
+              <span>{question.minLabel || question.min || "0"}</span>
+              <span>{question.maxLabel || question.max || "10"}</span>
             </div>
           </div>
         );
@@ -199,16 +221,16 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
   };
   
   return (
-    <div className="fia-question">
-      <h3 className="fia-subheading mb-6">{question.text}</h3>
-      <div className="mb-6">
+    <div className="fia-question animate-fade-in">
+      <h3 className="fia-subheading mb-8 text-center">{question.text}</h3>
+      <div className="mb-8 max-w-2xl mx-auto">
         {renderQuestion()}
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-center">
         <Button
           onClick={handleSubmit}
           disabled={isButtonDisabled()}
-          className="fia-btn-primary"
+          className="fia-btn-primary px-10"
         >
           Continue
         </Button>
