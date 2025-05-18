@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -53,31 +53,31 @@
   }
 
   .fia-heading {
-    @apply text-2xl sm:text-3xl font-medium text-fia-text;
+    @apply text-2xl sm:text-3xl font-medium text-fia-text font-playfair;
   }
 
   .fia-subheading {
-    @apply text-xl font-medium text-fia-text;
+    @apply text-xl font-medium text-fia-text font-playfair;
   }
   
   .fia-card {
-    @apply bg-white rounded-lg border border-slate-100 shadow-sm p-6 transition-all;
+    @apply bg-white rounded-lg border border-slate-100 shadow-md p-6 transition-all hover:shadow-lg;
   }
   
   .fia-btn-primary {
-    @apply bg-primary text-white px-6 py-2 rounded-md hover:opacity-90 transition-opacity;
+    @apply bg-primary text-white px-6 py-2 rounded-md hover:opacity-90 transition-all transform hover:scale-[1.02] shadow-sm hover:shadow;
   }
   
   .fia-btn-secondary {
-    @apply bg-fia-blue text-fia-text px-6 py-2 rounded-md hover:opacity-90 transition-opacity;
+    @apply bg-fia-blue text-fia-text px-6 py-2 rounded-md hover:opacity-90 transition-all transform hover:scale-[1.02] shadow-sm hover:shadow;
   }
   
   .fia-question {
-    @apply mb-8 p-6 bg-white rounded-lg border border-slate-100 shadow-sm;
+    @apply mb-8 p-8 bg-white rounded-lg border border-slate-100 shadow-md transition-all animate-fade-in;
   }
 
   .fia-input {
-    @apply p-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary/20;
+    @apply p-3 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm;
   }
   
   .fia-label {
@@ -85,18 +85,30 @@
   }
   
   .fia-radio-group {
-    @apply space-y-2;
+    @apply space-y-3;
   }
   
   .fia-radio-label {
-    @apply flex items-center space-x-2 p-3 border rounded-md cursor-pointer hover:bg-fia-offwhite transition;
+    @apply flex items-center space-x-2 p-4 border rounded-md cursor-pointer hover:bg-fia-offwhite transition-all shadow-sm hover:shadow;
   }
   
   .fia-checkbox-label {
-    @apply flex items-start space-x-2 p-3 border rounded-md cursor-pointer hover:bg-fia-offwhite transition;
+    @apply flex items-start space-x-2 p-4 border rounded-md cursor-pointer hover:bg-fia-offwhite transition-all shadow-sm hover:shadow;
   }
 
   .fia-result-card {
-    @apply p-6 bg-white rounded-lg border border-slate-100 shadow-sm mb-6;
+    @apply p-8 bg-white rounded-lg border border-slate-100 shadow-md mb-6 transition-all hover:shadow-lg;
+  }
+  
+  .fia-stepper {
+    @apply flex justify-center items-center space-x-2 mb-6 text-sm text-fia-textLight;
+  }
+  
+  .fia-stepper-item {
+    @apply flex items-center;
+  }
+  
+  .fia-stepper-item-active {
+    @apply font-medium text-primary;
   }
 }
