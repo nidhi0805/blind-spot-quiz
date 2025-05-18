@@ -7,7 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
-import { Check } from "lucide-react";
+import { Check, ChevronRight } from "lucide-react";
 
 interface QuizQuestionProps {
   question: Question;
@@ -111,15 +111,15 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
               <div 
                 key={answer.id} 
                 className={`fia-radio-label transition-all ${
-                  selectedOption === answer.id ? 'border-fia-accent bg-fia-accent/5 shadow' : ''
+                  selectedOption === answer.id ? 'border-fia-yellow bg-fia-yellow/10 shadow' : ''
                 }`}
               >
-                <RadioGroupItem value={answer.id} id={answer.id} className="mr-2" />
-                <Label htmlFor={answer.id} className="flex-grow cursor-pointer">
+                <RadioGroupItem value={answer.id} id={answer.id} className="mr-3 text-fia-yellow" />
+                <Label htmlFor={answer.id} className="flex-grow cursor-pointer text-lg">
                   {answer.text}
                 </Label>
                 {selectedOption === answer.id && (
-                  <Check className="h-5 w-5 text-fia-accent ml-2 animate-scale-in" />
+                  <Check className="h-5 w-5 text-fia-yellow ml-2 animate-scale-in" />
                 )}
               </div>
             ))}
@@ -128,21 +128,21 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
       
       case 'multi-select':
         return (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {question.answers?.map(answer => (
               <div 
                 key={answer.id} 
                 className={`fia-checkbox-label transition-all ${
-                  selectedOptions.includes(answer.id) ? 'border-fia-accent bg-fia-accent/5 shadow' : ''
+                  selectedOptions.includes(answer.id) ? 'border-fia-yellow bg-fia-yellow/10 shadow' : ''
                 }`}
               >
                 <Checkbox
                   id={answer.id}
                   checked={selectedOptions.includes(answer.id)}
                   onCheckedChange={() => handleCheckboxChange(answer.id)}
-                  className="mr-2 mt-0.5"
+                  className="mr-3 mt-0.5 text-fia-yellow border-fia-charcoal/60"
                 />
-                <Label htmlFor={answer.id} className="flex-grow cursor-pointer">
+                <Label htmlFor={answer.id} className="flex-grow cursor-pointer text-lg">
                   {answer.text}
                 </Label>
               </div>
@@ -157,21 +157,21 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
               <div 
                 key={answer.id}
                 className={`
-                  border rounded-lg p-4 cursor-pointer transition-all
+                  border-2 rounded-lg p-5 cursor-pointer transition-all
                   ${selectedOption === answer.id ? 
-                    'border-fia-accent ring-2 ring-fia-accent/20 shadow-md' : 
-                    'hover:bg-fia-background border-fia-border'}
+                    'border-fia-yellow ring-2 ring-fia-yellow/20 shadow-md' : 
+                    'hover:bg-fia-yellow/5 border-fia-border'}
                 `}
                 onClick={() => setSelectedOption(answer.id)}
               >
-                <div className="aspect-square bg-fia-background rounded-md mb-4 overflow-hidden">
+                <div className="aspect-square bg-fia-teal/10 rounded-md mb-5 overflow-hidden">
                   <img 
                     src={answer.imageSrc || "/placeholder.svg"} 
                     alt={answer.text}
                     className="w-full h-full object-cover" 
                   />
                 </div>
-                <p className="text-center">{answer.text}</p>
+                <p className="text-center text-lg font-medium">{answer.text}</p>
               </div>
             ))}
           </div>
@@ -179,8 +179,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
       
       case 'slider':
         return (
-          <div className="space-y-8 py-4">
-            <div className="relative pt-6">
+          <div className="space-y-10 py-6">
+            <div className="relative pt-10">
               <Slider
                 value={[sliderValue]}
                 min={question.min || 0}
@@ -190,13 +190,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
                 className="z-10"
               />
               <div 
-                className="absolute top-0 left-0 bg-fia-accent text-white px-3 py-1 rounded-md transform -translate-x-1/2 transition-all" 
+                className="absolute top-0 left-0 bg-fia-charcoal text-fia-white px-4 py-2 rounded-md transform -translate-x-1/2 transition-all" 
                 style={{ left: `${((sliderValue - (question.min || 0)) / ((question.max || 10) - (question.min || 0))) * 100}%` }}
               >
                 {sliderValue}
               </div>
             </div>
-            <div className="flex justify-between text-sm text-fia-textLight mt-6">
+            <div className="flex justify-between text-base font-medium text-fia-charcoal mt-6">
               <span>{question.minLabel || question.min || "0"}</span>
               <span>{question.maxLabel || question.max || "10"}</span>
             </div>
@@ -221,18 +221,19 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
   };
   
   return (
-    <div className="animate-slide-in">
-      <h3 className="text-xl sm:text-2xl font-semibold mb-8 text-center">{question.text}</h3>
-      <div className="mb-8 max-w-2xl mx-auto">
+    <div className="fia-flashcard animate-card-flip max-w-3xl w-full">
+      <h3 className="text-2xl sm:text-3xl font-bold mb-10 text-center leading-tight">{question.text}</h3>
+      <div className="mb-10 max-w-2xl mx-auto">
         {renderQuestion()}
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center pt-4">
         <Button
           onClick={handleSubmit}
           disabled={isButtonDisabled()}
-          className="fia-btn-primary px-10"
+          className="fia-cta-button group"
         >
           Continue
+          <ChevronRight className="ml-1 group-hover:translate-x-1 transition-transform" />
         </Button>
       </div>
     </div>

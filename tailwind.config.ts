@@ -62,27 +62,29 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// FIA Quiz custom colors
+				// FIA Updated colors
 				fia: {
-					background: '#FAF9F6',
-					text: '#2C2C2C',
-					accent: '#4B48D3',
-					secondary: '#FFFFFF',
+					yellow: '#F2BE29',    // Hero sections, result backgrounds
+					teal: '#246A73',      // Quiz flashcard background
+					burgundy: '#842E2E',  // CTA button hover, rebel profile
+					blue: '#1B3B6F',      // Info cards, secondary tone
+					white: '#FFFFFF',     // Background for cards
+					charcoal: '#121212',  // Headings and CTA text
+					
+					// Original colors - keeping for compatibility
+					background: '#FFFFFF',
+					text: '#121212',
+					accent: '#F2BE29',
+					secondary: '#246A73',
 					border: '#E0E0E0',
 					// Profile colors
-					dreamer: '#CABCF3',
-					peacemaker: '#A7D8DE',
-					caregiver: '#F8D5C3',
-					rebel: '#FFD6D1',
-					achiever: '#E4E2DD',
-					// Original colors - keeping for compatibility
-					blue: '#D3E4FD',
-					purple: '#E5DEFF',
-					pink: '#FFDEE2',
-					peach: '#FDE1D3',
-					gray: '#F1F0FB',
+					dreamer: '#1B3B6F',    // Sapphire Blue
+					peacemaker: '#246A73',  // Deep Teal  
+					caregiver: '#F2BE29',   // FIA Yellow
+					rebel: '#842E2E',       // Burgundy
+					achiever: '#121212',    // Charcoal
+					textLight: '#444444',
 					offwhite: '#F9F9F9',
-					textLight: '#6E6E6E'
 				}
 			},
 			borderRadius: {
@@ -91,7 +93,9 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
+				sans: ['Inter', 'DM Sans', 'Work Sans', 'system-ui', 'sans-serif'],
 				inter: ['Inter', 'system-ui', 'sans-serif'],
+				heading: ['Circular Std', 'Futura PT', 'Helvetica Neue', 'Inter', 'sans-serif'],
 			},
 			keyframes: {
 				'accordion-down': {
@@ -149,6 +153,26 @@ export default {
 						transform: 'translateX(0)',
 						opacity: '1'
 					}
+				},
+				'slide-left': {
+					'0%': {
+						transform: 'translateX(20px)',
+						opacity: '0'
+					},
+					'100%': {
+						transform: 'translateX(0)',
+						opacity: '1'
+					}
+				},
+				'card-flip': {
+					'0%': {
+						transform: 'rotateY(-10deg)',
+						opacity: '0'
+					},
+					'100%': {
+						transform: 'rotateY(0)',
+						opacity: '1'
+					}
 				}
 			},
 			animation: {
@@ -157,10 +181,13 @@ export default {
 				'fade-in': 'fade-in 0.5s ease-out',
 				'scale-in': 'scale-in 0.5s ease-out',
 				'slide-up': 'slide-up 0.5s ease-out',
-				'slide-right': 'slide-right 0.5s ease-out'
+				'slide-right': 'slide-right 0.5s ease-out',
+				'slide-left': 'slide-left 0.5s ease-out',
+				'card-flip': 'card-flip 0.5s ease-out'
 			},
 			backgroundImage: {
-				// Removing the soft grid pattern
+				// Adding subtle texture patterns
+				'subtle-dots': 'url("data:image/svg+xml,%3Csvg width="20" height="20" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath fill="%23000" fill-opacity=".05" d="M10 0a1 1 0 110 2 1 1 0 010-2zm0 18a1 1 0 110 2 1 1 0 010-2z"/%3E%3C/svg%3E")',
 			}
 		}
 	},
