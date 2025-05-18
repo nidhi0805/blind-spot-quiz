@@ -52,47 +52,47 @@ const ResultPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-fia-background py-12">
       <div className="fia-container">
-        <h2 className="fia-heading mb-2 text-center animate-slide-up">Your Blind Spot Analysis</h2>
-        <p className="text-fia-textLight text-center mb-12 animate-slide-up-delay-1">
+        <h2 className="text-3xl sm:text-4xl font-semibold mb-2 text-center animate-slide-up">Your Blind Spot Analysis</h2>
+        <p className="text-fia-textLight text-center mb-12 animate-slide-up">
           Based on your responses, we've identified your primary relational patterns.
         </p>
         
         {/* Dominant Profile */}
-        <div className="mb-12 animate-slide-up-delay-2">
-          <h3 className="fia-subheading mb-6">Your Primary Blind Spot Pattern</h3>
+        <div className="mb-12 animate-slide-up">
+          <h3 className="text-2xl font-semibold mb-6">Your Primary Blind Spot Pattern</h3>
           
           {dominantProfiles.map(profile => (
             <Card key={profile.id} className="fia-card mb-12 overflow-hidden">
-              <div className="flex flex-col items-center mb-6">
+              <div className="flex flex-col items-center mb-8">
                 <div className={`w-16 h-16 rounded-full ${getProfileColor(profile.id)} mb-4 flex items-center justify-center`}>
                   <img src={getProfileIllustration(profile.id)} alt="" className="w-8 h-8" />
                 </div>
-                <h4 className="text-2xl font-dmserif mb-2">{profile.name}</h4>
+                <h4 className="text-2xl font-semibold mb-2">{profile.name}</h4>
                 <div className="px-3 py-1 rounded-full bg-fia-accent/10 text-fia-accent text-sm font-medium">
                   {profile.percentage}%
                 </div>
               </div>
               
-              <div className="fia-result-section">
-                <h5 className="fia-section-title">Summary</h5>
+              <div className="mb-8 p-6 border border-fia-border rounded-lg bg-fia-background">
+                <h5 className="text-lg font-semibold mb-3">Summary</h5>
                 <p className="text-fia-text leading-relaxed">{profile.summary}</p>
               </div>
               
-              <div className="fia-result-section">
-                <h5 className="fia-section-title">Manipulative Tactics to Watch Out For</h5>
+              <div className="mb-8 p-6 border border-fia-border rounded-lg bg-fia-background">
+                <h5 className="text-lg font-semibold mb-3">Manipulative Tactics to Watch Out For</h5>
                 <p className="text-fia-text leading-relaxed">{profile.manipulativeTactics}</p>
               </div>
               
-              <div className="fia-result-section">
-                <h5 className="fia-section-title">How to Defend Yourself</h5>
+              <div className="mb-8 p-6 border border-fia-border rounded-lg bg-fia-background">
+                <h5 className="text-lg font-semibold mb-3">How to Defend Yourself</h5>
                 <p className="text-fia-text leading-relaxed">{profile.defenseStrategies}</p>
               </div>
               
-              <h6 className="text-lg font-medium mb-4 mt-8 font-dmserif">Recommended Tools</h6>
+              <h6 className="text-lg font-semibold mb-4 mt-8">Recommended Tools</h6>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {profile.tools.map((tool) => (
-                  <div key={tool.name} className="fia-tool-card">
-                    <h6 className="font-medium mb-2">{tool.name}</h6>
+                  <div key={tool.name} className="p-6 border border-fia-border rounded-lg bg-white">
+                    <h6 className="font-semibold mb-2">{tool.name}</h6>
                     <p className="text-fia-textLight text-sm mb-4">Build resources to strengthen your relational skills</p>
                     <CTAButton 
                       name={`Try ${tool.name}`} 
@@ -107,8 +107,8 @@ const ResultPage: React.FC = () => {
         </div>
         
         {/* Profile Breakdown */}
-        <div className="mb-12 animate-slide-up-delay-3">
-          <h3 className="fia-subheading mb-6">Your Blind Spot Profile Breakdown</h3>
+        <div className="mb-12 animate-slide-up">
+          <h3 className="text-2xl font-semibold mb-6">Your Blind Spot Profile Breakdown</h3>
           <Card className="fia-card">
             <div className="space-y-6">
               {top5Profiles.map(profile => (
@@ -117,7 +117,7 @@ const ResultPage: React.FC = () => {
                     <span className="font-medium">{profile.name}</span>
                     <span className="font-medium">{profile.percentage}%</span>
                   </div>
-                  <div className="fia-profile-bar">
+                  <div className="h-10 rounded-lg overflow-hidden relative mb-5 bg-fia-border/30">
                     <div 
                       className={`h-full ${getProfileColor(profile.id)}`} 
                       style={{ width: `${profile.percentage}%` }}

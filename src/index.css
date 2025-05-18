@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@400;500;600;700&family=DM+Serif+Display:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -53,15 +53,15 @@
   }
 
   .fia-heading {
-    @apply text-2xl sm:text-3xl font-medium text-fia-text font-playfair;
+    @apply text-2xl sm:text-3xl font-semibold text-fia-text;
   }
 
   .fia-subheading {
-    @apply text-xl font-medium text-fia-text font-playfair;
+    @apply text-xl font-semibold text-fia-text;
   }
   
   .fia-card {
-    @apply bg-fia-secondary rounded-xl border border-fia-border shadow-md p-8 transition-all hover:shadow-lg;
+    @apply bg-white rounded-xl border border-fia-border shadow-md p-8 transition-all hover:shadow-lg;
   }
   
   .fia-btn-primary {
@@ -73,7 +73,7 @@
   }
   
   .fia-question {
-    @apply mb-8 p-8 bg-fia-secondary rounded-xl border border-fia-border shadow-md transition-all animate-fade-in;
+    @apply mb-8 p-8 bg-white rounded-xl border border-fia-border shadow-md transition-all animate-fade-in;
   }
 
   .fia-input {
@@ -125,7 +125,7 @@
   }
   
   .fia-section-title {
-    @apply text-lg font-medium mb-3 font-dmserif;
+    @apply text-lg font-semibold mb-3;
   }
   
   .profile-dreamer {
@@ -181,4 +181,39 @@
   animation: slideUp 0.5s ease forwards;
   animation-delay: 0.3s;
   opacity: 0;
+}
+
+/* Flashcard-style transitions */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInBottom {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-in-out forwards;
+}
+
+.animate-slide-in {
+  animation: slideInBottom 0.5s ease-out forwards;
+}
+
+.flashcard {
+  @apply bg-white rounded-xl shadow-md border border-fia-border p-8 transition-all;
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }

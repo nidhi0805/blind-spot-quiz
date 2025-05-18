@@ -221,8 +221,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
   };
   
   return (
-    <div className="fia-question animate-fade-in">
-      <h3 className="fia-subheading mb-8 text-center">{question.text}</h3>
+    <div className="animate-slide-in">
+      <h3 className="text-xl sm:text-2xl font-semibold mb-8 text-center">{question.text}</h3>
       <div className="mb-8 max-w-2xl mx-auto">
         {renderQuestion()}
       </div>

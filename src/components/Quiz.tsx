@@ -112,7 +112,7 @@ const Quiz: React.FC = () => {
           </Button>
         )}
         
-        <div className="transition-all duration-300 transform">
+        <div className="flashcard transition-all duration-300">
           {currentQuestionIndex < quizQuestions.length && (
             <QuizQuestion 
               question={quizQuestions[currentQuestionIndex]} 
