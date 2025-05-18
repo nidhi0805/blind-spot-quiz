@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { useQuiz } from '../context/QuizContext';
 import CTAButton from './CTAButton';
 import { Progress } from "@/components/ui/progress";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { MotionButton } from "@/components/ui/motion-button";
 import { getDominantProfiles } from '../utils/resultProfiles';
 import { Lock, Puzzle, Flag } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -376,7 +376,6 @@ const ResultPage: React.FC = () => {
                     />
                     <Bar 
                       dataKey="percentage" 
-                      nameKey="name"
                       fill="#8884d8" 
                       radius={[0, 4, 4, 0]}
                       animationDuration={1500}
@@ -432,14 +431,14 @@ const ResultPage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.5 }}
         >
-          <button 
+          <MotionButton
             onClick={() => setCurrentStep('landing')}
             className="fia-btn-secondary text-lg px-10 py-4"
             whileHover={{ y: -3, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)" }}
             whileTap={{ y: 0 }}
           >
             Take the Quiz Again
-          </button>
+          </MotionButton>
         </motion.div>
       </div>
     </motion.div>
