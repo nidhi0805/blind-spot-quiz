@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useQuiz } from '../context/QuizContext';
 import { 
@@ -15,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ChevronRight, Lock, Mirror, Puzzle } from "lucide-react";
+import { ChevronRight, Lock, User, Puzzle } from "lucide-react";
 
 const IntakeForm: React.FC = () => {
   const { setIntake, setCurrentStep } = useQuiz();
@@ -101,7 +100,7 @@ const IntakeForm: React.FC = () => {
             <div className="p-8 bg-fia-white rounded-xl border-2 border-fia-border shadow-md">
               <div className="flex items-center mb-6">
                 <div className="w-12 h-12 rounded-full bg-fia-yellow/30 flex items-center justify-center mr-4">
-                  <Mirror className="w-6 h-6 text-fia-charcoal" />
+                  <User className="w-6 h-6 text-fia-charcoal" />
                 </div>
                 <h3 className="text-xl font-bold">About You</h3>
               </div>
