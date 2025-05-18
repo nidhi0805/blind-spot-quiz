@@ -39,7 +39,7 @@ export const saveQuizResult = (
     // Also save this specific result under its userId
     localStorage.setItem(`fia_result_${userId}`, JSON.stringify(result));
     
-    return result;
+    // Remove the return statement that's causing the type error
   } catch (error) {
     console.error('Error saving quiz result:', error);
     throw new Error('Failed to save quiz results');
