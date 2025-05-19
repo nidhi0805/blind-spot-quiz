@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Question, QuizResponse } from '../types/quiz';
 import { useQuiz } from '../context/QuizContext';
@@ -9,6 +8,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Check, ChevronRight } from "lucide-react";
 import { motion } from 'framer-motion';
+
+// Create a motion button component
+const MotionButton = motion(Button);
 
 interface QuizQuestionProps {
   question: Question;
@@ -356,7 +358,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.4 }}
           >
-            <Button
+            <MotionButton
               onClick={handleSubmit}
               disabled={isButtonDisabled()}
               className={`
@@ -370,7 +372,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
             >
               Continue
               <ChevronRight className="ml-1 transition-transform group-hover:translate-x-1" />
-            </Button>
+            </MotionButton>
           </motion.div>
         </motion.div>
       </motion.div>
