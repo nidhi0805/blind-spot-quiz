@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Work+Sans:wght@400;500;600;700&display=swap');
 
@@ -40,11 +41,14 @@
 
   * {
     @apply border-border;
+    box-sizing: border-box;
+    word-wrap: break-word;
   }
 
   body {
     @apply bg-fia-white text-fia-charcoal font-sans;
     line-height: 1.5;
+    overflow-x: hidden;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -92,6 +96,11 @@
   
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     @apply bg-fia-border;
+  }
+  
+  /* Hide horizontal scroll */
+  .quiz-card, .quiz-content-container {
+    overflow-x: hidden;
   }
 }
 
@@ -147,12 +156,14 @@
   
   .fia-radio-label {
     @apply flex items-center space-x-3 p-5 border-2 border-fia-border rounded-lg cursor-pointer 
-           hover:bg-fia-teal/10 transition-all shadow-sm hover:shadow;
+           hover:bg-fia-teal/10 transition-all shadow-sm hover:shadow
+           max-w-full box-border;
   }
   
   .fia-checkbox-label {
     @apply flex items-start space-x-3 p-5 border-2 border-fia-border rounded-lg cursor-pointer 
-           hover:bg-fia-teal/10 transition-all shadow-sm hover:shadow;
+           hover:bg-fia-teal/10 transition-all shadow-sm hover:shadow
+           max-w-full box-border;
   }
 
   .fia-result-card {
@@ -212,11 +223,13 @@
   /* Flashcard styles - enhanced */
   .fia-flashcard {
     @apply bg-fia-white rounded-xl border-2 border-fia-border shadow-2xl p-10 
-           transition-all transform hover:shadow-xl relative z-10;
+           transition-all transform hover:shadow-xl relative z-10
+           overflow-x-hidden;
   }
   
   .fia-flashcard-container {
-    @apply py-16 px-4 sm:p-16 bg-fia-teal relative min-h-[60vh] flex items-center justify-center overflow-hidden;
+    @apply py-16 px-4 sm:p-16 bg-fia-teal relative min-h-[60vh] flex items-center justify-center overflow-hidden
+           overflow-x-hidden;
     perspective: 1500px;
   }
   

@@ -10,7 +10,7 @@ import { Slider } from "@/components/ui/slider";
 import { Check, ChevronRight } from "lucide-react";
 import { motion } from 'framer-motion';
 
-// Create a motion button component
+// Create a motion button component that works with framer-motion
 const MotionButton = motion(Button);
 
 interface QuizQuestionProps {
@@ -137,7 +137,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
     switch (question.type) {
       case 'single-select':
         return (
-          <div className="max-h-[55vh] overflow-y-auto pr-1 custom-scrollbar">
+          <div className="max-h-[50vh] overflow-y-auto overflow-x-hidden pr-1 custom-scrollbar">
             <RadioGroup
               value={selectedOption}
               onValueChange={handleRadioChange}
@@ -151,6 +151,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
                   animate={selectedOption === answer.id ? "selected" : "unselected"}
                   className={`
                     p-3 rounded-xl border transition-all flex items-center cursor-pointer
+                    max-w-full box-border word-wrap-break-word
                     ${selectedOption === answer.id ? 
                       'border-fia-yellow bg-gradient-to-r from-fia-yellow/5 to-fia-yellow/10' : 
                       'border-fia-border/40 hover:border-fia-border'}
@@ -158,7 +159,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
                   onClick={() => handleRadioChange(answer.id)}
                   whileHover={{ y: -2, boxShadow: "0 10px 15px -5px rgba(0,0,0,0.05)" }}
                 >
-                  <div className="mr-3">
+                  <div className="mr-3 flex-shrink-0">
                     <div className={`
                       w-5 h-5 rounded-full border-2 flex items-center justify-center
                       ${selectedOption === answer.id ? 'border-fia-yellow' : 'border-fia-border'}
@@ -184,7 +185,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
       
       case 'multi-select':
         return (
-          <div className="max-h-[55vh] overflow-y-auto pr-1 custom-scrollbar">
+          <div className="max-h-[50vh] overflow-y-auto overflow-x-hidden pr-1 custom-scrollbar">
             <div className="space-y-2 max-w-md mx-auto">
               {question.answers?.map(answer => (
                 <motion.div 
@@ -194,6 +195,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
                   animate={selectedOptions.includes(answer.id) ? "selected" : "unselected"}
                   className={`
                     p-3 rounded-xl border transition-all flex items-start cursor-pointer
+                    max-w-full box-border word-wrap-break-word
                     ${selectedOptions.includes(answer.id) ? 
                       'border-fia-yellow bg-gradient-to-r from-fia-yellow/5 to-fia-yellow/10' : 
                       'border-fia-border/40 hover:border-fia-border'}
@@ -201,7 +203,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
                   onClick={() => handleCheckboxChange(answer.id)}
                   whileHover={{ y: -2, boxShadow: "0 10px 15px -5px rgba(0,0,0,0.05)" }}
                 >
-                  <div className="mr-3 mt-0.5">
+                  <div className="mr-3 mt-0.5 flex-shrink-0">
                     <div className={`
                       w-5 h-5 rounded-md border-2 flex items-center justify-center
                       ${selectedOptions.includes(answer.id) ? 'border-fia-yellow bg-fia-yellow' : 'border-fia-border'}
@@ -227,8 +229,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
       
       case 'image-select':
         return (
-          <div className="max-h-[55vh] overflow-y-auto pr-1 custom-scrollbar">
-            <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
+          <div className="overflow-x-hidden">
+            <div className="grid grid-cols-2 gap-3 mx-auto" style={{ maxWidth: "360px" }}>
               {question.answers?.map(answer => (
                 <motion.div 
                   key={answer.id}
@@ -238,20 +240,22 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
                   whileHover={{ y: -4, scale: 1.03 }}
                   onClick={() => handleRadioChange(answer.id)}
                   className={`
-                    border-2 rounded-xl p-3 cursor-pointer transition-all flex flex-col items-center
+                    border-2 rounded-xl p-2 cursor-pointer transition-all flex flex-col items-center
                     ${selectedOption === answer.id ? 
                       'border-fia-yellow bg-gradient-to-r from-fia-yellow/5 to-fia-yellow/10' : 
                       'border-fia-border/40 hover:border-fia-border'}
                   `}
                 >
-                  <div className="aspect-square rounded-xl mb-2 overflow-hidden bg-gradient-to-br from-fia-teal/10 to-fia-teal/5 w-full">
+                  <div className="aspect-square rounded-xl mb-2 overflow-hidden bg-gradient-to-br from-fia-teal/10 to-fia-teal/5 w-full" style={{ maxWidth: "150px" }}>
                     <img 
                       src={answer.imageSrc || "/placeholder.svg"} 
                       alt={answer.text}
                       className="w-full h-full object-cover" 
                     />
                   </div>
-                  <p className="text-center font-medium text-sm">{answer.text}</p>
+                  <p className="text-center font-medium text-sm truncate w-full" title={answer.text}>
+                    {answer.text}
+                  </p>
                   {selectedOption === answer.id && (
                     <motion.div 
                       className="w-5 h-5 rounded-full bg-fia-yellow flex items-center justify-center mt-1"
@@ -324,13 +328,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
   return (
     <div className="w-full max-w-xl mx-auto px-4 h-full flex items-center">
       <motion.div 
-        className="w-full flex flex-col h-[85vh] max-h-[600px] bg-white/95 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden"
+        className="w-full flex flex-col h-[85vh] max-h-[600px] bg-white/95 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden overflow-x-hidden"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.5 }}
       >
         <motion.div 
-          className="px-5 py-5 md:px-6 flex flex-col h-full"
+          className="px-5 py-5 md:px-6 flex flex-col h-full box-border overflow-x-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -345,7 +349,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
           </motion.h3>
           
           <motion.div 
-            className="flex-1 flex items-center overflow-hidden"
+            className="flex-1 flex items-center overflow-hidden overflow-x-hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.5 }}
@@ -368,8 +372,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
                   'bg-gradient-to-r from-fia-teal to-fia-teal/90 hover:from-fia-burgundy hover:to-fia-burgundy/90 text-white' : 
                   'bg-fia-border/40 text-fia-charcoal/40 cursor-not-allowed'}
               `}
-              whileHover={!isButtonDisabled() ? { scale: 1.03, y: -2 } : {}}
-              whileTap={!isButtonDisabled() ? { scale: 0.98 } : {}}
+              whileHover={!isButtonDisabled() ? { scale: 1.03, y: -2 } : undefined}
+              whileTap={!isButtonDisabled() ? { scale: 0.98 } : undefined}
             >
               Continue
               <ChevronRight className="ml-1 transition-transform group-hover:translate-x-1" />

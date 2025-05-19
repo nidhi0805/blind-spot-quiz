@@ -107,8 +107,8 @@ const IntakeForm: React.FC = () => {
       </div>
 
       {/* Main form area */}
-      <div className="flex-1 flex flex-col px-4 py-2 overflow-hidden">
-        <div className="max-w-4xl mx-auto w-full flex flex-col h-full">
+      <div className="flex-1 flex flex-col justify-evenly px-4 py-2 overflow-hidden">
+        <div className="max-w-4xl mx-auto w-full">
           {/* Header */}
           <div className="text-center mb-4">
             <motion.h2 
@@ -130,183 +130,181 @@ const IntakeForm: React.FC = () => {
           </div>
 
           {/* Form content */}
-          <div className="flex-1 flex flex-col">
-            <motion.div 
-              className="flex-1"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <Card className="bg-white border-0 shadow-md h-full">
-                <form onSubmit={handleSubmit} className="h-full flex flex-col p-5">
-                  {/* Two column grid for form inputs */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 flex-1">
-                    {/* Left Column */}
-                    <div className="space-y-4">
-                      {/* Email */}
-                      <div>
-                        <Label htmlFor="email" className="text-sm font-medium text-fia-charcoal">
-                          Email <span className="text-fia-burgundy">*</span>
-                        </Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={email}
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                            setEmailError('');
-                          }}
-                          className={`h-10 ${emailError ? 'border-fia-burgundy ring-1 ring-fia-burgundy' : 'focus:border-fia-yellow'}`}
-                          placeholder="your@email.com"
-                          required
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="w-full"
+          >
+            <Card className="bg-white border-0 shadow-md overflow-hidden">
+              <form onSubmit={handleSubmit} className="p-5">
+                {/* Two column grid for form inputs */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                  {/* Left Column */}
+                  <div className="space-y-4">
+                    {/* Email */}
+                    <div>
+                      <Label htmlFor="email" className="text-sm font-medium text-fia-charcoal">
+                        Email <span className="text-fia-burgundy">*</span>
+                      </Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          setEmailError('');
+                        }}
+                        className={`h-10 ${emailError ? 'border-fia-burgundy ring-1 ring-fia-burgundy' : 'focus:border-fia-yellow'}`}
+                        placeholder="your@email.com"
+                        required
+                      />
+                      {emailError && <p className="text-xs text-fia-burgundy mt-1">{emailError}</p>}
+                    </div>
+
+                    {/* Age Range */}
+                    <div>
+                      <Label htmlFor="age-range" className="text-sm font-medium text-fia-charcoal">
+                        Age Range <span className="text-fia-burgundy">*</span>
+                      </Label>
+                      <Select value={ageRange} onValueChange={setAgeRange} required>
+                        <SelectTrigger id="age-range" className="h-10">
+                          <SelectValue placeholder="Select age range" />
+                        </SelectTrigger>
+                        <SelectContent className="border border-fia-border">
+                          {ageRangeOptions.map(option => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Gender Identity */}
+                    <div>
+                      <Label htmlFor="gender-identity" className="text-sm font-medium text-fia-charcoal">
+                        Gender Identity <span className="text-fia-burgundy">*</span>
+                      </Label>
+                      <Select value={genderIdentity} onValueChange={setGenderIdentity} required>
+                        <SelectTrigger id="gender-identity" className="h-10">
+                          <SelectValue placeholder="Select gender identity" />
+                        </SelectTrigger>
+                        <SelectContent className="border border-fia-border">
+                          {genderOptions.map(option => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Right Column */}
+                  <div className="space-y-4">
+                    {/* Relationship Status */}
+                    <div>
+                      <Label htmlFor="relationship-status" className="text-sm font-medium text-fia-charcoal">
+                        Relationship Status <span className="text-fia-burgundy">*</span>
+                      </Label>
+                      <Select value={relationshipStatus} onValueChange={setRelationshipStatus} required>
+                        <SelectTrigger id="relationship-status" className="h-10">
+                          <SelectValue placeholder="Select relationship status" />
+                        </SelectTrigger>
+                        <SelectContent className="border border-fia-border">
+                          {relationshipOptions.map(option => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Previous Quiz */}
+                    <div>
+                      <Label htmlFor="taken-quiz" className="text-sm font-medium text-fia-charcoal">
+                        Have you taken a personality quiz before?
+                      </Label>
+                      <Select value={hasTakenQuiz} onValueChange={setHasTakenQuiz}>
+                        <SelectTrigger id="taken-quiz" className="h-10">
+                          <SelectValue placeholder="Select an option" />
+                        </SelectTrigger>
+                        <SelectContent className="border border-fia-border">
+                          <SelectItem value="yes">Yes</SelectItem>
+                          <SelectItem value="no">No</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Emotional Safety Slider */}
+                    <div>
+                      <Label className="text-sm font-medium text-fia-charcoal mb-2 block">
+                        How emotionally safe do you feel in close relationships?
+                      </Label>
+                      <div className="px-1">
+                        <Slider
+                          value={[emotionalSafety]}
+                          min={0}
+                          max={10}
+                          step={1}
+                          onValueChange={values => setEmotionalSafety(values[0])}
+                          className="my-4"
                         />
-                        {emailError && <p className="text-xs text-fia-burgundy mt-1">{emailError}</p>}
-                      </div>
-
-                      {/* Age Range */}
-                      <div>
-                        <Label htmlFor="age-range" className="text-sm font-medium text-fia-charcoal">
-                          Age Range <span className="text-fia-burgundy">*</span>
-                        </Label>
-                        <Select value={ageRange} onValueChange={setAgeRange} required>
-                          <SelectTrigger id="age-range" className="h-10">
-                            <SelectValue placeholder="Select age range" />
-                          </SelectTrigger>
-                          <SelectContent className="border border-fia-border">
-                            {ageRangeOptions.map(option => (
-                              <SelectItem key={option.value} value={option.value}>
-                                {option.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      {/* Gender Identity */}
-                      <div>
-                        <Label htmlFor="gender-identity" className="text-sm font-medium text-fia-charcoal">
-                          Gender Identity <span className="text-fia-burgundy">*</span>
-                        </Label>
-                        <Select value={genderIdentity} onValueChange={setGenderIdentity} required>
-                          <SelectTrigger id="gender-identity" className="h-10">
-                            <SelectValue placeholder="Select gender identity" />
-                          </SelectTrigger>
-                          <SelectContent className="border border-fia-border">
-                            {genderOptions.map(option => (
-                              <SelectItem key={option.value} value={option.value}>
-                                {option.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    {/* Right Column */}
-                    <div className="space-y-4">
-                      {/* Relationship Status */}
-                      <div>
-                        <Label htmlFor="relationship-status" className="text-sm font-medium text-fia-charcoal">
-                          Relationship Status <span className="text-fia-burgundy">*</span>
-                        </Label>
-                        <Select value={relationshipStatus} onValueChange={setRelationshipStatus} required>
-                          <SelectTrigger id="relationship-status" className="h-10">
-                            <SelectValue placeholder="Select relationship status" />
-                          </SelectTrigger>
-                          <SelectContent className="border border-fia-border">
-                            {relationshipOptions.map(option => (
-                              <SelectItem key={option.value} value={option.value}>
-                                {option.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      {/* Previous Quiz */}
-                      <div>
-                        <Label htmlFor="taken-quiz" className="text-sm font-medium text-fia-charcoal">
-                          Have you taken a personality quiz before?
-                        </Label>
-                        <Select value={hasTakenQuiz} onValueChange={setHasTakenQuiz}>
-                          <SelectTrigger id="taken-quiz" className="h-10">
-                            <SelectValue placeholder="Select an option" />
-                          </SelectTrigger>
-                          <SelectContent className="border border-fia-border">
-                            <SelectItem value="yes">Yes</SelectItem>
-                            <SelectItem value="no">No</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      {/* Emotional Safety Slider */}
-                      <div>
-                        <Label className="text-sm font-medium text-fia-charcoal mb-2 block">
-                          How emotionally safe do you feel in close relationships?
-                        </Label>
-                        <div className="px-1">
-                          <Slider
-                            value={[emotionalSafety]}
-                            min={0}
-                            max={10}
-                            step={1}
-                            onValueChange={values => setEmotionalSafety(values[0])}
-                            className="my-4"
-                          />
-                          <div className="flex justify-between text-xs text-fia-textLight">
-                            <span>Not at all safe</span>
-                            <span className="font-medium">{emotionalSafety}</span>
-                            <span>Extremely safe</span>
-                          </div>
+                        <div className="flex justify-between text-xs text-fia-textLight">
+                          <span>Not at all safe</span>
+                          <span className="font-medium">{emotionalSafety}</span>
+                          <span>Extremely safe</span>
                         </div>
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  {/* Traits section - optional, condensed */}
-                  <div className="mt-4">
-                    <Label className="text-sm font-medium text-fia-charcoal mb-2 block">
-                      Select any that apply to you (Optional)
-                    </Label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-                      {preTraitsOptions.slice(0, 3).map(option => (
-                        <div key={option.value} className="flex items-center space-x-2 bg-white border border-fia-border/60 rounded-md p-2 hover:bg-fia-teal/5">
-                          <Checkbox
-                            id={option.value}
-                            checked={preTraits.includes(option.value)}
-                            onCheckedChange={() => handlePreTraitChange(option.value)}
-                            className="border-fia-charcoal/50"
-                          />
-                          <Label 
-                            htmlFor={option.value}
-                            className="cursor-pointer text-xs leading-tight text-fia-charcoal/80"
-                          >
-                            {option.label}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
+                {/* Traits section - optional, condensed */}
+                <div className="mt-4">
+                  <Label className="text-sm font-medium text-fia-charcoal mb-2 block">
+                    Select any that apply to you (Optional)
+                  </Label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {preTraitsOptions.slice(0, 3).map(option => (
+                      <div key={option.value} className="flex items-center space-x-2 bg-white border border-fia-border/60 rounded-md p-2 hover:bg-fia-teal/5">
+                        <Checkbox
+                          id={option.value}
+                          checked={preTraits.includes(option.value)}
+                          onCheckedChange={() => handlePreTraitChange(option.value)}
+                          className="border-fia-charcoal/50"
+                        />
+                        <Label 
+                          htmlFor={option.value}
+                          className="cursor-pointer text-xs leading-tight text-fia-charcoal/80"
+                        >
+                          {option.label}
+                        </Label>
+                      </div>
+                    ))}
                   </div>
+                </div>
 
-                  {/* Consent message - simplified */}
-                  <div className="mt-3 text-xs text-fia-blue/90 bg-fia-blue/5 border border-fia-blue/10 rounded-md p-2">
-                    This is not therapy or diagnosis — it's a mirror to help you reflect on how you show up in complex relationships.
-                  </div>
+                {/* Consent message - simplified */}
+                <div className="mt-3 text-xs text-fia-blue/90 bg-fia-blue/5 border border-fia-blue/10 rounded-md p-2">
+                  This is not therapy or diagnosis — it's a mirror to help you reflect on how you show up in complex relationships.
+                </div>
 
-                  {/* Submit Button */}
-                  <div className="mt-4 flex justify-center">
-                    <Button 
-                      type="submit" 
-                      className="bg-fia-charcoal hover:bg-fia-charcoal/90 text-white px-8 py-2 rounded-lg font-medium group"
-                    >
-                      Begin the Quiz
-                      <ChevronRight className="ml-1 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </div>
-                </form>
-              </Card>
-            </motion.div>
-          </div>
+                {/* Submit Button */}
+                <div className="mt-4 flex justify-center">
+                  <Button 
+                    type="submit" 
+                    className="bg-fia-charcoal hover:bg-fia-charcoal/90 text-white px-8 py-2 rounded-lg font-medium group"
+                  >
+                    Begin the Quiz
+                    <ChevronRight className="ml-1 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </div>
+              </form>
+            </Card>
+          </motion.div>
         </div>
       </div>
     </motion.div>
