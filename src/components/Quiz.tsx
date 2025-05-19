@@ -138,7 +138,7 @@ const Quiz: React.FC = () => {
   
   return (
     <motion.div 
-      className="min-h-screen bg-fia-white overflow-hidden fixed inset-0"
+      className="min-h-screen bg-fia-white overflow-y-auto"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

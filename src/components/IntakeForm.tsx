@@ -20,12 +20,15 @@ const IntakeForm: React.FC = () => {
   const { setIntake, setCurrentStep } = useQuiz();
 
   const [email, setEmail] = useState('');
+  const [hasTakenQuiz, setHasTakenQuiz] = useState('');
   const [ageRange, setAgeRange] = useState('');
   const [genderIdentity, setGenderIdentity] = useState('');
   const [relationshipStatus, setRelationshipStatus] = useState('');
   const [emotionalSafety, setEmotionalSafety] = useState(5);
   const [preTraits, setPreTraits] = useState<string[]>([]);
   const [emailError, setEmailError] = useState('');
+
+
   
   // Email validation
   const validateEmail = (email: string) => {
@@ -56,6 +59,11 @@ const IntakeForm: React.FC = () => {
       return;
     }
     
+    if (hasTakenQuiz === 'yes') {
+    // Simulate quiz results or fetch from storage
+    setCurrentStep('results');
+    return;
+    }
     // Save intake data
     setIntake({
       email,
@@ -103,6 +111,21 @@ const IntakeForm: React.FC = () => {
                   <User className="w-6 h-6 text-fia-charcoal" />
                 </div>
                 <h3 className="text-xl font-bold">About You</h3>
+              </div>
+
+              <div className="space-y-3 mb-8">
+            <Label htmlFor="taken-quiz" className="fia-label text-lg font-medium">
+              Have you taken a personality quiz like this before?
+            </Label>
+            <Select value={hasTakenQuiz} onValueChange={setHasTakenQuiz} required>
+            <SelectTrigger id="taken-quiz" className="fia-input">
+            <SelectValue placeholder="Select an option" />
+            </SelectTrigger>
+            <SelectContent className="border-2 border-fia-border">
+            <SelectItem value="yes">Yes</SelectItem>
+            <SelectItem value="no">No</SelectItem>
+            </SelectContent>
+            </Select>
               </div>
               
               {/* Email */}
