@@ -202,7 +202,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
           </motion.h3>
           
           <motion.div 
-            className="flex-1 flex items-center justify-center overflow-visible" 
+            className="flex-1 flex items-center justify-center overflow-visible mb-auto" 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.5 }}
