@@ -122,8 +122,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
   const cardVariants = {
     unselected: { scale: 1, y: 0 },
     selected: { 
-      scale: 1.02,
+      scale: 1.02, 
       y: -3,
+      boxShadow: "0 10px 25px -5px rgba(0,0,0,0.08)",
       transition: { type: "spring", stiffness: 300, damping: 15 }
     }
   };
@@ -136,7 +137,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
           <RadioGroup
             value={selectedOption}
             onValueChange={handleRadioChange}
-            className="fia-radio-group space-y-5"
+            className="space-y-3 max-w-md mx-auto"
           >
             {question.answers?.map(answer => (
               <motion.div 
@@ -144,24 +145,33 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
                 variants={cardVariants}
                 initial="unselected"
                 animate={selectedOption === answer.id ? "selected" : "unselected"}
-                className={`fia-radio-label transition-all ${
-                  selectedOption === answer.id ? 'border-fia-yellow bg-fia-yellow/10 shadow-md' : ''
-                }`}
-                whileHover={{ scale: 1.01, y: -2, transition: { duration: 0.2 } }}
+                className={`
+                  p-4 rounded-xl border-2 transition-all flex items-center cursor-pointer
+                  ${selectedOption === answer.id ? 
+                    'border-fia-yellow bg-gradient-to-r from-fia-yellow/5 to-fia-yellow/10' : 
+                    'border-fia-border/40 hover:border-fia-border'}
+                `}
+                onClick={() => handleRadioChange(answer.id)}
+                whileHover={{ y: -2, boxShadow: "0 10px 15px -5px rgba(0,0,0,0.05)" }}
               >
-                <RadioGroupItem value={answer.id} id={answer.id} className="mr-3 text-fia-yellow" />
-                <Label htmlFor={answer.id} className="flex-grow cursor-pointer text-lg">
+                <div className="mr-3">
+                  <div className={`
+                    w-5 h-5 rounded-full border-2 flex items-center justify-center
+                    ${selectedOption === answer.id ? 'border-fia-yellow' : 'border-fia-border'}
+                  `}>
+                    {selectedOption === answer.id && (
+                      <motion.div 
+                        className="w-2.5 h-2.5 rounded-full bg-fia-yellow"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 500 }}
+                      />
+                    )}
+                  </div>
+                </div>
+                <Label className="flex-grow cursor-pointer text-base md:text-lg font-medium">
                   {answer.text}
                 </Label>
-                {selectedOption === answer.id && (
-                  <motion.div
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ type: "spring", stiffness: 500, damping: 15 }}
-                  >
-                    <Check className="h-5 w-5 text-fia-yellow ml-2" />
-                  </motion.div>
-                )}
               </motion.div>
             ))}
           </RadioGroup>
@@ -169,25 +179,38 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
       
       case 'multi-select':
         return (
-          <div className="space-y-5">
+          <div className="space-y-3 max-w-md mx-auto">
             {question.answers?.map(answer => (
               <motion.div 
                 key={answer.id} 
                 variants={cardVariants}
                 initial="unselected"
                 animate={selectedOptions.includes(answer.id) ? "selected" : "unselected"}
-                className={`fia-checkbox-label transition-all ${
-                  selectedOptions.includes(answer.id) ? 'border-fia-yellow bg-fia-yellow/10 shadow-md' : ''
-                }`}
-                whileHover={{ scale: 1.01, y: -2, transition: { duration: 0.2 } }}
+                className={`
+                  p-4 rounded-xl border-2 transition-all flex items-start cursor-pointer
+                  ${selectedOptions.includes(answer.id) ? 
+                    'border-fia-yellow bg-gradient-to-r from-fia-yellow/5 to-fia-yellow/10' : 
+                    'border-fia-border/40 hover:border-fia-border'}
+                `}
+                onClick={() => handleCheckboxChange(answer.id)}
+                whileHover={{ y: -2, boxShadow: "0 10px 15px -5px rgba(0,0,0,0.05)" }}
               >
-                <Checkbox
-                  id={answer.id}
-                  checked={selectedOptions.includes(answer.id)}
-                  onCheckedChange={() => handleCheckboxChange(answer.id)}
-                  className="mr-3 mt-0.5 text-fia-yellow border-fia-charcoal/60"
-                />
-                <Label htmlFor={answer.id} className="flex-grow cursor-pointer text-lg">
+                <div className="mr-3 mt-0.5">
+                  <div className={`
+                    w-5 h-5 rounded-md border-2 flex items-center justify-center
+                    ${selectedOptions.includes(answer.id) ? 'border-fia-yellow bg-fia-yellow' : 'border-fia-border'}
+                  `}>
+                    {selectedOptions.includes(answer.id) && (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                      >
+                        <Check className="h-3 w-3 text-white" />
+                      </motion.div>
+                    )}
+                  </div>
+                </div>
+                <Label className="flex-grow cursor-pointer text-base md:text-lg font-medium">
                   {answer.text}
                 </Label>
               </motion.div>
@@ -197,30 +220,40 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
       
       case 'image-select':
         return (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
             {question.answers?.map(answer => (
               <motion.div 
                 key={answer.id}
                 variants={cardVariants}
                 initial="unselected"
                 animate={selectedOption === answer.id ? "selected" : "unselected"}
-                whileHover={{ scale: 1.03, y: -3, transition: { duration: 0.2 } }}
+                whileHover={{ y: -4, scale: 1.03 }}
                 onClick={() => handleRadioChange(answer.id)}
                 className={`
-                  border-2 rounded-lg p-5 cursor-pointer transition-all
+                  border-2 rounded-xl p-4 cursor-pointer transition-all flex flex-col items-center
                   ${selectedOption === answer.id ? 
-                    'border-fia-yellow ring-2 ring-fia-yellow/20 shadow-md' : 
-                    'hover:bg-fia-yellow/5 border-fia-border'}
+                    'border-fia-yellow bg-gradient-to-r from-fia-yellow/5 to-fia-yellow/10' : 
+                    'border-fia-border/40 hover:border-fia-border'}
                 `}
               >
-                <div className="aspect-square bg-fia-teal/10 rounded-md mb-5 overflow-hidden">
+                <div className="aspect-square rounded-xl mb-3 overflow-hidden bg-gradient-to-br from-fia-teal/10 to-fia-teal/5 w-full">
                   <img 
                     src={answer.imageSrc || "/placeholder.svg"} 
                     alt={answer.text}
                     className="w-full h-full object-cover" 
                   />
                 </div>
-                <p className="text-center text-lg font-medium">{answer.text}</p>
+                <p className="text-center font-medium">{answer.text}</p>
+                {selectedOption === answer.id && (
+                  <motion.div 
+                    className="w-6 h-6 rounded-full bg-fia-yellow flex items-center justify-center mt-2"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 500 }}
+                  >
+                    <Check className="h-4 w-4 text-white" />
+                  </motion.div>
+                )}
               </motion.div>
             ))}
           </div>
@@ -228,8 +261,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
       
       case 'slider':
         return (
-          <div className="space-y-10 py-6">
-            <div className="relative pt-10">
+          <div className="space-y-12 py-4 max-w-md mx-auto w-full px-2">
+            <div className="relative pt-16">
               <Slider
                 value={[sliderValue]}
                 min={question.min || 0}
@@ -239,11 +272,15 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
                 className="z-10"
               />
               <motion.div 
-                className="absolute top-0 left-0 bg-fia-charcoal text-fia-white px-4 py-2 rounded-md transform -translate-x-1/2 transition-all" 
-                style={{ left: `${((sliderValue - (question.min || 0)) / ((question.max || 10) - (question.min || 0))) * 100}%` }}
+                className="absolute top-0 left-0 bg-gradient-to-br from-fia-teal to-fia-teal/90 text-white px-4 py-2 rounded-xl shadow-md transform -translate-x-1/2"
+                style={{ 
+                  left: `${((sliderValue - (question.min || 0)) / ((question.max || 10) - (question.min || 0))) * 100}%` 
+                }}
+                initial={{ scale: 0.8, y: 10, opacity: 0 }}
                 animate={{ 
-                  y: [0, -5, 0],
-                  scale: [1, 1.1, 1]
+                  scale: 1,
+                  y: 0,
+                  opacity: 1
                 }}
                 transition={{ duration: 0.3 }}
                 key={sliderValue}
@@ -251,7 +288,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
                 {sliderValue}
               </motion.div>
             </div>
-            <div className="flex justify-between text-base font-medium text-fia-charcoal mt-6">
+            <div className="flex justify-between text-sm font-medium text-fia-charcoal/70 mt-6 px-2">
               <span>{question.minLabel || question.min || "0"}</span>
               <span>{question.maxLabel || question.max || "10"}</span>
             </div>
@@ -277,44 +314,65 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
   
   return (
     <motion.div 
-      className="fia-flashcard bg-white rounded-xl shadow-2xl p-8 md:p-12 max-w-3xl w-full mx-auto"
+      className="w-full max-w-xl mx-auto px-4 sm:px-8 py-6 overflow-hidden"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
     >
-      <motion.h3 
-        className="text-2xl sm:text-3xl font-bold mb-10 text-center leading-tight"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.4 }}
-      >
-        {question.text}
-      </motion.h3>
       <motion.div 
-        className="mb-10 max-w-2xl mx-auto"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
+        className="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.1, duration: 0.5 }}
       >
-        {renderQuestion()}
-      </motion.div>
-      <motion.div 
-        className="flex justify-center pt-4"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-      >
-        <Button
-          onClick={handleSubmit}
-          disabled={isButtonDisabled()}
-          className={`fia-cta-button group ${isAnswered ? 'animate-pulse-once' : ''}`}
-          whileHover={!isButtonDisabled() ? { scale: 1.05, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)" } : {}}
-          whileTap={!isButtonDisabled() ? { scale: 0.98 } : {}}
+        <motion.div 
+          className="px-6 py-8 md:px-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
         >
-          Continue
-          <ChevronRight className="ml-1 group-hover:translate-x-1 transition-transform" />
-        </Button>
+          <motion.h3 
+            className="text-xl md:text-2xl font-bold mb-8 text-center leading-tight"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.4 }}
+          >
+            {question.text}
+          </motion.h3>
+          
+          <motion.div 
+            className="mb-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            {renderQuestion()}
+          </motion.div>
+          
+          <motion.div 
+            className="flex justify-center"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.4 }}
+          >
+            <Button
+              onClick={handleSubmit}
+              disabled={isButtonDisabled()}
+              className={`
+                px-8 py-2 rounded-full font-medium text-base group
+                ${isAnswered ? 
+                  'bg-gradient-to-r from-fia-teal to-fia-teal/90 hover:from-fia-burgundy hover:to-fia-burgundy/90 text-white' : 
+                  'bg-fia-border/40 text-fia-charcoal/40 cursor-not-allowed'}
+              `}
+              whileHover={!isButtonDisabled() ? { scale: 1.03, y: -2 } : {}}
+              whileTap={!isButtonDisabled() ? { scale: 0.98 } : {}}
+            >
+              Continue
+              <ChevronRight className="ml-1 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </motion.div>
+        </motion.div>
       </motion.div>
     </motion.div>
   );

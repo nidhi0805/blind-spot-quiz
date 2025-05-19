@@ -30,9 +30,9 @@ const Quiz: React.FC = () => {
   // Get question icon based on index
   const getQuestionIcon = (index: number) => {
     const icons = [
-      <Puzzle className="h-8 w-8 opacity-80" />,
-      <Lock className="h-8 w-8 opacity-80" />,
-      <Flag className="h-8 w-8 opacity-80" />
+      <Puzzle className="h-8 w-8 text-fia-yellow" />,
+      <Lock className="h-8 w-8 text-fia-yellow" />,
+      <Flag className="h-8 w-8 text-fia-yellow" />
     ];
     return icons[index % icons.length];
   };
@@ -138,84 +138,108 @@ const Quiz: React.FC = () => {
   
   return (
     <motion.div 
-      className="min-h-screen bg-fia-white overflow-y-auto"
+      className="h-screen w-full overflow-hidden bg-gradient-to-b from-fia-white to-fia-yellow/5 flex flex-col"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="fia-container py-8 h-full flex flex-col">
+      {/* Top Progress Bar */}
+      <motion.div 
+        className="w-full h-1 bg-fia-border/30 absolute top-0 left-0 z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+      >
         <motion.div 
-          className="mb-12 p-6 bg-fia-white rounded-lg border-2 border-fia-border shadow-md"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <span className="text-base font-medium text-fia-charcoal">
-                Question {currentQuestionIndex + 1} of {quizQuestions.length}
-              </span>
-            </div>
-            <div>
-              <span className="text-base font-medium text-fia-charcoal">
-                {progress}%
-              </span>
-            </div>
-          </div>
-          <Progress value={progress} className="h-3 bg-fia-border/30">
-            <motion.div 
-              className="h-full bg-fia-yellow"
-              initial={{ width: `${progress - 10}%` }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.7, ease: "easeInOut" }}
-            />
-          </Progress>
-        </motion.div>
-        
-        {currentQuestionIndex > 0 && (
-          <motion.div
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Button
-              variant="ghost"
-              size="sm"
-              className="mb-6 hover:bg-fia-white font-medium flex items-center"
-              onClick={handlePreviousQuestion}
-            >
-              <ChevronLeft className="h-5 w-5 mr-1" />
-              Previous question
-            </Button>
-          </motion.div>
-        )}
-        
-        <div className="fia-flashcard-container flex-1 flex items-center justify-center relative">
-          <div className="absolute inset-0 bg-fia-teal bg-subtle-dots opacity-10"></div>
-          <div className="absolute top-10 left-1/2 transform -translate-x-1/2">
+          className="h-full bg-fia-yellow"
+          initial={{ width: `${progress - 5}%` }}
+          animate={{ width: `${progress}%` }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+        />
+      </motion.div>
+      
+      {/* Progress Info */}
+      <motion.div 
+        className="flex items-center justify-between px-6 sm:px-12 pt-6 pb-4 relative z-20"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 flex items-center justify-center">
             {getQuestionIcon(currentQuestionIndex)}
           </div>
-          
-          <AnimatePresence initial={false} mode="wait">
-            <motion.div 
-              key={currentQuestionIndex}
-              custom={direction}
-              variants={cardVariants}
-              initial={direction === "right" ? "enterFromLeft" : "enterFromRight"}
-              animate="center"
-              exit={direction === "right" ? "exitToRight" : "exitToLeft"}
-              className="w-full max-w-3xl"
-            >
-              {currentQuestionIndex < quizQuestions.length && (
-                <QuizQuestion 
-                  question={quizQuestions[currentQuestionIndex]} 
-                  onNext={handleNextQuestion}
-                />
-              )}
-            </motion.div>
-          </AnimatePresence>
+          <span className="text-sm font-medium text-fia-charcoal/70">
+            Question {currentQuestionIndex + 1} of {quizQuestions.length}
+          </span>
         </div>
+        <div>
+          <span className="text-sm font-medium text-fia-charcoal/70">
+            {progress}%
+          </span>
+        </div>
+      </motion.div>
+      
+      {/* Previous Button (only show if not on first question) */}
+      {currentQuestionIndex > 0 && (
+        <motion.div
+          className="absolute top-16 sm:top-20 left-6 sm:left-12 z-30"
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 0.8, x: 0 }}
+          whileHover={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          <Button
+            variant="ghost"
+            size="sm"
+            className="hover:bg-fia-white/50 text-fia-charcoal/70 font-medium flex items-center group"
+            onClick={handlePreviousQuestion}
+          >
+            <ChevronLeft className="h-4 w-4 mr-1 group-hover:-translate-x-0.5 transition-transform" />
+            Previous
+          </Button>
+        </motion.div>
+      )}
+      
+      {/* Main Question Container */}
+      <div className="flex-1 flex items-center justify-center px-4 relative">
+        {/* Decorative background pattern */}
+        <div className="absolute inset-0 bg-subtle-dots opacity-10"></div>
+        
+        {/* Flashcard Animation Container */}
+        <AnimatePresence initial={false} mode="wait">
+          <motion.div 
+            key={currentQuestionIndex}
+            custom={direction}
+            variants={cardVariants}
+            initial={direction === "right" ? "enterFromLeft" : "enterFromRight"}
+            animate="center"
+            exit={direction === "right" ? "exitToRight" : "exitToLeft"}
+            className="w-full max-h-full flex justify-center items-center"
+          >
+            {currentQuestionIndex < quizQuestions.length && (
+              <QuizQuestion 
+                question={quizQuestions[currentQuestionIndex]} 
+                onNext={handleNextQuestion}
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
+      
+      {/* Final invitation - shown on last question */}
+      {currentQuestionIndex === quizQuestions.length - 1 && responses.some(r => r.questionId === quizQuestions[currentQuestionIndex].id) && (
+        <motion.div 
+          className="absolute bottom-8 left-0 right-0 text-center px-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+        >
+          <p className="text-fia-charcoal/70 text-sm max-w-md mx-auto">
+            Want to go deeper? Check out your full pattern in the Blind Spot Quiz or explore the Listening Lab.
+          </p>
+        </motion.div>
+      )}
     </motion.div>
   );
 };
