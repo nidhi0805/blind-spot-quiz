@@ -29,7 +29,7 @@ const MultiSelectQuestion: React.FC<MultiSelectQuestionProps> = ({
 
   return (
     <div className="flex items-center justify-center w-full overflow-visible">
-      <div className="space-y-3 max-w-[500px] w-full">
+      <div className="space-y-2.5 max-w-[500px] w-full">
         {answers?.map(answer => (
           <motion.div 
             key={answer.id} 
@@ -37,7 +37,7 @@ const MultiSelectQuestion: React.FC<MultiSelectQuestionProps> = ({
             initial="unselected"
             animate={selectedOptions.includes(answer.id) ? "selected" : "unselected"}
             className={`
-              p-4 rounded-xl border-2 transition-all flex items-start cursor-pointer
+              p-3.5 rounded-xl border-2 transition-all flex items-start cursor-pointer
               w-full box-border overflow-visible
               ${selectedOptions.includes(answer.id) ? 
                 'border-fia-yellow bg-[#fffbe6]' : 
@@ -45,10 +45,11 @@ const MultiSelectQuestion: React.FC<MultiSelectQuestionProps> = ({
             `}
             onClick={() => onOptionSelect(answer.id)}
             whileHover={{ y: -2, boxShadow: "0 10px 15px -5px rgba(0,0,0,0.05)" }}
+            style={{ boxSizing: 'border-box' }}
           >
             <div className="mr-4 mt-0.5 flex-shrink-0">
               <div className={`
-                w-6 h-6 rounded-md border-2 flex items-center justify-center
+                w-5 h-5 rounded-md border-2 flex items-center justify-center
                 ${selectedOptions.includes(answer.id) ? 'border-fia-yellow bg-fia-yellow' : 'border-fia-border'}
                 transition-colors
               `}>
@@ -57,12 +58,12 @@ const MultiSelectQuestion: React.FC<MultiSelectQuestionProps> = ({
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                   >
-                    <Check className="h-3.5 w-3.5 text-white" />
+                    <Check className="h-3 w-3 text-white" />
                   </motion.div>
                 )}
               </div>
             </div>
-            <Label className="flex-grow cursor-pointer text-base leading-tight font-medium pt-0.5">
+            <Label className="flex-grow cursor-pointer text-sm leading-tight font-medium pt-0.5">
               {answer.text}
             </Label>
           </motion.div>

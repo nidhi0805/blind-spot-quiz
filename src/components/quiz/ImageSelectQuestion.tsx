@@ -28,7 +28,7 @@ const ImageSelectQuestion: React.FC<ImageSelectQuestionProps> = ({
 
   return (
     <div className="w-full flex justify-center">
-      <div className="grid grid-cols-2 gap-4 sm:gap-5 w-full max-w-[340px] sm:max-w-[380px]">
+      <div className="grid grid-cols-2 gap-3 w-full max-w-[320px] sm:max-w-[360px]">
         {answers?.map(answer => (
           <motion.div 
             key={answer.id}
@@ -38,12 +38,13 @@ const ImageSelectQuestion: React.FC<ImageSelectQuestionProps> = ({
             whileHover={{ y: -2, boxShadow: "0 8px 20px -4px rgba(0,0,0,0.1)" }}
             onClick={() => onOptionSelect(answer.id)}
             className={`
-              box-border cursor-pointer transition-all
+              box-border cursor-pointer transition-all overflow-visible
               rounded-xl shadow-sm hover:shadow-md
               ${selectedOption === answer.id ? 
-                'ring-3 ring-fia-yellow ring-offset-1' : 
+                'ring-2 ring-fia-yellow ring-offset-1' : 
                 'border-2 border-fia-border/40 hover:border-fia-border'}
             `}
+            style={{ boxSizing: 'border-box' }}
           >
             <div className="w-full overflow-hidden rounded-t-lg bg-gradient-to-br from-fia-teal/10 to-fia-teal/5">
               <img 
@@ -52,8 +53,8 @@ const ImageSelectQuestion: React.FC<ImageSelectQuestionProps> = ({
                 className="w-full h-auto object-cover aspect-square" 
               />
             </div>
-            <div className="p-2.5 w-full text-center bg-white rounded-b-xl">
-              <p className="font-medium text-sm line-clamp-3 h-12 flex items-center justify-center" title={answer.text}>
+            <div className="p-2 w-full text-center bg-white rounded-b-xl">
+              <p className="font-medium text-xs sm:text-sm line-clamp-2 h-10 flex items-center justify-center" title={answer.text}>
                 {answer.text}
               </p>
               {selectedOption === answer.id && (
