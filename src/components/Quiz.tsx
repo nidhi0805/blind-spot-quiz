@@ -5,7 +5,6 @@ import { quizQuestions } from '../utils/quizData';
 import { calculateResults } from '../utils/scoring';
 import { generateUserId, saveQuizResult } from '../utils/storage';
 import QuizQuestion from './QuizQuestion';
-import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { ChevronLeft, Flag, Lock, Puzzle } from "lucide-react";
@@ -30,9 +29,9 @@ const Quiz: React.FC = () => {
   // Get question icon based on index
   const getQuestionIcon = (index: number) => {
     const icons = [
-      <Puzzle className="h-8 w-8 text-fia-yellow" />,
-      <Lock className="h-8 w-8 text-fia-yellow" />,
-      <Flag className="h-8 w-8 text-fia-yellow" />
+      <Puzzle className="h-6 w-6 text-fia-yellow" />,
+      <Lock className="h-6 w-6 text-fia-yellow" />,
+      <Flag className="h-6 w-6 text-fia-yellow" />
     ];
     return icons[index % icons.length];
   };
@@ -138,14 +137,14 @@ const Quiz: React.FC = () => {
   
   return (
     <motion.div 
-      className="h-screen w-full overflow-hidden bg-gradient-to-b from-fia-white to-fia-yellow/5 flex flex-col"
+      className="h-screen w-full overflow-hidden flex flex-col bg-gradient-to-b from-fia-white to-fia-yellow/5"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       {/* Top Progress Bar */}
       <motion.div 
-        className="w-full h-1 bg-fia-border/30 absolute top-0 left-0 z-10"
+        className="w-full h-1.5 bg-fia-border/30 relative"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
@@ -160,21 +159,21 @@ const Quiz: React.FC = () => {
       
       {/* Progress Info */}
       <motion.div 
-        className="flex items-center justify-between px-6 sm:px-12 pt-6 pb-4 relative z-20"
+        className="flex items-center justify-between px-6 py-4 relative z-10"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 flex items-center justify-center">
+        <div className="flex items-center space-x-2">
+          <div className="w-7 h-7 flex items-center justify-center">
             {getQuestionIcon(currentQuestionIndex)}
           </div>
-          <span className="text-sm font-medium text-fia-charcoal/70">
+          <span className="text-sm font-medium text-fia-charcoal/80">
             Question {currentQuestionIndex + 1} of {quizQuestions.length}
           </span>
         </div>
         <div>
-          <span className="text-sm font-medium text-fia-charcoal/70">
+          <span className="text-sm font-medium text-fia-charcoal/80">
             {progress}%
           </span>
         </div>
@@ -183,7 +182,7 @@ const Quiz: React.FC = () => {
       {/* Previous Button (only show if not on first question) */}
       {currentQuestionIndex > 0 && (
         <motion.div
-          className="absolute top-16 sm:top-20 left-6 sm:left-12 z-30"
+          className="absolute top-12 left-6 z-20"
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 0.8, x: 0 }}
           whileHover={{ opacity: 1 }}
@@ -201,7 +200,7 @@ const Quiz: React.FC = () => {
         </motion.div>
       )}
       
-      {/* Main Question Container */}
+      {/* Main Question Container - Full height minus header */}
       <div className="flex-1 flex items-center justify-center px-4 relative">
         {/* Decorative background pattern */}
         <div className="absolute inset-0 bg-subtle-dots opacity-10"></div>
@@ -230,7 +229,7 @@ const Quiz: React.FC = () => {
       {/* Final invitation - shown on last question */}
       {currentQuestionIndex === quizQuestions.length - 1 && responses.some(r => r.questionId === quizQuestions[currentQuestionIndex].id) && (
         <motion.div 
-          className="absolute bottom-8 left-0 right-0 text-center px-6"
+          className="absolute bottom-6 left-0 right-0 text-center px-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.5 }}

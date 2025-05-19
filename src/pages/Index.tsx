@@ -25,45 +25,61 @@ const Landing: React.FC = () => {
   
   return (
     <motion.div 
-      className="min-h-screen bg-fia-yellow relative overflow-hidden"
+      className="h-screen flex flex-col overflow-hidden bg-fia-yellow"
       initial="initial"
       animate="animate"
       exit="exit"
       variants={pageVariants}
     >
-      {/* Hero Section */}
-      <div className="fia-split-container min-h-[70vh] shadow-lg">
-        <div className="w-full md:w-1/2 bg-fia-charcoal flex items-center justify-center p-12">
+      {/* Split container that takes full height */}
+      <div className="flex flex-col md:flex-row flex-1 w-full">
+        {/* Left panel */}
+        <div className="w-full md:w-1/2 bg-fia-charcoal flex items-center justify-center p-8 md:p-6">
           <div className="max-w-md text-center">
-            <div className="flex justify-center mb-8">
-              <div className="bg-fia-yellow/20 rounded-full p-5">
-                <Lock className="w-12 h-12 text-fia-yellow" />
+            <div className="flex justify-center mb-6">
+              <div className="bg-fia-yellow/20 rounded-full p-4">
+                <Lock className="w-10 h-10 text-fia-yellow" />
               </div>
             </div>
             <motion.h2 
-              className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight"
+              className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.7 }}
             >
               Uncover Your <br/> Blind Spot Patterns
             </motion.h2>
+            
+            {/* CTA for mobile only - appears below headline on mobile */}
+            <div className="md:hidden mt-6">
+              <MotionButton
+                onClick={() => setCurrentStep('intake')}
+                className="fia-cta-button group w-full"
+                whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)" }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Begin Self-Assessment
+                <ChevronRight className="ml-1 group-hover:translate-x-1 transition-transform" />
+              </MotionButton>
+            </div>
           </div>
         </div>
         
-        <div className="w-full md:w-1/2 flex items-center justify-center p-8 md:p-12">
-          <div className="max-w-xl">
+        {/* Right panel */}
+        <div className="w-full md:w-1/2 flex flex-col justify-center p-6 md:p-8">
+          <div className="max-w-md mx-auto">
             <motion.p 
-              className="text-xl text-fia-charcoal mb-10 leading-relaxed font-medium"
+              className="text-lg md:text-xl text-fia-charcoal mb-6 font-medium text-balance"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.7 }}
             >
               Gain insights into your relational blind spot patterns in emotionally complex relationships.
-              This self-awareness diagnostic helps you understand how you show up when
-              things get complicated.
             </motion.p>
+            
+            {/* CTA for tablet/desktop - appears below description */}
             <motion.div
+              className="hidden md:block mb-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.7 }}
@@ -82,51 +98,61 @@ const Landing: React.FC = () => {
         </div>
       </div>
       
-      {/* Features Section */}
-      <div className="fia-container py-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <motion.div 
-            className="bg-white p-10 rounded-xl border-2 border-fia-border shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-          >
-            <div className="w-16 h-16 rounded-full bg-fia-blue flex items-center justify-center mb-6">
-              <Puzzle className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="font-bold text-2xl mb-4">Discover Your Patterns</h3>
-            <p className="text-fia-textLight leading-relaxed text-lg">
-              Identify your unique relational tendencies and blind spots that may be affecting your relationships.
-            </p>
-          </motion.div>
-          <motion.div 
-            className="bg-white p-10 rounded-xl border-2 border-fia-border shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-          >
-            <div className="w-16 h-16 rounded-full bg-fia-teal flex items-center justify-center mb-6">
-              <Flag className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="font-bold text-2xl mb-4">Recognize Warning Signs</h3>
-            <p className="text-fia-textLight leading-relaxed text-lg">
-              Learn to detect manipulative tactics that target your specific vulnerabilities.
-            </p>
-          </motion.div>
-          <motion.div 
-            className="bg-white p-10 rounded-xl border-2 border-fia-border shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-          >
-            <div className="w-16 h-16 rounded-full bg-fia-burgundy flex items-center justify-center mb-6">
-              <Lock className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="font-bold text-2xl mb-4">Build Better Defenses</h3>
-            <p className="text-fia-textLight leading-relaxed text-lg">
-              Gain practical strategies to protect your emotional wellbeing in complex relationships.
-            </p>
-          </motion.div>
+      {/* Feature cards in a condensed layout */}
+      <div className="bg-fia-white/90 py-6 px-4 md:px-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <motion.div 
+              className="bg-white p-6 rounded-xl border-2 border-fia-border shadow hover:shadow-md hover:-translate-y-1 transition-all"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              <div className="flex items-center mb-3">
+                <div className="w-10 h-10 rounded-full bg-fia-blue flex items-center justify-center mr-3">
+                  <Puzzle className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="font-bold text-xl">Discover Patterns</h3>
+              </div>
+              <p className="text-fia-textLight leading-snug text-balance">
+                Identify your unique relational tendencies affecting relationships.
+              </p>
+            </motion.div>
+            
+            <motion.div 
+              className="bg-white p-6 rounded-xl border-2 border-fia-border shadow hover:shadow-md hover:-translate-y-1 transition-all"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+            >
+              <div className="flex items-center mb-3">
+                <div className="w-10 h-10 rounded-full bg-fia-teal flex items-center justify-center mr-3">
+                  <Flag className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="font-bold text-xl">Warning Signs</h3>
+              </div>
+              <p className="text-fia-textLight leading-snug text-balance">
+                Learn to detect manipulative tactics targeting your vulnerabilities.
+              </p>
+            </motion.div>
+            
+            <motion.div 
+              className="bg-white p-6 rounded-xl border-2 border-fia-border shadow hover:shadow-md hover:-translate-y-1 transition-all"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              <div className="flex items-center mb-3">
+                <div className="w-10 h-10 rounded-full bg-fia-burgundy flex items-center justify-center mr-3">
+                  <Lock className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="font-bold text-xl">Build Defenses</h3>
+              </div>
+              <p className="text-fia-textLight leading-snug text-balance">
+                Gain strategies to protect your wellbeing in complex relationships.
+              </p>
+            </motion.div>
+          </div>
         </div>
       </div>
     </motion.div>
