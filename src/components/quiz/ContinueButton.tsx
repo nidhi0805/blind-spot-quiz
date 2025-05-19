@@ -20,7 +20,7 @@ const ContinueButton: React.FC<ContinueButtonProps> = ({
 }) => {
   return (
     <motion.div 
-      className="flex justify-center mt-5 sm:mt-6 w-full"
+      className="flex justify-center mt-6 w-full"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5, duration: 0.4 }}
