@@ -181,13 +181,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
   return (
     <div className="w-full max-w-xl mx-auto px-4 h-full flex items-center">
       <motion.div 
-        className="w-full flex flex-col h-[85vh] max-h-[600px] bg-white/95 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden"
+        className="w-full flex flex-col h-[85vh] max-h-[600px] bg-white/95 backdrop-blur-md rounded-2xl shadow-xl overflow-visible"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.5 }}
       >
         <motion.div 
-          className="px-5 py-5 md:px-6 flex flex-col h-full box-border overflow-x-hidden"
+          className="px-5 py-5 md:px-6 flex flex-col h-full box-border overflow-visible"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -202,7 +202,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
           </motion.h3>
           
           <motion.div 
-            className="flex-1 flex items-center overflow-hidden overflow-x-hidden"
+            className="flex-1 flex items-center justify-center overflow-visible"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.5 }}

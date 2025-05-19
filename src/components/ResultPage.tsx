@@ -3,12 +3,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useQuiz } from '../context/QuizContext';
 import CTAButton from './CTAButton';
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getDominantProfiles } from '../utils/resultProfiles';
 import { ArrowUp, ChevronDown, Lock, Puzzle, Flag } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   BarChart,
   Bar,
@@ -31,7 +30,6 @@ const getProfileColor = (profileId: string): string => {
     caregiver: 'profile-caregiver',
     rebel: 'profile-rebel',
     achiever: 'profile-achiever',
-    // Default to first color if not found
     default: 'profile-dreamer'
   };
   
@@ -156,6 +154,27 @@ const ResultPage: React.FC = () => {
     }
   };
   
+  const insightSectionVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.6,
+        staggerChildren: 0.1
+      }
+    }
+  };
+  
+  const insightItemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5 }
+    }
+  };
+  
   const profileCardVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: (index: number) => ({
@@ -224,10 +243,10 @@ const ResultPage: React.FC = () => {
           animate="visible"
           transition={{ delay: 0.2 }}
         >
-          Based on your responses, we've identified your primary relational patterns.
+          Based on your responses, we've identified your primary relational pattern.
         </motion.p>
         
-        {/* Dominant Profile Card - Hero Style */}
+        {/* Dominant Profile Card - Hero Style (Reduced height by 20%) */}
         <motion.div 
           className="w-full max-w-md mx-auto px-5"
           variants={contentVariants}
@@ -242,9 +261,9 @@ const ResultPage: React.FC = () => {
             variants={profileCardVariants}
             custom={0}
           >
-            <div className="p-10 md:p-12 flex flex-col items-center text-white">
+            <div className="p-8 md:py-8 md:px-12 flex flex-col items-center text-white">
               <motion.div 
-                className="w-24 h-24 rounded-full bg-white/20 mb-6 flex items-center justify-center"
+                className="w-20 h-20 rounded-full bg-white/20 mb-4 flex items-center justify-center"
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.5, duration: 0.5, type: "spring" }}
@@ -262,22 +281,13 @@ const ResultPage: React.FC = () => {
               </motion.h4>
               
               <motion.div 
-                className="px-6 py-3 rounded-full bg-white/20 text-white text-xl font-bold mb-8"
+                className="px-6 py-2 rounded-full bg-white/20 text-white text-xl font-bold mb-6"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.7, duration: 0.5 }}
               >
                 {dominantProfile.percentage}%
               </motion.div>
-              
-              <motion.p
-                className="text-center text-white/90 text-lg mb-8 max-w-md"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.5 }}
-              >
-                Your strongest relational lens
-              </motion.p>
               
               <motion.button
                 className="flex items-center gap-2 px-6 py-3 rounded-lg bg-white/20 text-white font-medium hover:bg-white/30 transition-colors"
@@ -296,205 +306,196 @@ const ResultPage: React.FC = () => {
       </section>
       
       {/* INSIGHT SECTION - Full Trait Breakdown (Scrollable) */}
-      {showFullInsight && (
-        <section ref={insightRef} className="py-16 bg-gradient-to-b from-white to-fia-offwhite">
-          <div className="fia-container">
-            <motion.h3 
-              className="text-3xl font-bold mb-12 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              Your Primary Pattern: {dominantProfile.name}
-            </motion.h3>
-            
-            <motion.div 
-              className="mb-10 p-8 border-2 border-fia-border rounded-xl bg-white shadow-md"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-            >
-              <div className="flex items-center mb-4">
-                <div className={`w-12 h-12 rounded-full ${getBgColor(dominantProfile.id)} flex items-center justify-center mr-4`}>
-                  <Puzzle className="w-6 h-6 text-white" />
-                </div>
-                <h5 className="text-2xl font-bold">Summary</h5>
-              </div>
-              <p className="text-fia-charcoal leading-relaxed text-lg">{dominantProfile.summary}</p>
-            </motion.div>
-            
-            <motion.div 
-              className="mb-10 p-8 border-2 border-fia-border rounded-xl bg-white shadow-md"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-            >
-              <div className="flex items-center mb-4">
-                <div className={`w-12 h-12 rounded-full ${getBgColor(dominantProfile.id)} flex items-center justify-center mr-4`}>
-                  <Flag className="w-6 h-6 text-white" />
-                </div>
-                <h5 className="text-2xl font-bold">Manipulative Tactics to Watch Out For</h5>
-              </div>
-              <p className="text-fia-charcoal leading-relaxed text-lg">{dominantProfile.manipulativeTactics}</p>
-            </motion.div>
-            
-            <motion.div 
-              className="mb-10 p-8 border-2 border-fia-border rounded-xl bg-white shadow-md"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-            >
-              <div className="flex items-center mb-4">
-                <div className={`w-12 h-12 rounded-full ${getBgColor(dominantProfile.id)} flex items-center justify-center mr-4`}>
-                  <Lock className="w-6 h-6 text-white" />
-                </div>
-                <h5 className="text-2xl font-bold">How to Defend Yourself</h5>
-              </div>
-              <p className="text-fia-charcoal leading-relaxed text-lg">{dominantProfile.defenseStrategies}</p>
-            </motion.div>
-            
-            <motion.h6 
-              className="text-2xl font-bold mb-8 mt-16"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
-            >
-              Recommended Tools
-            </motion.h6>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-              {dominantProfile.tools.map((tool, toolIndex) => (
-                <motion.div 
-                  key={tool.name} 
-                  className="p-8 border-2 border-fia-border rounded-xl bg-white hover:shadow-lg transition-all"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + (toolIndex * 0.1), duration: 0.5 }}
-                  whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)" }}
-                >
-                  <h6 className="font-bold text-xl mb-3">{tool.name}</h6>
-                  <p className="text-fia-textLight mb-6">Build resources to strengthen your relational skills</p>
-                  <CTAButton 
-                    name={`Try ${tool.name}`} 
-                    url={tool.url} 
-                    isPrimary={true}
-                  />
-                </motion.div>
-              ))}
-            </div>
-                 
-            {/* Profile Breakdown */}
-            <motion.div 
-              className="mb-16 max-w-4xl mx-auto"
-              variants={contentVariants}
-              initial="hidden"
-              animate="visible"
-              transition={{ delay: 0.6 }}
-            >
+      <AnimatePresence>
+        {showFullInsight && (
+          <motion.section 
+            ref={insightRef} 
+            className="py-16 bg-gradient-to-b from-white to-fia-offwhite"
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            variants={insightSectionVariants}
+          >
+            <div className="fia-container">
               <motion.h3 
-                className="text-2xl sm:text-3xl font-bold mb-8"
-                variants={contentVariants}
-                initial="hidden"
-                animate="visible"
-                transition={{ delay: 0.7 }}
+                className="text-3xl font-bold mb-12 text-center"
+                variants={insightItemVariants}
               >
-                Your Blind Spot Profile Breakdown
+                Your Primary Pattern: {dominantProfile.name}
               </motion.h3>
               
-              <Card className="p-8 bg-white rounded-xl border-2 border-fia-border shadow-lg">
-                {isChartVisible && (
-                  <div className="mb-10 h-72">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart
-                        layout="vertical"
-                        data={chartData}
-                        margin={{
-                          top: 5,
-                          right: 30,
-                          left: 20,
-                          bottom: 5,
-                        }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" domain={[0, 100]} />
-                        <YAxis dataKey="name" type="category" />
-                        <Tooltip 
-                          formatter={(value) => [`${value}%`, 'Percentage']}
-                          contentStyle={{ 
-                            backgroundColor: 'white', 
-                            borderRadius: '8px',
-                            border: '1px solid #eee',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)' 
-                          }}
-                        />
-                        <Bar 
-                          dataKey="percentage" 
-                          fill="#8884d8" 
-                          radius={[0, 4, 4, 0]}
-                          animationDuration={1500}
-                        >
-                          {chartData.map((entry, index) => (
-                            <motion.rect 
-                              key={`bar-${index}`}
-                              fill={entry.color}
-                              initial={{ width: 0 }}
-                              animate={{ width: `${entry.percentage}%` }}
-                              transition={{ duration: 1, delay: 0.2 * index }}
-                            />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                )}
-                
-                <div className="space-y-6">
-                  {top5Profiles.map((profile, index) => (
-                    <motion.div 
-                      key={profile.id} 
-                      className="space-y-2"
-                      custom={index}
-                      variants={profileCardVariants}
-                      initial="hidden"
-                      animate="visible"
-                    >
-                      <div className="flex justify-between items-center">
-                        <span className="font-bold text-lg">{profile.name}</span>
-                        <span className="font-bold text-lg">{profile.percentage}%</span>
-                      </div>
-                      <div className="h-8 rounded-lg overflow-hidden relative bg-fia-border/30">
-                        <motion.div 
-                          className={`h-full ${getBgColor(profile.id)}`}
-                          custom={profile.percentage}
-                          variants={barVariants}
-                          initial="hidden"
-                          animate="visible"
-                          style={{ width: `${profile.percentage}%` }}
-                        />
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </Card>
-            </motion.div>
-            
-            {/* Start Over Button */}
-            <motion.div 
-              className="text-center pt-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.5 }}
-            >
-              <button 
-                onClick={() => setCurrentStep('landing')}
-                className="fia-btn-secondary text-lg px-10 py-4"
+              <motion.div 
+                className="mb-10 p-8 border-2 border-fia-border rounded-xl bg-white shadow-md"
+                variants={insightItemVariants}
               >
-                Take the Quiz Again
-              </button>
-            </motion.div>
-          </div>
-        </section>
-      )}
+                <div className="flex items-center mb-4">
+                  <div className={`w-12 h-12 rounded-full ${getBgColor(dominantProfile.id)} flex items-center justify-center mr-4`}>
+                    <Puzzle className="w-6 h-6 text-white" />
+                  </div>
+                  <h5 className="text-2xl font-bold">Summary</h5>
+                </div>
+                <p className="text-fia-charcoal leading-relaxed text-lg">{dominantProfile.summary}</p>
+              </motion.div>
+              
+              <motion.div 
+                className="mb-10 p-8 border-2 border-fia-border rounded-xl bg-white shadow-md"
+                variants={insightItemVariants}
+              >
+                <div className="flex items-center mb-4">
+                  <div className={`w-12 h-12 rounded-full ${getBgColor(dominantProfile.id)} flex items-center justify-center mr-4`}>
+                    <Flag className="w-6 h-6 text-white" />
+                  </div>
+                  <h5 className="text-2xl font-bold">Manipulative Tactics to Watch Out For</h5>
+                </div>
+                <p className="text-fia-charcoal leading-relaxed text-lg">{dominantProfile.manipulativeTactics}</p>
+              </motion.div>
+              
+              <motion.div 
+                className="mb-10 p-8 border-2 border-fia-border rounded-xl bg-white shadow-md"
+                variants={insightItemVariants}
+              >
+                <div className="flex items-center mb-4">
+                  <div className={`w-12 h-12 rounded-full ${getBgColor(dominantProfile.id)} flex items-center justify-center mr-4`}>
+                    <Lock className="w-6 h-6 text-white" />
+                  </div>
+                  <h5 className="text-2xl font-bold">How to Defend Yourself</h5>
+                </div>
+                <p className="text-fia-charcoal leading-relaxed text-lg">{dominantProfile.defenseStrategies}</p>
+              </motion.div>
+              
+              <motion.h6 
+                className="text-2xl font-bold mb-8 mt-16"
+                variants={insightItemVariants}
+              >
+                Recommended Tools
+              </motion.h6>
+              
+              <motion.div 
+                className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16"
+                variants={insightItemVariants}
+              >
+                {dominantProfile.tools.map((tool, toolIndex) => (
+                  <motion.div 
+                    key={tool.name} 
+                    className="p-8 border-2 border-fia-border rounded-xl bg-white hover:shadow-lg transition-all"
+                    whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)" }}
+                  >
+                    <h6 className="font-bold text-xl mb-3">{tool.name}</h6>
+                    <p className="text-fia-textLight mb-6">Build resources to strengthen your relational skills</p>
+                    <CTAButton 
+                      name={`Try ${tool.name}`} 
+                      url={tool.url} 
+                      isPrimary={true}
+                    />
+                  </motion.div>
+                ))}
+              </motion.div>
+                  
+              {/* Profile Breakdown */}
+              <motion.div 
+                className="mb-16 max-w-4xl mx-auto"
+                variants={insightItemVariants}
+              >
+                <motion.h3 
+                  className="text-2xl sm:text-3xl font-bold mb-8"
+                  variants={insightItemVariants}
+                >
+                  Your Blind Spot Profile Breakdown
+                </motion.h3>
+                
+                <Card className="p-8 bg-white rounded-xl border-2 border-fia-border shadow-lg">
+                  {isChartVisible && (
+                    <div className="mb-10 h-72">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart
+                          layout="vertical"
+                          data={chartData}
+                          margin={{
+                            top: 5,
+                            right: 30,
+                            left: 20,
+                            bottom: 5,
+                          }}
+                        >
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis type="number" domain={[0, 100]} />
+                          <YAxis dataKey="name" type="category" />
+                          <Tooltip 
+                            formatter={(value) => [`${value}%`, 'Percentage']}
+                            contentStyle={{ 
+                              backgroundColor: 'white', 
+                              borderRadius: '8px',
+                              border: '1px solid #eee',
+                              boxShadow: '0 4px 12px rgba(0,0,0,0.1)' 
+                            }}
+                          />
+                          <Bar 
+                            dataKey="percentage" 
+                            fill="#8884d8" 
+                            radius={[0, 4, 4, 0]}
+                            animationDuration={1500}
+                          >
+                            {chartData.map((entry, index) => (
+                              <motion.rect 
+                                key={`bar-${index}`}
+                                fill={entry.color}
+                                initial={{ width: 0 }}
+                                animate={{ width: `${entry.percentage}%` }}
+                                transition={{ duration: 1, delay: 0.2 * index }}
+                              />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  )}
+                  
+                  <div className="space-y-6">
+                    {top5Profiles.map((profile, index) => (
+                      <motion.div 
+                        key={profile.id} 
+                        className="space-y-2"
+                        custom={index}
+                        variants={profileCardVariants}
+                        initial="hidden"
+                        animate="visible"
+                      >
+                        <div className="flex justify-between items-center">
+                          <span className="font-bold text-lg">{profile.name}</span>
+                          <span className="font-bold text-lg">{profile.percentage}%</span>
+                        </div>
+                        <div className="h-8 rounded-lg overflow-hidden relative bg-fia-border/30">
+                          <motion.div 
+                            className={`h-full ${getBgColor(profile.id)}`}
+                            custom={profile.percentage}
+                            variants={barVariants}
+                            initial="hidden"
+                            animate="visible"
+                            style={{ width: `${profile.percentage}%` }}
+                          />
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </Card>
+              </motion.div>
+              
+              {/* Start Over Button */}
+              <motion.div 
+                className="text-center pt-8"
+                variants={insightItemVariants}
+              >
+                <button 
+                  onClick={() => setCurrentStep('landing')}
+                  className="fia-btn-secondary text-lg px-10 py-4"
+                >
+                  Take the Quiz Again
+                </button>
+              </motion.div>
+            </div>
+          </motion.section>
+        )}
+      </AnimatePresence>
       
       {/* Back to Top Button */}
       {showBackToTop && (

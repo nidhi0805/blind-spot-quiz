@@ -22,7 +22,7 @@ const SliderQuestion: React.FC<SliderQuestionProps> = ({
 }) => {
   return (
     <div className="space-y-8 py-3 max-w-md mx-auto w-full px-2">
-      <div className="relative pt-12">
+      <div className="relative pt-16">
         <Slider
           value={[value]}
           min={min || 0}
@@ -32,7 +32,7 @@ const SliderQuestion: React.FC<SliderQuestionProps> = ({
           className="z-10"
         />
         <motion.div 
-          className="absolute top-0 left-0 bg-gradient-to-br from-fia-teal to-fia-teal/90 text-white px-3 py-1.5 rounded-xl shadow-md transform -translate-x-1/2"
+          className="absolute top-0 left-0 bg-gradient-to-br from-fia-teal to-fia-teal/90 text-white px-4 py-2 rounded-xl shadow-md transform -translate-x-1/2"
           style={{ 
             left: `${((value - min) / (max - min)) * 100}%` 
           }}
@@ -48,7 +48,7 @@ const SliderQuestion: React.FC<SliderQuestionProps> = ({
           {value}
         </motion.div>
       </div>
-      <div className="flex justify-between text-sm font-medium text-fia-charcoal/70 mt-5 px-2">
+      <div className="flex justify-between text-sm font-medium text-fia-charcoal/70 mt-8 px-2">
         <span>{minLabel || min || "0"}</span>
         <span>{maxLabel || max || "10"}</span>
       </div>

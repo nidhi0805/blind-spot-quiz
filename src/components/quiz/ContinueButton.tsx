@@ -20,7 +20,7 @@ const ContinueButton: React.FC<ContinueButtonProps> = ({
 }) => {
   return (
     <motion.div 
-      className="flex justify-center mt-5"
+      className="flex justify-center mt-8 w-full"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5, duration: 0.4 }}
@@ -29,7 +29,8 @@ const ContinueButton: React.FC<ContinueButtonProps> = ({
         onClick={onClick}
         disabled={isDisabled}
         className={`
-          px-8 py-2 rounded-full font-medium text-base group
+          px-8 py-2.5 rounded-full font-medium text-base group relative
+          transition-all duration-300 min-w-[160px]
           ${isAnswered ? 
             'bg-gradient-to-r from-fia-teal to-fia-teal/90 hover:from-fia-burgundy hover:to-fia-burgundy/90 text-white' : 
             'bg-fia-border/40 text-fia-charcoal/40 cursor-not-allowed'}
