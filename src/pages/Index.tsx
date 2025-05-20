@@ -36,11 +36,17 @@ const Landing: React.FC = () => {
         {/* Left panel */}
         <div className="w-full md:w-1/2 bg-fia-charcoal flex items-center justify-center p-6 md:p-8">
           <div className="max-w-md text-center">
-            <div className="flex justify-center mb-5">
-              <div className="bg-fia-yellow/20 rounded-full p-4">
-                <Lock className="w-10 h-10 text-fia-yellow" />
+            <motion.div 
+              className="flex justify-center mb-5"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+            >
+              <div className="bg-fia-yellow/20 rounded-full p-4 animate-pulse-once">
+                <Lock className="w-10 h-10 text-fia-yellow animate-float" />
               </div>
-            </div>
+            </motion.div>
+            
             <motion.h2 
               className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight text-balance"
               initial={{ opacity: 0, y: 20 }}
@@ -49,6 +55,15 @@ const Landing: React.FC = () => {
             >
               Uncover Your <br/> Blind Spot Patterns
             </motion.h2>
+            
+            <motion.p 
+              className="text-white/80 mt-3 text-lg font-medium"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.7 }}
+            >
+              Understand how you show up when things get complicated.
+            </motion.p>
             
             {/* CTA for mobile only - appears below headline on mobile */}
             <div className="md:hidden mt-6">
@@ -65,8 +80,16 @@ const Landing: React.FC = () => {
           </div>
         </div>
         
-        {/* Right panel */}
-        <div className="w-full md:w-1/2 flex flex-col justify-center p-5 md:p-8">
+        {/* Right panel with diagonal separator */}
+        <div className="w-full md:w-1/2 flex flex-col justify-center p-5 md:p-8 relative">
+          <motion.div 
+            className="absolute top-0 left-0 w-12 h-12 md:w-24 md:h-full bg-fia-charcoal hidden md:block"
+            style={{ clipPath: "polygon(0 0, 0% 100%, 100% 0)" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          />
+          
           <div className="max-w-md mx-auto">
             <motion.p 
               className="text-lg md:text-xl text-fia-charcoal mb-6 font-medium text-balance"
@@ -74,7 +97,7 @@ const Landing: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.7 }}
             >
-              Gain insights into your relational blind spot patterns in emotionally complex relationships.
+              Gain insights into your relational blind spot patterns in emotionally complex relationships. This self-awareness diagnostic helps you uncover how you respond when things get tough.
             </motion.p>
             
             {/* CTA for tablet/desktop - appears below description */}
