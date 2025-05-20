@@ -75,6 +75,9 @@ export const calculateResults = (responses: QuizResponse[]): ProfileResult[] => 
   return results.sort((a, b) => b.score - a.score);
 };
 
+// Export calculateScores for compatibility
+export const calculateScores = calculateResults;
+
 // Get dominant profiles (top N)
 export const getDominantProfiles = (profiles: ProfileResult[], count: number = 2): ProfileResult[] => {
   return [...profiles].slice(0, count);

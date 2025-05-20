@@ -6,6 +6,40 @@ export const generateUserId = (): string => {
   return `user_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 };
 
+// Save quiz progress in localStorage
+export const saveQuizProgress = (data: {
+  currentStep: string;
+  currentQuestionIndex: number;
+  answers: any[];
+  intakeData: any;
+}) => {
+  try {
+    localStorage.setItem('quiz_progress', JSON.stringify(data));
+  } catch (error) {
+    console.error('Error saving quiz progress:', error);
+  }
+};
+
+// Get saved quiz progress from localStorage
+export const getQuizProgress = () => {
+  try {
+    const progressData = localStorage.getItem('quiz_progress');
+    return progressData ? JSON.parse(progressData) : null;
+  } catch (error) {
+    console.error('Error retrieving quiz progress:', error);
+    return null;
+  }
+};
+
+// Clear saved quiz progress from localStorage
+export const clearQuizProgress = () => {
+  try {
+    localStorage.removeItem('quiz_progress');
+  } catch (error) {
+    console.error('Error clearing quiz progress:', error);
+  }
+};
+
 // Save quiz result to localStorage
 export const saveQuizResult = (
   userId: string,
@@ -38,8 +72,6 @@ export const saveQuizResult = (
     
     // Also save this specific result under its userId
     localStorage.setItem(`fia_result_${userId}`, JSON.stringify(result));
-    
-    // Remove the return statement that's causing the type error
   } catch (error) {
     console.error('Error saving quiz result:', error);
     throw new Error('Failed to save quiz results');

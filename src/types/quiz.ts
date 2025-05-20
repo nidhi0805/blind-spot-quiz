@@ -11,6 +11,8 @@ export interface Answer {
   text: string;
   profileWeights: ProfileWeight[];
   imageSrc?: string;
+  questionId?: string;
+  value?: string | string[] | number;
 }
 
 export interface Question {

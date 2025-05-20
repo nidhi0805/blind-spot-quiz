@@ -1,10 +1,10 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { Question, Answer, ProfileResult } from '../types/quiz';
-import { quizData } from '../utils/quizData';
-import { calculateScores } from '../utils/scoring';
+import { Question, Answer, ProfileResult, QuizResponse, UserIntake } from '../types/quiz';
+import { quizQuestions } from '../utils/quizData';
+import { calculateResults } from '../utils/scoring';
 import { initializeProfileResults } from '../utils/resultProfiles';
-import { saveQuizProgress, getQuizProgress, clearQuizProgress } from '../utils/storage';
+import { generateUserId, saveQuizResult } from '../utils/storage';
 
 // Define the context type
 interface QuizContextType {
@@ -26,6 +26,13 @@ interface QuizContextType {
   calculateResults: () => void;
   isLastQuestion: boolean;
   resetQuiz: () => void;
+  
+  // Added properties to match component usage
+  responses: QuizResponse[];
+  addResponse: (response: QuizResponse) => void;
+  intake: UserIntake | null;
+  setIntake: (intake: UserIntake) => void;
+  setResults: (results: ProfileResult[]) => void;
 }
 
 // Create the context with a default value
@@ -48,75 +55,76 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     email: '',
     age: '',
   });
+
+  // State for quiz responses (added to match component usage)
+  const [responses, setResponses] = useState<QuizResponse[]>([]);
+  
+  // State for intake data (added to match component usage)
+  const [intake, setIntake] = useState<UserIntake | null>(null);
   
   // State for quiz results
   const [results, setResults] = useState<ProfileResult[] | null>(null);
   
   // Questions from the quiz data
-  const questions = quizData;
+  const questions = quizQuestions;
   
   // Check if current question is the last question
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
   
   // Function to update a specific answer
   const updateAnswer = (questionId: string, answerValue: string | string[] | number) => {
-    const existingAnswerIndex = answers.findIndex(answer => answer.questionId === questionId);
+    const existingAnswerIndex = answers.findIndex(answer => answer.id === questionId);
     
     if (existingAnswerIndex !== -1) {
       // Update existing answer
       const updatedAnswers = [...answers];
       updatedAnswers[existingAnswerIndex] = {
         ...updatedAnswers[existingAnswerIndex],
-        value: answerValue
+        text: answerValue.toString()
       };
       setAnswers(updatedAnswers);
     } else {
       // Add new answer
-      setAnswers([...answers, { questionId, value: answerValue }]);
+      setAnswers([...answers, { 
+        id: questionId, 
+        text: answerValue.toString(),
+        profileWeights: []
+      }]);
     }
+  };
+
+  // Function to add a quiz response
+  const addResponse = (response: QuizResponse) => {
+    setResponses(prev => {
+      const existingIndex = prev.findIndex(r => r.questionId === response.questionId);
+      if (existingIndex !== -1) {
+        // Replace existing response
+        const updated = [...prev];
+        updated[existingIndex] = response;
+        return updated;
+      } else {
+        // Add new response
+        return [...prev, response];
+      }
+    });
   };
   
   // Function to calculate results based on answers
-  const calculateResults = () => {
-    const calculatedResults = calculateScores(answers, initializeProfileResults());
+  const calculateQuizResults = () => {
+    const calculatedResults = calculateResults(responses);
     setResults(calculatedResults);
     setCurrentStep('results');
-    
-    // Clear saved progress once we're at results
-    clearQuizProgress();
   };
   
   // Function to reset the quiz state
   const resetQuiz = () => {
     setCurrentQuestionIndex(0);
     setAnswers([]);
+    setResponses([]);
     setResults(null);
-    clearQuizProgress();
+    setCurrentStep('landing');
   };
-  
-  // Load saved progress on initial mount
-  useEffect(() => {
-    const savedProgress = getQuizProgress();
-    if (savedProgress) {
-      if (savedProgress.currentStep) setCurrentStep(savedProgress.currentStep as 'landing' | 'intake' | 'quiz' | 'results');
-      if (savedProgress.currentQuestionIndex !== undefined) setCurrentQuestionIndex(savedProgress.currentQuestionIndex);
-      if (savedProgress.answers) setAnswers(savedProgress.answers);
-      if (savedProgress.intakeData) setIntakeData(savedProgress.intakeData);
-    }
-  }, []);
-  
-  // Save progress when relevant state changes
-  useEffect(() => {
-    if (currentStep !== 'results') {
-      saveQuizProgress({
-        currentStep,
-        currentQuestionIndex,
-        answers,
-        intakeData
-      });
-    }
-  }, [currentStep, currentQuestionIndex, answers, intakeData]);
-  
+
   // Context value
   const value = {
     currentStep,
@@ -130,9 +138,15 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIntakeData,
     questions,
     results,
-    calculateResults,
+    calculateResults: calculateQuizResults,
     isLastQuestion,
-    resetQuiz
+    resetQuiz,
+    // Added values to match component usage
+    responses,
+    addResponse,
+    intake, 
+    setIntake,
+    setResults
   };
   
   return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;

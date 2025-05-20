@@ -1,4 +1,3 @@
-
 import { Question } from "../types/quiz";
 
 export const quizQuestions: Question[] = [
@@ -373,6 +372,9 @@ export const quizQuestions: Question[] = [
     ]
   }
 ];
+
+// Add this export for compatibility
+export const quizData = quizQuestions;
 
 export const ageRangeOptions = [
   { value: "18-24", label: "18-24" },
