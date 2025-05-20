@@ -118,6 +118,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   
   // Function to reset the quiz state
   const resetQuiz = () => {
+    // Reset all quiz state variables
     setCurrentQuestionIndex(0);
     setAnswers([]);
     setResponses([]);

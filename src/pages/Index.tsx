@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { QuizProvider } from '../context/QuizContext';
 import IntakeForm from '../components/IntakeForm';
 import Quiz from '../components/Quiz';
@@ -76,6 +76,11 @@ const BrainIcon = () => (
 const Landing: React.FC = () => {
   const { setCurrentStep } = useQuiz();
   
+  // FIX: Add handler to explicitly navigate to the intake step
+  const handleStartQuiz = () => {
+    setCurrentStep('intake');
+  };
+  
   return (
     <motion.div 
       className="min-h-screen flex flex-col overflow-hidden bg-gradient-to-r from-black to-fia-yellow"
@@ -119,7 +124,7 @@ const Landing: React.FC = () => {
             transition={{ delay: 0.6, duration: 0.5 }}
           >
             <MotionButton
-              onClick={() => setCurrentStep('intake')}
+              onClick={handleStartQuiz} {/* FIX: Use the explicit handler */}
               className="bg-black text-white text-lg md:text-xl px-8 py-6 rounded-full font-bold group hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -203,15 +208,11 @@ const Index: React.FC = () => {
 
 // Quiz content based on current step
 const QuizContent: React.FC = () => {
-  const { currentStep, resetQuiz } = useQuiz();
+  const { currentStep } = useQuiz();
   
-  // Add effect to handle quiz reset when returning to the quiz
-  React.useEffect(() => {
-    if (currentStep === 'quiz') {
-      // Reset the quiz state when entering the quiz
-      resetQuiz();
-    }
-  }, [currentStep, resetQuiz]);
+  // FIX: Remove reset effect as it was causing issues with navigation
+  // Previously the resetQuiz function was called when entering the quiz step
+  // which was resetting the quiz state back to the landing page
   
   switch (currentStep) {
     case 'landing':

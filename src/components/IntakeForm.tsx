@@ -75,7 +75,7 @@ const IntakeForm: React.FC = () => {
       preTraits
     });
     
-    // Move to quiz
+    // Move to quiz - THIS IS THE FIX: Explicitly set to 'quiz' step
     setCurrentStep('quiz');
   };
 
