@@ -3,6 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Label } from "@/components/ui/label";
 import { Answer } from '../../types/quiz';
+import { Check } from 'lucide-react';
 
 interface SingleSelectQuestionProps {
   answers: Answer[];
@@ -36,10 +37,11 @@ const SingleSelectQuestion: React.FC<SingleSelectQuestionProps> = ({
             initial="unselected"
             animate={selectedOption === answer.id ? "selected" : "unselected"}
             className={`
-              p-3.5 rounded-xl border-2 transition-all flex items-center cursor-pointer
-              w-full box-border overflow-visible
+              p-4 rounded-xl border-2 transition-all flex items-center cursor-pointer
+              w-full bg-gradient-to-r from-white to-gray-50 shadow-md hover:shadow-lg 
+              transition-shadow duration-200 hover:scale-105 hover:border-fia-yellow
               ${selectedOption === answer.id ? 
-                'border-fia-yellow bg-[#fffbe6]' : 
+                'ring-2 ring-fia-yellow ring-offset-1 bg-yellow-50 border-yellow-300' : 
                 'border-transparent hover:border-fia-border'}
             `}
             onClick={() => onOptionSelect(answer.id)}
@@ -65,6 +67,16 @@ const SingleSelectQuestion: React.FC<SingleSelectQuestionProps> = ({
             <Label className="flex-grow cursor-pointer text-sm leading-tight font-medium">
               {answer.text}
             </Label>
+            {selectedOption === answer.id && (
+              <motion.div 
+                className="ml-2 flex-shrink-0"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 500 }}
+              >
+                <Check className="h-4 w-4 text-fia-yellow" />
+              </motion.div>
+            )}
           </motion.div>
         ))}
       </div>

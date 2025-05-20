@@ -35,13 +35,13 @@ const ImageSelectQuestion: React.FC<ImageSelectQuestionProps> = ({
             variants={cardVariants}
             initial="unselected"
             animate={selectedOption === answer.id ? "selected" : "unselected"}
-            whileHover={{ y: -2, boxShadow: "0 8px 20px -4px rgba(0,0,0,0.1)" }}
+            whileHover={{ y: -2, boxShadow: "0 8px 20px -4px rgba(0,0,0,0.1)", scale: 1.05 }}
             onClick={() => onOptionSelect(answer.id)}
             className={`
               relative box-border cursor-pointer transition-all overflow-visible
-              rounded-xl shadow-sm hover:shadow-md h-auto
+              rounded-xl shadow-md hover:shadow-lg h-auto bg-gradient-to-r from-white to-gray-50
               ${selectedOption === answer.id ? 
-                'ring-2 ring-fia-yellow ring-inset' : 
+                'ring-2 ring-fia-yellow ring-inset shadow-inner bg-yellow-50' : 
                 'border-2 border-fia-border/40 hover:border-fia-border'}
             `}
             style={{ boxSizing: 'border-box' }}

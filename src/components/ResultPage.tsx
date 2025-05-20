@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { getDominantProfiles } from '../utils/resultProfiles';
 import { ArrowUp, ChevronDown, Lock, Puzzle, Flag, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import FlipCard from './FlipCard';
 import {
   BarChart,
   Bar,
@@ -76,72 +77,100 @@ const getTailwindColor = (profileId: string): string => {
   return colorMap[profileId.toLowerCase()] || colorMap.default;
 };
 
-// Manipulative match data based on profile
+// Manipulative match data based on profile with traits
 const getManipulativeMatch = (profileId: string) => {
-  const matchMap: {[key: string]: {name: string, quote: string, description: string, emoji: string}} = {
+  const matchMap: {[key: string]: {name: string, quote: string, description: string, emoji: string, traits: string[]}} = {
     dreamer: {
       name: "The Illusionist",
       quote: "You saw the potential. They just saw your hope.",
       description: "They mirror your dreams, validate your emotions, and vanish when real life kicks in. You're left holding a fantasy, wondering if it was ever real.",
-      emoji: "🃏"
+      emoji: "🃏",
+      traits: ["Emotionally unavailable", "Promise-breaker", "Fantasy seller"]
     },
     peacemaker: {
       name: "The Chaos Creator",
       quote: "They need your calm to mask their storm.",
       description: "They manufacture crises that only you can solve, positioning any boundary as selfish. Your harmony becomes their weapon against your own needs.",
-      emoji: "🌪️"
+      emoji: "🌪️",
+      traits: ["Boundary violator", "Drama instigator", "Guilt manipulator"]
     },
     caregiver: {
       name: "The Eternal Patient",
       quote: "Your care is their currency, and they're always bankrupt.",
       description: "They perform helplessness to extract your nurturing energy, always in crisis but never taking responsibility. Your compassion becomes their life support system.",
-      emoji: "🏥"
+      emoji: "🏥",
+      traits: ["Crisis manufacturer", "Responsibility avoider", "Energy vampire"]
     },
     rebel: {
       name: "The Persecution Specialist",
       quote: "They've found the perfect defender for their imaginary battles.",
       description: "They create 'us-against-them' narratives that isolate you while positioning themselves as fellow warriors. Your courage becomes collateral in conflicts they manufacture.",
-      emoji: "⚔️"
+      emoji: "⚔️",
+      traits: ["Narrative controller", "Reality distorter", "Isolation enforcer"]
     },
     achiever: {
       name: "The Goalposter",
       quote: "The finish line moves every time you get close.",
       description: "They constantly shift standards and expectations, using your drive for excellence against you. Your achievements become stepping stones to their next impossible demand.",
-      emoji: "🏁"
+      emoji: "🏁",
+      traits: ["Standard shifter", "Validation withholder", "Perfectionism exploiter"]
     },
     explorer: {
       name: "The Freedom Baiter",
       quote: "They offer the horizon but build a cage.",
       description: "They initially celebrate your independence, then slowly introduce guilt and manipulation when you exercise it. Your autonomy becomes their favorite target.",
-      emoji: "🪤"
+      emoji: "🪤",
+      traits: ["Guilt-inducing", "Emotionally evasive", "Mystery as control"]
     },
     traditionalist: {
       name: "The Authority Impersonator",
       quote: "They don't follow the rules. They become them.",
       description: "They leverage your respect for structure by creating arbitrary standards they claim you must follow. Your conscientiousness becomes a lever for their control.",
-      emoji: "📜"
+      emoji: "📜",
+      traits: ["Rule inventor", "Authority abuser", "Selective enforcer"]
     },
     intellectual: {
       name: "The Logic Twister",
       quote: "They exhaust your mind until compliance seems rational.",
       description: "They use circular arguments and intellectual gymnastics to make you doubt your perceptions. Your analytical nature becomes their playground for gaslighting.",
-      emoji: "🔄"
+      emoji: "🔄",
+      traits: ["Reality distorter", "Circular arguer", "Truth manipulator"]
     },
     leader: {
       name: "The Threat Magnifier",
       quote: "They make you feel powerful by creating problems only you can solve.",
       description: "They position themselves as in need of your protection while manufacturing crises that require your intervention. Your strength becomes their shield and weapon.",
-      emoji: "🔍"
+      emoji: "🔍",
+      traits: ["Crisis fabricator", "Protection seeker", "Dependency creator"]
     },
     default: {
       name: "The Manipulator",
       quote: "They study your patterns to exploit your blind spots.",
       description: "They carefully observe your vulnerabilities and use them against you, adapting their approach based on what works best to control your behavior.",
-      emoji: "🎭"
+      emoji: "🎭",
+      traits: ["Vulnerability hunter", "Pattern analyzer", "Behavior controller"]
     }
   };
   
   return matchMap[profileId.toLowerCase()] || matchMap.default;
+};
+
+// Get placeholder image path for manipulative match
+const getManipulativeMatchImage = (profileId: string): string => {
+  const imageMap: {[key: string]: string} = {
+    dreamer: "/placeholder.svg",
+    peacemaker: "/placeholder.svg",
+    caregiver: "/placeholder.svg",
+    rebel: "/placeholder.svg",
+    achiever: "/placeholder.svg",
+    explorer: "/placeholder.svg",
+    traditionalist: "/placeholder.svg",
+    intellectual: "/placeholder.svg",
+    leader: "/placeholder.svg",
+    default: "/placeholder.svg"
+  };
+  
+  return imageMap[profileId.toLowerCase()] || imageMap.default;
 };
 
 const ResultPage: React.FC = () => {
@@ -207,6 +236,7 @@ const ResultPage: React.FC = () => {
   
   // Get the manipulative match for the dominant profile
   const manipulativeMatch = getManipulativeMatch(dominantProfile.id);
+  const manipulativeMatchImage = getManipulativeMatchImage(dominantProfile.id);
   
   // Prepare chart data
   const chartData = top5Profiles.map(profile => ({
@@ -422,22 +452,32 @@ const ResultPage: React.FC = () => {
                   <p className="text-fia-charcoal leading-relaxed text-lg">{dominantProfile.manipulativeTactics}</p>
                 </motion.div>
                 
-                {/* New section: Your Manipulative Match */}
+                {/* Updated Your Manipulative Match section with FlipCard */}
                 <motion.div 
-                  className="mb-8 p-6 sm:p-8 border-2 border-fia-border rounded-xl bg-white shadow-md"
+                  className="mb-8 border-2 border-fia-border rounded-xl bg-white shadow-md overflow-hidden"
                   variants={insightItemVariants}
                 >
-                  <div className="flex items-center mb-4">
-                    <div className={`w-12 h-12 rounded-full ${getBgColor(dominantProfile.id)} flex items-center justify-center mr-4`}>
-                      <span className="text-2xl text-white">{manipulativeMatch.emoji}</span>
+                  <div className="p-6 sm:p-8">
+                    <div className="flex items-center mb-4">
+                      <div className={`w-12 h-12 rounded-full ${getBgColor(dominantProfile.id)} flex items-center justify-center mr-4`}>
+                        <span className="text-2xl text-white">{manipulativeMatch.emoji}</span>
+                      </div>
+                      <h5 className="text-2xl font-bold">💥 Your Manipulative Match</h5>
                     </div>
-                    <h5 className="text-2xl font-bold">💥 Your Manipulative Match</h5>
-                  </div>
-                  
-                  <div className="p-5 border border-fia-border/30 rounded-lg bg-fia-offwhite mb-4">
-                    <h6 className="text-xl font-bold mb-2">{manipulativeMatch.name}</h6>
-                    <p className="text-fia-charcoal/80 italic mb-4">"{manipulativeMatch.quote}"</p>
-                    <p className="text-fia-charcoal leading-relaxed">{manipulativeMatch.description}</p>
+                    
+                    {/* FlipCard component for manipulative match */}
+                    <div className="h-[340px]">
+                      <FlipCard 
+                        frontContent={{
+                          name: manipulativeMatch.name,
+                          quote: manipulativeMatch.quote,
+                          description: manipulativeMatch.description,
+                          emoji: manipulativeMatch.emoji
+                        }}
+                        imageSrc={manipulativeMatchImage}
+                        traits={manipulativeMatch.traits}
+                      />
+                    </div>
                   </div>
                 </motion.div>
                 

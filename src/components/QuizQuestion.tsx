@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Question, QuizResponse } from '../types/quiz';
 import { useQuiz } from '../context/QuizContext';
@@ -193,7 +192,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
           transition={{ delay: 0.2 }}
         >
           <motion.h3 
-            className="text-xl font-bold mb-4 sm:mb-5 text-center leading-tight"
+            className="text-xl font-semibold mb-4 sm:mb-5 text-center leading-tight"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.4 }}

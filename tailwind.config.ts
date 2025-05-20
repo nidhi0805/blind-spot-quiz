@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -173,6 +174,14 @@ export default {
 						transform: 'rotateY(0)',
 						opacity: '1'
 					}
+				},
+				'card-flip-back': {
+					'0%': {
+						transform: 'rotateY(180deg)',
+					},
+					'100%': {
+						transform: 'rotateY(0deg)',
+					}
 				}
 			},
 			animation: {
@@ -183,12 +192,19 @@ export default {
 				'slide-up': 'slide-up 0.5s ease-out',
 				'slide-right': 'slide-right 0.5s ease-out',
 				'slide-left': 'slide-left 0.5s ease-out',
-				'card-flip': 'card-flip 0.5s ease-out'
+				'card-flip': 'card-flip 0.5s ease-out',
+				'card-flip-back': 'card-flip-back 0.5s ease-out'
 			},
 			backgroundImage: {
 				// Adding subtle texture patterns
 				'subtle-dots': 'url("data:image/svg+xml,%3Csvg width="20" height="20" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath fill="%23000" fill-opacity=".05" d="M10 0a1 1 0 110 2 1 1 0 010-2zm0 18a1 1 0 110 2 1 1 0 010-2z"/%3E%3C/svg%3E")',
-			}
+			},
+			rotate: {
+				'y-180': 'rotateY(180deg)',
+			},
+			transitionProperty: {
+				'transform-opacity': 'transform, opacity',
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

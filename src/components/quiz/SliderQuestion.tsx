@@ -48,7 +48,7 @@ const SliderQuestion: React.FC<SliderQuestionProps> = ({
           {value}
         </motion.div>
       </div>
-      <div className="flex justify-between text-sm font-medium text-fia-charcoal/70 mt-8 px-2">
+      <div className="flex justify-between text-sm font-medium text-fia-charcoal/70 mt-8 px-2 bg-gradient-to-r from-white to-gray-50 p-3 rounded-lg shadow-sm">
         <span>{minLabel || min || "0"}</span>
         <span>{maxLabel || max || "10"}</span>
       </div>

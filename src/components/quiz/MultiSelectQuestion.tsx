@@ -37,10 +37,11 @@ const MultiSelectQuestion: React.FC<MultiSelectQuestionProps> = ({
             initial="unselected"
             animate={selectedOptions.includes(answer.id) ? "selected" : "unselected"}
             className={`
-              p-3.5 rounded-xl border-2 transition-all flex items-start cursor-pointer
-              w-full box-border overflow-visible
+              p-4 rounded-xl border-2 transition-all flex items-start cursor-pointer
+              w-full bg-gradient-to-r from-white to-gray-50 shadow-md hover:shadow-lg 
+              transition-shadow duration-200 hover:scale-105 hover:border-fia-yellow
               ${selectedOptions.includes(answer.id) ? 
-                'border-fia-yellow bg-[#fffbe6]' : 
+                'ring-2 ring-fia-yellow ring-offset-1 bg-yellow-50 border-yellow-300 animate-pulse' : 
                 'border-transparent hover:border-fia-border'}
             `}
             onClick={() => onOptionSelect(answer.id)}
