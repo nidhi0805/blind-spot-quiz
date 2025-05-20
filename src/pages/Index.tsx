@@ -6,7 +6,7 @@ import Quiz from '../components/Quiz';
 import ResultPage from '../components/ResultPage';
 import { Button } from '@/components/ui/button';
 import { useQuiz } from '../context/QuizContext';
-import { ChevronRight, Flag, Lock, Puzzle } from 'lucide-react';
+import { ChevronRight, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 // Create a motion button component that works with framer-motion
@@ -19,160 +19,170 @@ const pageVariants = {
   exit: { opacity: 0, y: -20, transition: { duration: 0.3, ease: "easeIn" } }
 };
 
+// Brain icon SVG component
+const BrainIcon = () => (
+  <motion.svg 
+    width="280" 
+    height="280" 
+    viewBox="0 0 280 280" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 0.8 }}
+    transition={{ duration: 1.2 }}
+  >
+    <path 
+      d="M140 70C120 70 105 80 100 95C95 110 100 130 110 140C120 150 125 165 120 180C115 195 100 200 85 195C70 190 60 175 65 155C70 135 85 125 95 125C105 125 115 130 120 140"
+      stroke="#FFD02F" 
+      strokeWidth="2" 
+      strokeLinecap="round"
+    />
+    <path 
+      d="M140 70C155 70 170 80 175 95C180 110 175 125 165 135C155 145 150 165 155 180C160 195 170 200 185 195C200 190 210 175 205 160C200 145 185 135 175 135" 
+      stroke="#FFD02F" 
+      strokeWidth="2" 
+      strokeLinecap="round"
+    />
+    <path 
+      d="M205 120C215 120 225 130 225 145C225 160 215 170 200 170" 
+      stroke="#FFD02F" 
+      strokeWidth="2" 
+      strokeLinecap="round"
+    />
+    <path 
+      d="M140 70C140 50 150 35 170 30C190 25 210 35 220 55C230 75 225 95 210 105" 
+      stroke="#FFD02F" 
+      strokeWidth="2" 
+      strokeLinecap="round"
+    />
+    <path 
+      d="M240 120C255 120 265 135 265 150C265 165 255 180 240 180" 
+      stroke="#FFD02F" 
+      strokeWidth="2" 
+      strokeLinecap="round"
+      opacity="0.7"
+    />
+    <path 
+      d="M250 150C260 155 265 165 265 175" 
+      stroke="#FFD02F" 
+      strokeWidth="2" 
+      strokeLinecap="round"
+      opacity="0.6"
+    />
+  </motion.svg>
+);
+
 // Landing page component
 const Landing: React.FC = () => {
   const { setCurrentStep } = useQuiz();
   
   return (
     <motion.div 
-      className="h-screen flex flex-col overflow-hidden bg-fia-yellow"
+      className="min-h-screen flex flex-col overflow-hidden bg-gradient-to-r from-black to-fia-yellow"
       initial="initial"
       animate="animate"
       exit="exit"
       variants={pageVariants}
     >
-      {/* Split container that takes full height */}
-      <div className="flex flex-col md:flex-row flex-1 w-full">
-        {/* Left panel */}
-        <div className="w-full md:w-1/2 bg-fia-charcoal flex items-center justify-center p-6 md:p-8">
-          <div className="max-w-md text-center">
-            <motion.div 
-              className="flex justify-center mb-5"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1, duration: 0.5 }}
-            >
-              <div className="bg-fia-yellow/20 rounded-full p-4 animate-pulse-once">
-                <Lock className="w-10 h-10 text-fia-yellow animate-float" />
-              </div>
-            </motion.div>
-            
-            <motion.h2 
-              className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight text-balance"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.7 }}
-            >
-              Uncover Your <br/> Blind Spot Patterns
-            </motion.h2>
-            
-            <motion.p 
-              className="text-white/80 mt-3 text-lg font-medium"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.7 }}
-            >
-              Understand how you show up when things get complicated.
-            </motion.p>
-            
-            {/* CTA for mobile only - appears below headline on mobile */}
-            <div className="md:hidden mt-6">
-              <MotionButton
-                onClick={() => setCurrentStep('intake')}
-                className="fia-cta-button group w-full"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Begin Self-Assessment
-                <ChevronRight className="ml-1 group-hover:translate-x-1 transition-transform" />
-              </MotionButton>
-            </div>
-          </div>
+      {/* Main hero section */}
+      <div className="flex-1 flex flex-col items-center justify-center relative pt-10 pb-8 px-6 md:px-12">
+        {/* Brain icon overlay */}
+        <div className="absolute top-0 left-0 opacity-70 md:opacity-100">
+          <BrainIcon />
         </div>
         
-        {/* Right panel with diagonal separator */}
-        <div className="w-full md:w-1/2 flex flex-col justify-center p-5 md:p-8 relative">
-          <motion.div 
-            className="absolute top-0 left-0 w-12 h-12 md:w-24 md:h-full bg-fia-charcoal hidden md:block"
-            style={{ clipPath: "polygon(0 0, 0% 100%, 100% 0)" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-          />
+        {/* Content container */}
+        <div className="max-w-3xl mx-auto text-center z-10 mt-16">
+          <motion.h1 
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.7 }}
+          >
+            Uncover Your<br />
+            Blind Spot<br />
+            Patterns
+          </motion.h1>
           
-          <div className="max-w-md mx-auto">
-            <motion.p 
-              className="text-lg md:text-xl text-fia-charcoal mb-6 font-medium text-balance"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.7 }}
+          <motion.p 
+            className="text-white text-lg md:text-xl opacity-90 mb-10 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.7 }}
+          >
+            How do you show up in emotionally complex relationships? Let's find out.
+          </motion.p>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+          >
+            <MotionButton
+              onClick={() => setCurrentStep('intake')}
+              className="bg-black text-white text-lg md:text-xl px-8 py-6 rounded-full font-bold group hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
             >
-              Gain insights into your relational blind spot patterns in emotionally complex relationships. This self-awareness diagnostic helps you uncover how you respond when things get tough.
-            </motion.p>
-            
-            {/* CTA for tablet/desktop - appears below description */}
-            <motion.div
-              className="hidden md:block mb-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.7 }}
-            >
-              <MotionButton
-                onClick={() => setCurrentStep('intake')}
-                className="fia-cta-button group"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Begin Self-Assessment
-                <ChevronRight className="ml-1 group-hover:translate-x-1 transition-transform" />
-              </MotionButton>
-            </motion.div>
-          </div>
+              Start the Quiz
+              <ArrowRight className="ml-2 text-fia-yellow group-hover:translate-x-1 transition-transform" />
+            </MotionButton>
+          </motion.div>
         </div>
       </div>
       
-      {/* Feature cards in a condensed layout */}
-      <div className="bg-fia-white/90 py-4 px-4 md:px-6">
+      {/* Feature cards section */}
+      <div className="px-6 md:px-12 pb-16">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             <motion.div 
-              className="bg-white p-4 rounded-xl border-2 border-fia-border shadow hover:shadow-md hover:-translate-y-1 transition-all"
+              className="bg-fia-white/95 p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <div className="flex items-center mb-2">
-                <div className="w-9 h-9 rounded-full bg-fia-blue flex items-center justify-center mr-3">
-                  <Puzzle className="w-5 h-5 text-white" />
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-fia-blue flex items-center justify-center">
+                  <span className="text-2xl text-white">+</span>
                 </div>
-                <h3 className="font-bold text-lg">Discover Patterns</h3>
               </div>
-              <p className="text-fia-textLight leading-snug text-balance text-sm">
+              <h3 className="font-bold text-xl mb-2">Discover Patterns</h3>
+              <p className="text-fia-charcoal/80">
                 Identify your unique relational tendencies.
               </p>
             </motion.div>
             
             <motion.div 
-              className="bg-white p-4 rounded-xl border-2 border-fia-border shadow hover:shadow-md hover:-translate-y-1 transition-all"
+              className="bg-fia-white/95 p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
             >
-              <div className="flex items-center mb-2">
-                <div className="w-9 h-9 rounded-full bg-fia-teal flex items-center justify-center mr-3">
-                  <Flag className="w-5 h-5 text-white" />
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-fia-teal flex items-center justify-center">
+                  <span className="text-2xl font-bold text-white">P</span>
                 </div>
-                <h3 className="font-bold text-lg">Warning Signs</h3>
               </div>
-              <p className="text-fia-textLight leading-snug text-balance text-sm">
-                Detect manipulative tactics targeting vulnerabilities.
+              <h3 className="font-bold text-xl mb-2">Warning Signs</h3>
+              <p className="text-fia-charcoal/80">
+                Detect insights targeting your vulnerabilities.
               </p>
             </motion.div>
             
             <motion.div 
-              className="bg-white p-4 rounded-xl border-2 border-fia-border shadow hover:shadow-md hover:-translate-y-1 transition-all"
+              className="bg-fia-white/95 p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
+              transition={{ delay: 0.7, duration: 0.5 }}
             >
-              <div className="flex items-center mb-2">
-                <div className="w-9 h-9 rounded-full bg-fia-burgundy flex items-center justify-center mr-3">
-                  <Lock className="w-5 h-5 text-white" />
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-fia-burgundy flex items-center justify-center">
+                  <span className="text-2xl text-white">↓</span>
                 </div>
-                <h3 className="font-bold text-lg">Build Defenses</h3>
               </div>
-              <p className="text-fia-textLight leading-snug text-balance text-sm">
-                Gain strategies to protect your wellbeing.
+              <h3 className="font-bold text-xl mb-2">Build Defenses</h3>
+              <p className="text-fia-charcoal/80">
+                Get strategies to navigate relationship snags.
               </p>
             </motion.div>
           </div>
@@ -193,7 +203,15 @@ const Index: React.FC = () => {
 
 // Quiz content based on current step
 const QuizContent: React.FC = () => {
-  const { currentStep } = useQuiz();
+  const { currentStep, resetQuiz } = useQuiz();
+  
+  // Add effect to handle quiz reset when returning to the quiz
+  React.useEffect(() => {
+    if (currentStep === 'quiz') {
+      // Reset the quiz state when entering the quiz
+      resetQuiz();
+    }
+  }, [currentStep, resetQuiz]);
   
   switch (currentStep) {
     case 'landing':
