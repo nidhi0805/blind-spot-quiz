@@ -76,7 +76,7 @@ const BrainIcon = () => (
 const Landing: React.FC = () => {
   const { setCurrentStep } = useQuiz();
   
-  // FIX: Add handler to explicitly navigate to the intake step
+  // Handler to explicitly navigate to the intake step
   const handleStartQuiz = () => {
     setCurrentStep('intake');
   };
@@ -124,7 +124,7 @@ const Landing: React.FC = () => {
             transition={{ delay: 0.6, duration: 0.5 }}
           >
             <MotionButton
-              onClick={handleStartQuiz} {/* FIX: Use the explicit handler */}
+              onClick={handleStartQuiz}
               className="bg-black text-white text-lg md:text-xl px-8 py-6 rounded-full font-bold group hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -210,7 +210,6 @@ const Index: React.FC = () => {
 const QuizContent: React.FC = () => {
   const { currentStep } = useQuiz();
   
-  // FIX: Remove reset effect as it was causing issues with navigation
   // Previously the resetQuiz function was called when entering the quiz step
   // which was resetting the quiz state back to the landing page
   
