@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useQuiz } from '../context/QuizContext';
 import { Button } from "@/components/ui/button";
@@ -34,6 +33,7 @@ const MBTISelection: React.FC<MBTISelectionProps> = ({ onBack }) => {
       id: profile.id,
       name: profile.name,
       percentage: profile.percentage,
+      score: profile.percentage, // Add the missing score property
       summary: `Based on your ${selectedMBTI} personality type, you align with this victim pattern.`,
       manipulativeTactics: "Specific tactics will vary based on your personality type vulnerabilities.",
       defenseStrategies: "Your defense strategies are tailored to your personality type strengths.",
