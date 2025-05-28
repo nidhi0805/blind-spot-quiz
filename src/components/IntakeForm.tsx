@@ -15,11 +15,13 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, User } from "lucide-react";
 import { motion } from "framer-motion";
+import MBTISelection from './MBTISelection';
 
 const IntakeForm: React.FC = () => {
   const { setIntake, setCurrentStep } = useQuiz();
+  const [showMBTIFlow, setShowMBTIFlow] = useState(false);
 
   const [email, setEmail] = useState('');
   const [hasTakenQuiz, setHasTakenQuiz] = useState('');
@@ -78,6 +80,19 @@ const IntakeForm: React.FC = () => {
     // Move to quiz - THIS IS THE FIX: Explicitly set to 'quiz' step
     setCurrentStep('quiz');
   };
+
+  const handleMBTIClick = () => {
+    setShowMBTIFlow(true);
+  };
+
+  const handleBackFromMBTI = () => {
+    setShowMBTIFlow(false);
+  };
+
+  // Show MBTI selection if that flow is active
+  if (showMBTIFlow) {
+    return <MBTISelection onBack={handleBackFromMBTI} />;
+  }
 
   return (
     <motion.div 
@@ -292,14 +307,24 @@ const IntakeForm: React.FC = () => {
                   This is not therapy or diagnosis — it's a mirror to help you reflect on how you show up in complex relationships.
                 </div>
 
-                {/* Submit Button */}
-                <div className="mt-4 flex justify-center">
+                {/* Submit Buttons */}
+                <div className="mt-4 flex flex-col sm:flex-row justify-center gap-3">
                   <Button 
                     type="submit" 
                     className="bg-fia-charcoal hover:bg-fia-charcoal/90 text-white px-8 py-2 rounded-lg font-medium group"
                   >
                     Begin the Quiz
                     <ChevronRight className="ml-1 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                  
+                  <Button 
+                    type="button"
+                    onClick={handleMBTIClick}
+                    variant="outline"
+                    className="border-fia-teal text-fia-teal hover:bg-fia-teal hover:text-white px-6 py-2 rounded-lg font-medium group"
+                  >
+                    <User className="mr-2 h-4 w-4" />
+                    Already know your personality type?
                   </Button>
                 </div>
               </form>
