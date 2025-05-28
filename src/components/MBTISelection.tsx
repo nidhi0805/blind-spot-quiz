@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { getMBTIOptions, mapMBTIToVictimProfiles } from '../utils/mbtiMapping';
 import { ChevronRight, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
+import { BlindSpotProfile } from '../types/quiz';
 
 interface MBTISelectionProps {
   onBack: () => void;
@@ -30,10 +31,10 @@ const MBTISelection: React.FC<MBTISelectionProps> = ({ onBack }) => {
     
     // Convert to the format expected by the results page
     const results = victimProfiles.map(profile => ({
-      id: profile.id,
+      id: profile.id as BlindSpotProfile, // Cast to BlindSpotProfile type
       name: profile.name,
       percentage: profile.percentage,
-      score: profile.percentage, // Add the missing score property
+      score: profile.percentage,
       summary: `Based on your ${selectedMBTI} personality type, you align with this victim pattern.`,
       manipulativeTactics: "Specific tactics will vary based on your personality type vulnerabilities.",
       defenseStrategies: "Your defense strategies are tailored to your personality type strengths.",
