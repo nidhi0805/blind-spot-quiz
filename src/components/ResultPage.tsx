@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuiz } from '../context/QuizContext';
 import CTAButton from './CTAButton';
@@ -535,7 +536,7 @@ const ResultPage: React.FC = () => {
                         transition={{ delay: 1.2 }}
                       >
                         <p>This visualization shows how your quiz responses mapped to different personality vulnerability patterns. Your dominant pattern is highlighted as your primary result.</p>
-                      </div>
+                      </motion.div>
                     </motion.div>
                   )}
                 </AnimatePresence>
