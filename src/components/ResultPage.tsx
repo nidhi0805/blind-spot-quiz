@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuiz } from '../context/QuizContext';
 import CTAButton from './CTAButton';
@@ -10,19 +9,7 @@ import { getDominantProfiles } from '../utils/resultProfiles';
 import { ArrowUp, ChevronDown, Lock, Puzzle, Flag, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FlipCard from './FlipCard';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Legend
-} from 'recharts';
+import RadialChart from './RadialChart';
 
 // Create motion components
 const MotionButton = motion(Button);
@@ -195,7 +182,6 @@ const getManipulativeMatchImage = (profileId: string): string => {
 const ResultPage: React.FC = () => {
   const { results, setCurrentStep } = useQuiz();
   const [showFullInsight, setShowFullInsight] = useState(false);
-  const [showChart, setShowChart] = useState(false);
   const insightRef = useRef<HTMLDivElement>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   
@@ -257,16 +243,8 @@ const ResultPage: React.FC = () => {
   const manipulativeMatch = getManipulativeMatch(dominantProfile.id);
   const manipulativeMatchImage = getManipulativeMatchImage(dominantProfile.id);
   
-  // Prepare chart data from results
-  const chartData = results
-    .filter(profile => profile.score > 0)
-    .map((profile, index) => ({
-      name: profile.name,
-      score: profile.score,
-      percentage: profile.percentage,
-      fill: CHART_COLORS[index % CHART_COLORS.length]
-    }))
-    .sort((a, b) => b.score - a.score);
+  // Filter profiles with scores > 0 for the chart
+  const profilesWithScores = results.filter(profile => profile.score > 0);
   
   // Animation variants
   const contentVariants = {
@@ -455,91 +433,23 @@ const ResultPage: React.FC = () => {
                   Your Primary Pattern: {dominantProfile.name}
                 </motion.h3>
 
-                {/* Profile Scores Chart */}
-                <AnimatePresence>
-                  {showChart && chartData.length > 0 && (
-                    <motion.div 
-                      className="mb-16 p-6 sm:p-8 border-2 border-fia-border rounded-xl bg-white shadow-md"
-                      variants={chartVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                    >
-                      <div className="text-center mb-6">
-                        <h4 className="text-2xl font-bold mb-2">Your Personality Profile Breakdown</h4>
-                        <p className="text-fia-textLight">See how your responses mapped to different vulnerability patterns</p>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        {/* Bar Chart */}
-                        <motion.div 
-                          className="h-96"
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.8, delay: 0.5 }}
-                        >
-                          <h5 className="text-lg font-semibold mb-4 text-center">Score Distribution</h5>
-                          <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
-                              <CartesianGrid strokeDasharray="3 3" />
-                              <XAxis 
-                                dataKey="name" 
-                                angle={-45}
-                                textAnchor="end"
-                                height={80}
-                                fontSize={12}
-                              />
-                              <YAxis />
-                              <Tooltip 
-                                formatter={(value: number, name: string) => [`${value}%`, 'Percentage']}
-                                labelFormatter={(label) => `Profile: ${label}`}
-                              />
-                              <Bar dataKey="percentage" fill="#1B3B6F" radius={[4, 4, 0, 0]} />
-                            </BarChart>
-                          </ResponsiveContainer>
-                        </motion.div>
-
-                        {/* Pie Chart */}
-                        <motion.div 
-                          className="h-96"
-                          initial={{ opacity: 0, x: 20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.8, delay: 0.7 }}
-                        >
-                          <h5 className="text-lg font-semibold mb-4 text-center">Profile Composition</h5>
-                          <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                              <Pie
-                                data={chartData}
-                                cx="50%"
-                                cy="50%"
-                                labelLine={false}
-                                label={({ name, percentage }) => `${name}: ${percentage}%`}
-                                outerRadius={80}
-                                fill="#8884d8"
-                                dataKey="percentage"
-                              >
-                                {chartData.map((entry, index) => (
-                                  <Cell key={`cell-${index}`} fill={entry.fill} />
-                                ))}
-                              </Pie>
-                              <Tooltip formatter={(value: number) => [`${value}%`, 'Percentage']} />
-                            </PieChart>
-                          </ResponsiveContainer>
-                        </motion.div>
-                      </div>
-                      
-                      <motion.div 
-                        className="mt-4 text-sm text-fia-textLight text-center"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 1.2 }}
-                      >
-                        <p>This visualization shows how your quiz responses mapped to different personality vulnerability patterns. Your dominant pattern is highlighted as your primary result.</p>
-                      </motion.div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {/* Interactive Radial Chart */}
+                {profilesWithScores.length > 0 && (
+                  <motion.div 
+                    className="mb-16 p-6 sm:p-8 border-2 border-fia-border rounded-xl bg-white shadow-md"
+                    variants={insightItemVariants}
+                  >
+                    <div className="text-center mb-6">
+                      <h4 className="text-2xl font-bold mb-2">Your Vulnerability Pattern Wheel</h4>
+                      <p className="text-fia-textLight">Watch as your results come to life in this interactive visualization</p>
+                    </div>
+                    
+                    <RadialChart 
+                      profiles={profilesWithScores} 
+                      dominantProfile={dominantProfile}
+                    />
+                  </motion.div>
+                )}
                 
                 <motion.div 
                   className="mb-8 p-6 sm:p-8 border-2 border-fia-border rounded-xl bg-white shadow-md"
