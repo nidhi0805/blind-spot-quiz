@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuiz } from '../context/QuizContext';
 import CTAButton from './CTAButton';
@@ -10,15 +9,6 @@ import { getDominantProfiles } from '../utils/resultProfiles';
 import { ArrowUp, ChevronDown, Lock, Puzzle, Flag, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FlipCard from './FlipCard';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
 
 // Create motion components
 const MotionButton = motion(Button);
@@ -176,7 +166,6 @@ const getManipulativeMatchImage = (profileId: string): string => {
 
 const ResultPage: React.FC = () => {
   const { results, setCurrentStep } = useQuiz();
-  const [isChartVisible, setIsChartVisible] = useState(false);
   const [showFullInsight, setShowFullInsight] = useState(false);
   const [showFlourishChart, setShowFlourishChart] = useState(false);
   const insightRef = useRef<HTMLDivElement>(null);
@@ -208,34 +197,43 @@ const ResultPage: React.FC = () => {
   }, []);
   
   useEffect(() => {
-    // Animation delay for chart
-    const timer = setTimeout(() => {
-      setIsChartVisible(true);
-    }, 800);
-    
     // Show Flourish chart after a delay
     const flourishTimer = setTimeout(() => {
       setShowFlourishChart(true);
     }, 1200);
     
     return () => {
-      clearTimeout(timer);
       clearTimeout(flourishTimer);
     };
   }, []);
 
-  // Load Flourish script dynamically
+  // Load Flourish script and initialize chart
   useEffect(() => {
     if (showFlourishChart) {
-      const script = document.createElement('script');
-      script.src = 'https://public.flourish.studio/resources/embed.js';
-      script.async = true;
-      document.head.appendChild(script);
+      // Check if script already exists
+      const existingScript = document.querySelector('script[src="https://public.flourish.studio/resources/embed.js"]');
       
-      return () => {
-        // Clean up script when component unmounts
-        document.head.removeChild(script);
-      };
+      if (!existingScript) {
+        const script = document.createElement('script');
+        script.src = 'https://public.flourish.studio/resources/embed.js';
+        script.async = true;
+        script.onload = () => {
+          // Force re-initialization of Flourish embeds after script loads
+          setTimeout(() => {
+            if ((window as any).flourish && (window as any).flourish.live) {
+              (window as any).flourish.live();
+            }
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        // Script already exists, just trigger re-initialization
+        setTimeout(() => {
+          if ((window as any).flourish && (window as any).flourish.live) {
+            (window as any).flourish.live();
+          }
+        }, 100);
+      }
     }
   }, [showFlourishChart]);
   
@@ -256,19 +254,10 @@ const ResultPage: React.FC = () => {
   
   const dominantProfiles = getDominantProfiles(results, 1);
   const dominantProfile = dominantProfiles[0];
-  const sortedProfiles = [...results].sort((a, b) => b.percentage - a.percentage);
-  const top5Profiles = sortedProfiles.slice(0, 5);
   
   // Get the manipulative match for the dominant profile
   const manipulativeMatch = getManipulativeMatch(dominantProfile.id);
   const manipulativeMatchImage = getManipulativeMatchImage(dominantProfile.id);
-  
-  // Prepare chart data
-  const chartData = top5Profiles.map(profile => ({
-    name: profile.name,
-    percentage: profile.percentage,
-    color: getTailwindColor(profile.id)
-  }));
   
   // Animation variants
   const contentVariants = {
@@ -311,14 +300,6 @@ const ResultPage: React.FC = () => {
         duration: 0.7,
         ease: "easeOut"
       }
-    })
-  };
-  
-  const barVariants = {
-    hidden: { width: 0 },
-    visible: (percentage: number) => ({
-      width: `${percentage}%`,
-      transition: { duration: 1, ease: "easeOut", delay: 0.5 }
     })
   };
 
@@ -491,7 +472,6 @@ const ResultPage: React.FC = () => {
                           data-src="visualisation/23531996"
                           style={{ minHeight: '500px', width: '100%' }}
                         >
-                          <script src="https://public.flourish.studio/resources/embed.js"></script>
                           <noscript>
                             <img 
                               src="https://public.flourish.studio/visualisation/23531996/thumbnail" 
@@ -609,95 +589,6 @@ const ResultPage: React.FC = () => {
                       />
                     </motion.div>
                   ))}
-                </motion.div>
-                    
-                {/* Profile Breakdown */}
-                <motion.div 
-                  className="mb-16 max-w-4xl mx-auto"
-                  variants={insightItemVariants}
-                >
-                  <motion.h3 
-                    className="text-2xl sm:text-3xl font-bold mb-6"
-                    variants={insightItemVariants}
-                  >
-                    Your Blind Spot Profile Breakdown
-                  </motion.h3>
-                  
-                  <Card className="p-6 sm:p-8 bg-white rounded-xl border-2 border-fia-border shadow-lg">
-                    {isChartVisible && (
-                      <div className="mb-8 h-72">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart
-                            layout="vertical"
-                            data={chartData}
-                            margin={{
-                              top: 5,
-                              right: 30,
-                              left: 20,
-                              bottom: 5,
-                            }}
-                          >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis type="number" domain={[0, 100]} />
-                            <YAxis dataKey="name" type="category" />
-                            <Tooltip 
-                              formatter={(value) => [`${value}%`, 'Percentage']}
-                              contentStyle={{ 
-                                backgroundColor: 'white', 
-                                borderRadius: '8px',
-                                border: '1px solid #eee',
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)' 
-                              }}
-                            />
-                            <Bar 
-                              dataKey="percentage" 
-                              fill="#8884d8" 
-                              radius={[0, 4, 4, 0]}
-                              animationDuration={1500}
-                            >
-                              {chartData.map((entry, index) => (
-                                <motion.rect 
-                                  key={`bar-${index}`}
-                                  fill={entry.color}
-                                  initial={{ width: 0 }}
-                                  animate={{ width: `${entry.percentage}%` }}
-                                  transition={{ duration: 1, delay: 0.2 * index }}
-                                />
-                              ))}
-                            </Bar>
-                          </BarChart>
-                        </ResponsiveContainer>
-                      </div>
-                    )}
-                    
-                    <div className="space-y-5">
-                      {top5Profiles.map((profile, index) => (
-                        <motion.div 
-                          key={profile.id} 
-                          className="space-y-2"
-                          custom={index}
-                          variants={profileCardVariants}
-                          initial="hidden"
-                          animate="visible"
-                        >
-                          <div className="flex justify-between items-center">
-                            <span className="font-bold text-lg">{profile.name}</span>
-                            <span className="font-bold text-lg">{profile.percentage}%</span>
-                          </div>
-                          <div className="h-7 rounded-lg overflow-hidden relative bg-fia-border/30">
-                            <motion.div 
-                              className={`h-full ${getBgColor(profile.id)}`}
-                              custom={profile.percentage}
-                              variants={barVariants}
-                              initial="hidden"
-                              animate="visible"
-                              style={{ width: `${profile.percentage}%` }}
-                            />
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </Card>
                 </motion.div>
                 
                 {/* Start Over Button */}
