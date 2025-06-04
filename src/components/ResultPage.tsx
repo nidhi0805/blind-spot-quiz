@@ -9,6 +9,19 @@ import { getDominantProfiles } from '../utils/resultProfiles';
 import { ArrowUp, ChevronDown, Lock, Puzzle, Flag, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FlipCard from './FlipCard';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend
+} from 'recharts';
 
 // Create motion components
 const MotionButton = motion(Button);
@@ -49,6 +62,10 @@ const getBgColor = (profileId: string): string => {
     caregiver: 'bg-fia-yellow',
     rebel: 'bg-fia-burgundy',
     achiever: 'bg-fia-charcoal',
+    explorer: 'bg-fia-blue',
+    traditionalist: 'bg-fia-teal',
+    intellectual: 'bg-fia-charcoal',
+    leader: 'bg-fia-burgundy',
     default: 'bg-fia-blue'
   };
   
@@ -62,11 +79,21 @@ const getTailwindColor = (profileId: string): string => {
     caregiver: '#F2BE29',
     rebel: '#842E2E',
     achiever: '#121212',
+    explorer: '#1B3B6F',
+    traditionalist: '#246A73',
+    intellectual: '#121212',
+    leader: '#842E2E',
     default: '#1B3B6F'
   };
   
   return colorMap[profileId.toLowerCase()] || colorMap.default;
 };
+
+// Chart colors for profiles
+const CHART_COLORS = [
+  '#1B3B6F', '#246A73', '#F2BE29', '#842E2E', '#121212',
+  '#4A90E2', '#50C878', '#FF6B6B', '#9B59B6'
+];
 
 // Manipulative match data based on profile with traits
 const getManipulativeMatch = (profileId: string) => {
@@ -167,7 +194,7 @@ const getManipulativeMatchImage = (profileId: string): string => {
 const ResultPage: React.FC = () => {
   const { results, setCurrentStep } = useQuiz();
   const [showFullInsight, setShowFullInsight] = useState(false);
-  const [showFlourishChart, setShowFlourishChart] = useState(false);
+  const [showChart, setShowChart] = useState(false);
   const insightRef = useRef<HTMLDivElement>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   
@@ -197,45 +224,15 @@ const ResultPage: React.FC = () => {
   }, []);
   
   useEffect(() => {
-    // Show Flourish chart after a delay
-    const flourishTimer = setTimeout(() => {
-      setShowFlourishChart(true);
+    // Show chart after a delay
+    const chartTimer = setTimeout(() => {
+      setShowChart(true);
     }, 1200);
     
     return () => {
-      clearTimeout(flourishTimer);
+      clearTimeout(chartTimer);
     };
   }, []);
-
-  // Load Flourish script and initialize chart
-  useEffect(() => {
-    if (showFlourishChart) {
-      // Check if script already exists
-      const existingScript = document.querySelector('script[src="https://public.flourish.studio/resources/embed.js"]');
-      
-      if (!existingScript) {
-        const script = document.createElement('script');
-        script.src = 'https://public.flourish.studio/resources/embed.js';
-        script.async = true;
-        script.onload = () => {
-          // Force re-initialization of Flourish embeds after script loads
-          setTimeout(() => {
-            if ((window as any).flourish && (window as any).flourish.live) {
-              (window as any).flourish.live();
-            }
-          }, 100);
-        };
-        document.head.appendChild(script);
-      } else {
-        // Script already exists, just trigger re-initialization
-        setTimeout(() => {
-          if ((window as any).flourish && (window as any).flourish.live) {
-            (window as any).flourish.live();
-          }
-        }, 100);
-      }
-    }
-  }, [showFlourishChart]);
   
   if (!results) {
     return (
@@ -258,6 +255,17 @@ const ResultPage: React.FC = () => {
   // Get the manipulative match for the dominant profile
   const manipulativeMatch = getManipulativeMatch(dominantProfile.id);
   const manipulativeMatchImage = getManipulativeMatchImage(dominantProfile.id);
+  
+  // Prepare chart data from results
+  const chartData = results
+    .filter(profile => profile.score > 0)
+    .map((profile, index) => ({
+      name: profile.name,
+      score: profile.score,
+      percentage: profile.percentage,
+      fill: CHART_COLORS[index % CHART_COLORS.length]
+    }))
+    .sort((a, b) => b.score - a.score);
   
   // Animation variants
   const contentVariants = {
@@ -303,7 +311,7 @@ const ResultPage: React.FC = () => {
     })
   };
 
-  const flourishVariants = {
+  const chartVariants = {
     hidden: { opacity: 0, scale: 0.8, y: 30 },
     visible: { 
       opacity: 1, 
@@ -446,42 +454,79 @@ const ResultPage: React.FC = () => {
                   Your Primary Pattern: {dominantProfile.name}
                 </motion.h3>
 
-                {/* Flourish Chart Section */}
+                {/* Profile Scores Chart */}
                 <AnimatePresence>
-                  {showFlourishChart && (
+                  {showChart && chartData.length > 0 && (
                     <motion.div 
                       className="mb-16 p-6 sm:p-8 border-2 border-fia-border rounded-xl bg-white shadow-md"
-                      variants={flourishVariants}
+                      variants={chartVariants}
                       initial="hidden"
                       animate="visible"
                       exit="hidden"
                     >
                       <div className="text-center mb-6">
-                        <h4 className="text-2xl font-bold mb-2">Personality Vulnerability Mapping</h4>
-                        <p className="text-fia-textLight">Explore how different traits and patterns interconnect with vulnerability types</p>
+                        <h4 className="text-2xl font-bold mb-2">Your Personality Profile Breakdown</h4>
+                        <p className="text-fia-textLight">See how your responses mapped to different vulnerability patterns</p>
                       </div>
                       
-                      <motion.div 
-                        className="w-full overflow-hidden rounded-lg"
-                        initial={{ opacity: 0, rotateY: -15 }}
-                        animate={{ opacity: 1, rotateY: 0 }}
-                        transition={{ duration: 1, delay: 0.5 }}
-                      >
-                        <div 
-                          className="flourish-embed flourish-hierarchy" 
-                          data-src="visualisation/23531996"
-                          style={{ minHeight: '500px', width: '100%' }}
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        {/* Bar Chart */}
+                        <motion.div 
+                          className="h-96"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.8, delay: 0.5 }}
                         >
-                          <noscript>
-                            <img 
-                              src="https://public.flourish.studio/visualisation/23531996/thumbnail" 
-                              width="100%" 
-                              alt="hierarchy visualization" 
-                              className="rounded-lg"
-                            />
-                          </noscript>
-                        </div>
-                      </motion.div>
+                          <h5 className="text-lg font-semibold mb-4 text-center">Score Distribution</h5>
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
+                              <CartesianGrid strokeDasharray="3 3" />
+                              <XAxis 
+                                dataKey="name" 
+                                angle={-45}
+                                textAnchor="end"
+                                height={80}
+                                fontSize={12}
+                              />
+                              <YAxis />
+                              <Tooltip 
+                                formatter={(value: number, name: string) => [`${value}%`, 'Percentage']}
+                                labelFormatter={(label) => `Profile: ${label}`}
+                              />
+                              <Bar dataKey="percentage" fill="#1B3B6F" radius={[4, 4, 0, 0]} />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        </motion.div>
+
+                        {/* Pie Chart */}
+                        <motion.div 
+                          className="h-96"
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.8, delay: 0.7 }}
+                        >
+                          <h5 className="text-lg font-semibold mb-4 text-center">Profile Composition</h5>
+                          <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                              <Pie
+                                data={chartData}
+                                cx="50%"
+                                cy="50%"
+                                labelLine={false}
+                                label={({ name, percentage }) => `${name}: ${percentage}%`}
+                                outerRadius={80}
+                                fill="#8884d8"
+                                dataKey="percentage"
+                              >
+                                {chartData.map((entry, index) => (
+                                  <Cell key={`cell-${index}`} fill={entry.fill} />
+                                ))}
+                              </Pie>
+                              <Tooltip formatter={(value: number) => [`${value}%`, 'Percentage']} />
+                            </PieChart>
+                          </ResponsiveContainer>
+                        </motion.div>
+                      </div>
                       
                       <motion.div 
                         className="mt-4 text-sm text-fia-textLight text-center"
@@ -489,8 +534,8 @@ const ResultPage: React.FC = () => {
                         animate={{ opacity: 1 }}
                         transition={{ delay: 1.2 }}
                       >
-                        <p>Interactive chart showing the relationship between personality traits and vulnerability patterns. Your dominant pattern is highlighted in the visualization above.</p>
-                      </motion.div>
+                        <p>This visualization shows how your quiz responses mapped to different personality vulnerability patterns. Your dominant pattern is highlighted as your primary result.</p>
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
