@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuiz } from '../context/QuizContext';
 import CTAButton from './CTAButton';
@@ -177,6 +178,7 @@ const ResultPage: React.FC = () => {
   const { results, setCurrentStep } = useQuiz();
   const [isChartVisible, setIsChartVisible] = useState(false);
   const [showFullInsight, setShowFullInsight] = useState(false);
+  const [showFlourishChart, setShowFlourishChart] = useState(false);
   const insightRef = useRef<HTMLDivElement>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   
@@ -211,8 +213,31 @@ const ResultPage: React.FC = () => {
       setIsChartVisible(true);
     }, 800);
     
-    return () => clearTimeout(timer);
+    // Show Flourish chart after a delay
+    const flourishTimer = setTimeout(() => {
+      setShowFlourishChart(true);
+    }, 1200);
+    
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(flourishTimer);
+    };
   }, []);
+
+  // Load Flourish script dynamically
+  useEffect(() => {
+    if (showFlourishChart) {
+      const script = document.createElement('script');
+      script.src = 'https://public.flourish.studio/resources/embed.js';
+      script.async = true;
+      document.head.appendChild(script);
+      
+      return () => {
+        // Clean up script when component unmounts
+        document.head.removeChild(script);
+      };
+    }
+  }, [showFlourishChart]);
   
   if (!results) {
     return (
@@ -295,6 +320,20 @@ const ResultPage: React.FC = () => {
       width: `${percentage}%`,
       transition: { duration: 1, ease: "easeOut", delay: 0.5 }
     })
+  };
+
+  const flourishVariants = {
+    hidden: { opacity: 0, scale: 0.8, y: 30 },
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.8,
+        ease: "easeOut",
+        delay: 0.3
+      }
+    }
   };
   
   return (
@@ -425,6 +464,56 @@ const ResultPage: React.FC = () => {
                 >
                   Your Primary Pattern: {dominantProfile.name}
                 </motion.h3>
+
+                {/* Flourish Chart Section */}
+                <AnimatePresence>
+                  {showFlourishChart && (
+                    <motion.div 
+                      className="mb-16 p-6 sm:p-8 border-2 border-fia-border rounded-xl bg-white shadow-md"
+                      variants={flourishVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                    >
+                      <div className="text-center mb-6">
+                        <h4 className="text-2xl font-bold mb-2">Personality Vulnerability Mapping</h4>
+                        <p className="text-fia-textLight">Explore how different traits and patterns interconnect with vulnerability types</p>
+                      </div>
+                      
+                      <motion.div 
+                        className="w-full overflow-hidden rounded-lg"
+                        initial={{ opacity: 0, rotateY: -15 }}
+                        animate={{ opacity: 1, rotateY: 0 }}
+                        transition={{ duration: 1, delay: 0.5 }}
+                      >
+                        <div 
+                          className="flourish-embed flourish-hierarchy" 
+                          data-src="visualisation/23531996"
+                          style={{ minHeight: '500px', width: '100%' }}
+                        >
+                          <script src="https://public.flourish.studio/resources/embed.js"></script>
+                          <noscript>
+                            <img 
+                              src="https://public.flourish.studio/visualisation/23531996/thumbnail" 
+                              width="100%" 
+                              alt="hierarchy visualization" 
+                              className="rounded-lg"
+                            />
+                          </noscript>
+                        </div>
+                      </motion.div>
+                      
+                      <motion.div 
+                        className="mt-4 text-sm text-fia-textLight text-center"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 1.2 }}
+                      >
+                        <p>Interactive chart showing the relationship between personality traits and vulnerability patterns. Your dominant pattern is highlighted in the visualization above.</p>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
                 
                 <motion.div 
                   className="mb-8 p-6 sm:p-8 border-2 border-fia-border rounded-xl bg-white shadow-md"
