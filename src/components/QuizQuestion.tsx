@@ -187,9 +187,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
         transition={{ delay: 0.1, duration: 0.5, ease: "easeOut" }}
       >
         {/* Question Header */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 py-6 border-b border-slate-100">
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-5 border-b border-slate-100">
           <motion.h2 
-            className="text-2xl font-semibold text-slate-800 leading-relaxed text-center"
+            className="text-xl font-semibold text-slate-800 leading-relaxed text-center"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.4 }}
@@ -200,12 +200,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
         
         {/* Question Content */}
         <motion.div 
-          className="p-8"
+          className="p-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.5 }}
         >
-          <div className="min-h-[200px] flex items-center justify-center mb-6">
+          <div className="min-h-[160px] flex items-center justify-center mb-6">
             {renderQuestion()}
           </div>
           

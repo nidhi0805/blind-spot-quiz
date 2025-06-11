@@ -135,11 +135,11 @@ const Quiz: React.FC = () => {
     >
       {/* Header with Progress */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-6 py-4">
+        <div className="max-w-3xl mx-auto px-4 py-4">
           {/* Progress Bar */}
           <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
-              <h1 className="text-xl font-semibold text-slate-800">Personality Assessment</h1>
+              <h1 className="text-lg font-semibold text-slate-800">Personality Assessment</h1>
               <span className="text-sm text-slate-600 font-medium">
                 {currentQuestionIndex + 1} of {quizQuestions.length}
               </span>
@@ -176,8 +176,8 @@ const Quiz: React.FC = () => {
       </div>
       
       {/* Question Container */}
-      <div className="flex-1 flex items-center justify-center px-4 py-8">
-        <div className="w-full max-w-3xl">
+      <div className="flex-1 flex items-center justify-center px-4 py-6">
+        <div className="w-full max-w-2xl">
           <AnimatePresence initial={false} mode="wait">
             <motion.div 
               key={currentQuestionIndex}
@@ -200,8 +200,8 @@ const Quiz: React.FC = () => {
       </div>
       
       {/* Footer Encouragement */}
-      <div className="bg-white/60 backdrop-blur-sm border-t border-slate-200 py-4">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      <div className="bg-white/60 backdrop-blur-sm border-t border-slate-200 py-3">
+        <div className="max-w-3xl mx-auto px-4 text-center">
           <p className="text-sm text-slate-600">
             {currentQuestionIndex < quizQuestions.length - 1 
               ? "Answer honestly for the most accurate results" 
