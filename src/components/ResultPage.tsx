@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuiz } from '../context/QuizContext';
 import CTAButton from './CTAButton';
@@ -8,7 +7,7 @@ import { getDominantProfiles } from '../utils/resultProfiles';
 import { ArrowUp, Trophy, Target, Shield, Brain, Heart, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FlipCard from './FlipCard';
-import RadialChart from './RadialChart';
+import InteractiveChart from './InteractiveChart';
 
 // Create motion components
 const MotionButton = motion(Button);
@@ -48,6 +47,24 @@ const getProfileIcon = (profileId: string) => {
   };
   
   return iconMap[profileId.toLowerCase()] || iconMap.default;
+};
+
+// Profile caricature mapping
+const getProfileCaricature = (profileId: string) => {
+  const caricatureMap: {[key: string]: string} = {
+    dreamer: "🌟",
+    peacemaker: "🕊️", 
+    caregiver: "🤗",
+    rebel: "⚡",
+    achiever: "🏆",
+    explorer: "🗺️",
+    traditionalist: "📚",
+    intellectual: "🧠",
+    leader: "👑",
+    default: "🎭"
+  };
+  
+  return caricatureMap[profileId.toLowerCase()] || caricatureMap.default;
 };
 
 // Manipulative match data (keeping existing logic)
@@ -188,10 +205,10 @@ const ResultPage: React.FC = () => {
   const profilesWithScores = results.filter(profile => profile.score > 0);
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative py-12 px-4">
-        <div className="max-w-3xl mx-auto text-center">
+      <section className="relative py-8 px-4">
+        <div className="max-w-4xl mx-auto text-center">
           {/* Completion Badge */}
           <motion.div 
             className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6"
@@ -204,7 +221,7 @@ const ResultPage: React.FC = () => {
           </motion.div>
 
           <motion.h1 
-            className="text-3xl md:text-4xl font-bold text-slate-800 mb-4"
+            className="text-2xl md:text-3xl font-bold text-slate-800 mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
@@ -213,7 +230,7 @@ const ResultPage: React.FC = () => {
           </motion.h1>
           
           <motion.p 
-            className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto"
+            className="text-base text-slate-600 mb-6 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
@@ -223,7 +240,7 @@ const ResultPage: React.FC = () => {
 
           {/* Primary Profile Card */}
           <motion.div 
-            className="max-w-md mx-auto mb-6"
+            className="max-w-lg mx-auto mb-6"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.6, duration: 0.7 }}
@@ -232,7 +249,6 @@ const ResultPage: React.FC = () => {
               className="bg-white rounded-2xl shadow-xl border-2 p-6 text-center relative overflow-hidden"
               style={{ borderColor: getProfileColor(primaryProfile.id) }}
             >
-              {/* Background Gradient */}
               <div 
                 className="absolute inset-0 opacity-5"
                 style={{ 
@@ -241,11 +257,8 @@ const ResultPage: React.FC = () => {
               />
               
               <div className="relative z-10">
-                <div 
-                  className="w-16 h-16 rounded-full flex items-center justify-center text-white mb-3 mx-auto shadow-lg"
-                  style={{ backgroundColor: getProfileColor(primaryProfile.id) }}
-                >
-                  {getProfileIcon(primaryProfile.id)}
+                <div className="text-6xl mb-4">
+                  {getProfileCaricature(primaryProfile.id)}
                 </div>
                 
                 <h2 className="text-xl font-bold text-slate-800 mb-2">
@@ -281,7 +294,7 @@ const ResultPage: React.FC = () => {
 
           {/* Trait Bars Preview */}
           <motion.div 
-            className="max-w-xl mx-auto"
+            className="max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.6 }}
@@ -319,31 +332,31 @@ const ResultPage: React.FC = () => {
         {showFullResults && (
           <motion.section 
             ref={detailsRef}
-            className="py-12 bg-white"
+            className="py-8 bg-white"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="max-w-5xl mx-auto px-4">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-slate-800 mb-3">
+            <div className="max-w-4xl mx-auto px-4">
+              <div className="text-center mb-6">
+                <h2 className="text-xl font-bold text-slate-800 mb-3">
                   Detailed Analysis: {primaryProfile.name}
                 </h2>
-                <p className="text-slate-600 max-w-2xl mx-auto">
+                <p className="text-slate-600 max-w-2xl mx-auto text-sm">
                   Explore your complete personality profile, including strengths, challenges, and growth opportunities.
                 </p>
               </div>
 
-              {/* Interactive Radial Chart */}
+              {/* Interactive Chart */}
               {profilesWithScores.length > 0 && (
                 <motion.div 
-                  className="mb-12 bg-slate-50 rounded-2xl p-6"
+                  className="mb-8"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.2, duration: 0.6 }}
                 >
-                  <RadialChart 
+                  <InteractiveChart 
                     profiles={profilesWithScores} 
                     dominantProfile={primaryProfile}
                   />
@@ -351,7 +364,7 @@ const ResultPage: React.FC = () => {
               )}
 
               {/* Profile Details Grid */}
-              <div className="grid md:grid-cols-2 gap-6 mb-12">
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
                 {/* Summary Card */}
                 <motion.div 
                   className="bg-white rounded-xl shadow-lg border border-slate-200 p-5"
@@ -393,7 +406,7 @@ const ResultPage: React.FC = () => {
 
               {/* Your Manipulative Match */}
               <motion.div 
-                className="mb-12"
+                className="mb-8"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8, duration: 0.6 }}
@@ -423,7 +436,7 @@ const ResultPage: React.FC = () => {
 
               {/* Defense Strategies */}
               <motion.div 
-                className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 mb-12 border border-green-200"
+                className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 mb-8 border border-green-200"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1, duration: 0.6 }}
@@ -434,7 +447,7 @@ const ResultPage: React.FC = () => {
                   </div>
                   <h3 className="text-xl font-bold text-slate-800">How to Defend Yourself</h3>
                 </div>
-                <p className="text-slate-700 leading-relaxed">{primaryProfile.defenseStrategies}</p>
+                <p className="text-slate-700 leading-relaxed text-sm">{primaryProfile.defenseStrategies}</p>
               </motion.div>
 
               {/* Recommended Tools */}
@@ -447,7 +460,7 @@ const ResultPage: React.FC = () => {
                   Recommended Tools for Growth
                 </h3>
                 
-                <div className="grid md:grid-cols-2 gap-5 mb-8">
+                <div className="grid md:grid-cols-2 gap-5 mb-6">
                   {primaryProfile.tools.map((tool, index) => (
                     <motion.div 
                       key={tool.name}

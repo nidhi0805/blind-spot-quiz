@@ -6,7 +6,7 @@ import Quiz from '../components/Quiz';
 import ResultPage from '../components/ResultPage';
 import { Button } from '@/components/ui/button';
 import { useQuiz } from '../context/QuizContext';
-import { ChevronRight, ArrowRight } from 'lucide-react';
+import { ChevronRight, ArrowRight, Users, Brain, Heart, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 // Create a motion button component that works with framer-motion
@@ -19,58 +19,18 @@ const pageVariants = {
   exit: { opacity: 0, y: -20, transition: { duration: 0.3, ease: "easeIn" } }
 };
 
-// Brain icon SVG component
-const BrainIcon = () => (
-  <motion.svg 
-    width="280" 
-    height="280" 
-    viewBox="0 0 280 280" 
-    fill="none" 
-    xmlns="http://www.w3.org/2000/svg"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 0.8 }}
-    transition={{ duration: 1.2 }}
-  >
-    <path 
-      d="M140 70C120 70 105 80 100 95C95 110 100 130 110 140C120 150 125 165 120 180C115 195 100 200 85 195C70 190 60 175 65 155C70 135 85 125 95 125C105 125 115 130 120 140"
-      stroke="#FFD02F" 
-      strokeWidth="2" 
-      strokeLinecap="round"
-    />
-    <path 
-      d="M140 70C155 70 170 80 175 95C180 110 175 125 165 135C155 145 150 165 155 180C160 195 170 200 185 195C200 190 210 175 205 160C200 145 185 135 175 135" 
-      stroke="#FFD02F" 
-      strokeWidth="2" 
-      strokeLinecap="round"
-    />
-    <path 
-      d="M205 120C215 120 225 130 225 145C225 160 215 170 200 170" 
-      stroke="#FFD02F" 
-      strokeWidth="2" 
-      strokeLinecap="round"
-    />
-    <path 
-      d="M140 70C140 50 150 35 170 30C190 25 210 35 220 55C230 75 225 95 210 105" 
-      stroke="#FFD02F" 
-      strokeWidth="2" 
-      strokeLinecap="round"
-    />
-    <path 
-      d="M240 120C255 120 265 135 265 150C265 165 255 180 240 180" 
-      stroke="#FFD02F" 
-      strokeWidth="2" 
-      strokeLinecap="round"
-      opacity="0.7"
-    />
-    <path 
-      d="M250 150C260 155 265 165 265 175" 
-      stroke="#FFD02F" 
-      strokeWidth="2" 
-      strokeLinecap="round"
-      opacity="0.6"
-    />
-  </motion.svg>
-);
+// Interactive personality cards data
+const personalityPreview = [
+  { emoji: "🌟", name: "The Dreamer", color: "#8B5CF6", description: "Idealistic and empathetic" },
+  { emoji: "🕊️", name: "The Peacemaker", color: "#10B981", description: "Harmonious and diplomatic" },
+  { emoji: "🤗", name: "The Caregiver", color: "#F59E0B", description: "Nurturing and supportive" },
+  { emoji: "⚡", name: "The Rebel", color: "#EF4444", description: "Independent and bold" },
+  { emoji: "🏆", name: "The Achiever", color: "#3B82F6", description: "Goal-oriented and driven" },
+  { emoji: "🗺️", name: "The Explorer", color: "#06B6D4", description: "Curious and adventurous" },
+  { emoji: "📚", name: "The Traditionalist", color: "#6B7280", description: "Reliable and structured" },
+  { emoji: "🧠", name: "The Intellectual", color: "#7C3AED", description: "Analytical and thoughtful" },
+  { emoji: "👑", name: "The Leader", color: "#DC2626", description: "Confident and decisive" }
+];
 
 // Landing page component
 const Landing: React.FC = () => {
@@ -83,114 +43,148 @@ const Landing: React.FC = () => {
   
   return (
     <motion.div 
-      className="min-h-screen flex flex-col overflow-hidden bg-gradient-to-r from-black to-fia-yellow"
+      className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-x-hidden"
       initial="initial"
       animate="animate"
       exit="exit"
       variants={pageVariants}
     >
-      {/* Main hero section */}
-      <div className="flex-1 flex flex-col items-center justify-center relative pt-10 pb-8 px-6 md:px-12">
-        {/* Brain icon overlay */}
-        <div className="absolute top-0 left-0 opacity-70 md:opacity-100">
-          <BrainIcon />
+      {/* Header */}
+      <div className="px-6 py-4">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <div className="text-2xl font-bold text-slate-800">BlindSpots</div>
+          <Button variant="outline" className="text-slate-600 border-slate-300">
+            About
+          </Button>
         </div>
-        
-        {/* Content container */}
-        <div className="max-w-3xl mx-auto text-center z-10 mt-16">
-          <motion.h1 
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.7 }}
-          >
-            Uncover Your<br />
-            Blind Spot<br />
-            Patterns
-          </motion.h1>
-          
-          <motion.p 
-            className="text-white text-lg md:text-xl opacity-90 mb-10 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.7 }}
-          >
-            How do you show up in emotionally complex relationships? Let's find out.
-          </motion.p>
-          
+      </div>
+
+      {/* Hero Section */}
+      <div className="px-6 py-12">
+        <div className="max-w-6xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
+            className="mb-8"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
           >
+            <h1 className="text-4xl md:text-6xl font-bold text-slate-800 mb-6 leading-tight">
+              Uncover Your<br />
+              <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                Blind Spot
+              </span><br />
+              Patterns
+            </h1>
+            
+            <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
+              Discover how you show up in emotionally complex relationships and learn to protect yourself from manipulation.
+            </p>
+
             <MotionButton
               onClick={handleStartQuiz}
-              className="bg-black text-white text-lg md:text-xl px-8 py-6 rounded-full font-bold group hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white text-lg px-8 py-4 rounded-full font-semibold group shadow-lg"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
             >
-              Start the Quiz
-              <ArrowRight className="ml-2 text-fia-yellow group-hover:translate-x-1 transition-transform" />
+              Take the Free Quiz
+              <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
             </MotionButton>
           </motion.div>
-        </div>
-      </div>
-      
-      {/* Feature cards section */}
-      <div className="px-6 md:px-12 pb-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-            <motion.div 
-              className="bg-fia-white/95 p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-            >
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 rounded-full bg-fia-blue flex items-center justify-center">
-                  <span className="text-2xl text-white">+</span>
-                </div>
-              </div>
-              <h3 className="font-bold text-xl mb-2">Discover Patterns</h3>
-              <p className="text-fia-charcoal/80">
-                Identify your unique relational tendencies.
-              </p>
-            </motion.div>
+
+          {/* Personality Types Grid */}
+          <motion.div
+            className="mb-12"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
+            <h2 className="text-2xl font-bold text-slate-800 mb-8">
+              Which type resonates with you?
+            </h2>
             
-            <motion.div 
-              className="bg-fia-white/95 p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
-            >
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 rounded-full bg-fia-teal flex items-center justify-center">
-                  <span className="text-2xl font-bold text-white">P</span>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
+              {personalityPreview.map((type, index) => (
+                <motion.div
+                  key={type.name}
+                  className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl border border-slate-100 cursor-pointer transition-all hover:-translate-y-1"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 + index * 0.1, duration: 0.6 }}
+                  whileHover={{ scale: 1.02 }}
+                  onClick={handleStartQuiz}
+                >
+                  <div className="text-4xl mb-3">{type.emoji}</div>
+                  <h3 className="font-bold text-lg text-slate-800 mb-2">{type.name}</h3>
+                  <p className="text-slate-600 text-sm">{type.description}</p>
+                  <div 
+                    className="w-full h-1 rounded-full mt-3 opacity-70"
+                    style={{ backgroundColor: type.color }}
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Features Section */}
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-12"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+          >
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Brain className="h-8 w-8 text-white" />
               </div>
-              <h3 className="font-bold text-xl mb-2">Warning Signs</h3>
-              <p className="text-fia-charcoal/80">
-                Detect insights targeting your vulnerabilities.
+              <h3 className="text-xl font-bold text-slate-800 mb-2">Discover Patterns</h3>
+              <p className="text-slate-600">
+                Identify your unique relational tendencies and emotional vulnerabilities.
               </p>
-            </motion.div>
-            
-            <motion.div 
-              className="bg-fia-white/95 p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.5 }}
-            >
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 rounded-full bg-fia-burgundy flex items-center justify-center">
-                  <span className="text-2xl text-white">↓</span>
-                </div>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="h-8 w-8 text-white" />
               </div>
-              <h3 className="font-bold text-xl mb-2">Build Defenses</h3>
-              <p className="text-fia-charcoal/80">
-                Get strategies to navigate relationship snags.
+              <h3 className="text-xl font-bold text-slate-800 mb-2">Warning Signs</h3>
+              <p className="text-slate-600">
+                Learn to recognize manipulation tactics that target your specific blind spots.
               </p>
-            </motion.div>
-          </div>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Heart className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-800 mb-2">Build Defenses</h3>
+              <p className="text-slate-600">
+                Get personalized strategies to navigate relationship challenges safely.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* CTA Section */}
+          <motion.div
+            className="bg-gradient-to-r from-purple-100 to-blue-100 rounded-3xl p-8"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1, duration: 0.8 }}
+          >
+            <h2 className="text-2xl font-bold text-slate-800 mb-4">
+              Ready to understand your blind spots?
+            </h2>
+            <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
+              Take our comprehensive assessment to discover your vulnerability patterns and learn how to protect yourself in complex relationships.
+            </p>
+            <MotionButton
+              onClick={handleStartQuiz}
+              className="bg-slate-800 hover:bg-slate-900 text-white px-8 py-3 rounded-full font-semibold"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Start Assessment Now
+            </MotionButton>
+          </motion.div>
         </div>
       </div>
     </motion.div>
@@ -209,9 +203,6 @@ const Index: React.FC = () => {
 // Quiz content based on current step
 const QuizContent: React.FC = () => {
   const { currentStep } = useQuiz();
-  
-  // Previously the resetQuiz function was called when entering the quiz step
-  // which was resetting the quiz state back to the landing page
   
   switch (currentStep) {
     case 'landing':
