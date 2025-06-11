@@ -277,31 +277,7 @@ const IntakeForm: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Traits section - optional, condensed */}
-                <div className="mt-4">
-                  <Label className="text-sm font-medium text-fia-charcoal mb-2 block">
-                    Select any that apply to you (Optional)
-                  </Label>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    {preTraitsOptions.slice(0, 3).map(option => (
-                      <div key={option.value} className="flex items-center space-x-2 bg-white border border-fia-border/60 rounded-md p-2 hover:bg-fia-teal/5">
-                        <Checkbox
-                          id={option.value}
-                          checked={preTraits.includes(option.value)}
-                          onCheckedChange={() => handlePreTraitChange(option.value)}
-                          className="border-fia-charcoal/50"
-                        />
-                        <Label 
-                          htmlFor={option.value}
-                          className="cursor-pointer text-xs leading-tight text-fia-charcoal/80"
-                        >
-                          {option.label}
-                        </Label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
+            
                 {/* Consent message - simplified */}
                 <div className="mt-3 text-xs text-fia-blue/90 bg-fia-blue/5 border border-fia-blue/10 rounded-md p-2">
                   This is not therapy or diagnosis — it's a mirror to help you reflect on how you show up in complex relationships.

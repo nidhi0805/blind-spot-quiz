@@ -11,6 +11,7 @@ import { motion } from 'framer-motion';
 
 // Create a motion button component that works with framer-motion
 const MotionButton = motion(Button);
+const dreamer = "/img/Dreamer.png"; // Example image path, adjust as needed
 
 // Shared page transitions
 const pageVariants = {
@@ -21,7 +22,7 @@ const pageVariants = {
 
 // Interactive personality cards data
 const personalityPreview = [
-  { emoji: "🌟", name: "The Dreamer", color: "#8B5CF6", description: "Idealistic and empathetic" },
+  { image: dreamer, name: "The Dreamer", color: "#8B5CF6", description: "Idealistic and empathetic" },
   { emoji: "🕊️", name: "The Peacemaker", color: "#10B981", description: "Harmonious and diplomatic" },
   { emoji: "🤗", name: "The Caregiver", color: "#F59E0B", description: "Nurturing and supportive" },
   { emoji: "⚡", name: "The Rebel", color: "#EF4444", description: "Independent and bold" },
@@ -113,7 +114,13 @@ const Landing: React.FC = () => {
                   whileHover={{ scale: 1.02 }}
                   onClick={handleStartQuiz}
                 >
-                  <div className="text-4xl mb-3">{type.emoji}</div>
+                  <div className="text-4xl mb-3">
+                     {type.image ? (
+                      <img src={type.image} alt={type.name} className="w-10 h-10 mx-auto" />
+                    ) : (
+                      <span>{type.emoji}</span>
+                    )}
+                  </div>
                   <h3 className="font-bold text-lg text-slate-800 mb-2">{type.name}</h3>
                   <p className="text-slate-600 text-sm">{type.description}</p>
                   <div 

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ProfileResult } from '../types/quiz';
+import DreamerImage from '../img/Dreamer.png';
 
 interface InteractiveChartProps {
   profiles: ProfileResult[];
@@ -27,7 +28,7 @@ const InteractiveChart: React.FC<InteractiveChartProps> = ({ profiles, dominantP
   // Caricature mapping
   const getProfileCaricature = (profileId: string) => {
     const caricatureMap: {[key: string]: string} = {
-      dreamer: "🌟",
+      dreamer: DreamerImage,
       peacemaker: "🕊️", 
       caregiver: "🤗",
       rebel: "⚡",
