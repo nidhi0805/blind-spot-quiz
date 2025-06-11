@@ -6,8 +6,9 @@ import { calculateResults } from '../utils/scoring';
 import { generateUserId, saveQuizResult } from '../utils/storage';
 import QuizQuestion from './QuizQuestion';
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { ChevronLeft, Flag, Lock, Puzzle } from "lucide-react";
+import { ChevronLeft, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const Quiz: React.FC = () => {
@@ -25,16 +26,6 @@ const Quiz: React.FC = () => {
   
   // Calculate progress percentage
   const progress = Math.round(((currentQuestionIndex + 1) / quizQuestions.length) * 100);
-  
-  // Get question icon based on index
-  const getQuestionIcon = (index: number) => {
-    const icons = [
-      <Puzzle className="h-6 w-6 text-fia-yellow" />,
-      <Lock className="h-6 w-6 text-fia-yellow" />,
-      <Flag className="h-6 w-6 text-fia-yellow" />
-    ];
-    return icons[index % icons.length];
-  };
   
   // Handle moving to next question
   const handleNextQuestion = () => {
@@ -79,8 +70,8 @@ const Quiz: React.FC = () => {
     }
   };
   
-  // Animation variants
-  const cardVariants = {
+  // Animation variants for question transitions
+  const questionVariants = {
     enterFromRight: {
       x: "100%",
       opacity: 0
@@ -137,108 +128,88 @@ const Quiz: React.FC = () => {
   
   return (
     <motion.div 
-      className="h-screen w-full overflow-hidden flex flex-col bg-gradient-to-b from-fia-white to-fia-yellow/5"
+      className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-white to-blue-50 flex flex-col"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      {/* Top Progress Bar */}
-      <motion.div 
-        className="w-full h-1.5 bg-fia-border/30 relative"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-      >
-        <motion.div 
-          className="h-full bg-fia-yellow"
-          initial={{ width: `${progress - 5}%` }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-        />
-      </motion.div>
-      
-      {/* Progress Info */}
-      <motion.div 
-        className="flex items-center justify-between px-6 py-4 relative z-10"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <div className="flex items-center space-x-2">
-          <div className="w-7 h-7 flex items-center justify-center">
-            {getQuestionIcon(currentQuestionIndex)}
+      {/* Header with Progress */}
+      <div className="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-10">
+        <div className="max-w-4xl mx-auto px-6 py-4">
+          {/* Progress Bar */}
+          <div className="mb-4">
+            <div className="flex items-center justify-between mb-2">
+              <h1 className="text-xl font-semibold text-slate-800">Personality Assessment</h1>
+              <span className="text-sm text-slate-600 font-medium">
+                {currentQuestionIndex + 1} of {quizQuestions.length}
+              </span>
+            </div>
+            <Progress value={progress} className="h-2 bg-slate-200" />
+            <div className="flex justify-between text-xs text-slate-500 mt-1">
+              <span>Just started</span>
+              <span>{progress}% complete</span>
+              <span>Almost done!</span>
+            </div>
           </div>
-          <span className="text-sm font-medium text-fia-charcoal/80">
-            Question {currentQuestionIndex + 1} of {quizQuestions.length}
-          </span>
-        </div>
-        <div>
-          <span className="text-sm font-medium text-fia-charcoal/80">
-            {progress}%
-          </span>
-        </div>
-      </motion.div>
-      
-      {/* Previous Button (only show if not on first question) */}
-      {currentQuestionIndex > 0 && (
-        <motion.div
-          className="absolute top-12 left-6 z-20"
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 0.8, x: 0 }}
-          whileHover={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          <Button
-            variant="ghost"
-            size="sm"
-            className="hover:bg-fia-white/50 text-fia-charcoal/70 font-medium flex items-center group"
-            onClick={handlePreviousQuestion}
-          >
-            <ChevronLeft className="h-4 w-4 mr-1 group-hover:-translate-x-0.5 transition-transform" />
-            Previous
-          </Button>
-        </motion.div>
-      )}
-      
-      {/* Main Question Container - Full height minus header */}
-      <div className="flex-1 flex items-center justify-center px-4 relative">
-        {/* Decorative background pattern */}
-        <div className="absolute inset-0 bg-subtle-dots opacity-10"></div>
-        
-        {/* Flashcard Animation Container */}
-        <AnimatePresence initial={false} mode="wait">
-          <motion.div 
-            key={currentQuestionIndex}
-            custom={direction}
-            variants={cardVariants}
-            initial={direction === "right" ? "enterFromLeft" : "enterFromRight"}
-            animate="center"
-            exit={direction === "right" ? "exitToRight" : "exitToLeft"}
-            className="w-full max-h-full flex justify-center items-center"
-          >
-            {currentQuestionIndex < quizQuestions.length && (
-              <QuizQuestion 
-                question={quizQuestions[currentQuestionIndex]} 
-                onNext={handleNextQuestion}
-              />
+
+          {/* Navigation */}
+          <div className="flex items-center justify-between">
+            {currentQuestionIndex > 0 ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-slate-600 hover:text-slate-800 hover:bg-slate-100"
+                onClick={handlePreviousQuestion}
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Previous
+              </Button>
+            ) : (
+              <div />
             )}
-          </motion.div>
-        </AnimatePresence>
+            
+            <div className="text-sm text-slate-500">
+              Question {currentQuestionIndex + 1}
+            </div>
+          </div>
+        </div>
       </div>
       
-      {/* Final invitation - shown on last question */}
-      {currentQuestionIndex === quizQuestions.length - 1 && responses.some(r => r.questionId === quizQuestions[currentQuestionIndex].id) && (
-        <motion.div 
-          className="absolute bottom-6 left-0 right-0 text-center px-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.5 }}
-        >
-          <p className="text-fia-charcoal/70 text-sm max-w-md mx-auto">
-            Want to go deeper? Check out your full pattern in the Blind Spot Quiz or explore the Listening Lab.
+      {/* Question Container */}
+      <div className="flex-1 flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-3xl">
+          <AnimatePresence initial={false} mode="wait">
+            <motion.div 
+              key={currentQuestionIndex}
+              custom={direction}
+              variants={questionVariants}
+              initial={direction === "right" ? "enterFromLeft" : "enterFromRight"}
+              animate="center"
+              exit={direction === "right" ? "exitToRight" : "exitToLeft"}
+              className="w-full"
+            >
+              {currentQuestionIndex < quizQuestions.length && (
+                <QuizQuestion 
+                  question={quizQuestions[currentQuestionIndex]} 
+                  onNext={handleNextQuestion}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+      
+      {/* Footer Encouragement */}
+      <div className="bg-white/60 backdrop-blur-sm border-t border-slate-200 py-4">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <p className="text-sm text-slate-600">
+            {currentQuestionIndex < quizQuestions.length - 1 
+              ? "Answer honestly for the most accurate results" 
+              : "Almost there! Complete your assessment to see your personality type"
+            }
           </p>
-        </motion.div>
-      )}
+        </div>
+      </div>
     </motion.div>
   );
 };

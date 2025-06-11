@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Question, QuizResponse } from '../types/quiz';
 import { useQuiz } from '../context/QuizContext';
@@ -178,36 +179,35 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, onNext }) => {
   };
   
   return (
-    <div className="w-full max-w-xl mx-auto px-4 h-full flex items-center">
+    <div className="w-full max-w-2xl mx-auto">
       <motion.div 
-        className="w-full flex flex-col h-[80vh] max-h-[580px] bg-white/95 backdrop-blur-md rounded-2xl shadow-xl overflow-visible"
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.1, duration: 0.5 }}
+        className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden"
+        initial={{ y: 20, opacity: 0, scale: 0.98 }}
+        animate={{ y: 0, opacity: 1, scale: 1 }}
+        transition={{ delay: 0.1, duration: 0.5, ease: "easeOut" }}
       >
-        <motion.div 
-          className="px-5 py-5 md:px-6 flex flex-col h-full box-border"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          <motion.h3 
-            className="text-xl font-semibold mb-4 sm:mb-5 text-center leading-tight"
+        {/* Question Header */}
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 py-6 border-b border-slate-100">
+          <motion.h2 
+            className="text-2xl font-semibold text-slate-800 leading-relaxed text-center"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.4 }}
           >
             {question.text}
-          </motion.h3>
-          
-          <motion.div 
-            className="flex-1 flex items-center justify-center overflow-visible mb-auto" 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-          >
+          </motion.h2>
+        </div>
+        
+        {/* Question Content */}
+        <motion.div 
+          className="p-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+        >
+          <div className="min-h-[200px] flex items-center justify-center mb-6">
             {renderQuestion()}
-          </motion.div>
+          </div>
           
           <ContinueButton 
             isDisabled={isButtonDisabled()} 
