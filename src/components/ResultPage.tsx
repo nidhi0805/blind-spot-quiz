@@ -500,7 +500,7 @@ const ResultPage: React.FC = () => {
           whileTap={{ scale: 0.9 }}
         >
           <ArrowUp className="h-4 w-4" />
-        </ArrowUp>
+        </motion.button>
       )}
     </div>
   );
