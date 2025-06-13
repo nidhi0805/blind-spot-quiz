@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ProfileResult } from '../types/quiz';
-import DreamerImage from '../img/Dreamer.png';
 
 interface InteractiveChartProps {
   profiles: ProfileResult[];
@@ -11,6 +10,8 @@ interface InteractiveChartProps {
 
 const InteractiveChart: React.FC<InteractiveChartProps> = ({ profiles, dominantProfile }) => {
   const [hoveredProfile, setHoveredProfile] = useState<string | null>(null);
+  const DreamerImage = "/img/Dreamer.png"; 
+  const Peacemaker="img/Peacemaker.png";
 
   // Colors for each profile
   const profileColors: {[key: string]: string} = {
@@ -29,7 +30,7 @@ const InteractiveChart: React.FC<InteractiveChartProps> = ({ profiles, dominantP
   const getProfileCaricature = (profileId: string) => {
     const caricatureMap: {[key: string]: string} = {
       dreamer: DreamerImage,
-      peacemaker: "🕊️", 
+      peacemaker: Peacemaker, 
       caregiver: "🤗",
       rebel: "⚡",
       achiever: "🏆",
