@@ -13,6 +13,13 @@ import { motion } from 'framer-motion';
 const MotionButton = motion(Button);
 const dreamer = "/img/Dreamer.png"; 
 const Peacemaker = "/img/Peacemaker.png"; 
+const caregiver="/img/Caregiver.png";
+const rebel="/img/Rebel.png";
+const achiever="/img/Achiever.png";
+const explorer="/img/Explorer.png";
+const traditionalist="/img/Traditionalist.png";
+const intellectual="/img/Intellectual.png";
+const leader="/img/Leader.png";
 
 // Shared page transitions
 const pageVariants = {
@@ -24,14 +31,14 @@ const pageVariants = {
 // Interactive personality cards data
 const personalityPreview = [
   { image: dreamer, name: "The Dreamer", color: "#8B5CF6", description: "Idealistic and empathetic" },
-  { emoji: Peacemaker, name: "The Peacemaker", color: "#10B981", description: "Harmonious and diplomatic" },
-  { emoji: "🤗", name: "The Caregiver", color: "#F59E0B", description: "Nurturing and supportive" },
-  { emoji: "⚡", name: "The Rebel", color: "#EF4444", description: "Independent and bold" },
-  { emoji: "🏆", name: "The Achiever", color: "#3B82F6", description: "Goal-oriented and driven" },
-  { emoji: "🗺️", name: "The Explorer", color: "#06B6D4", description: "Curious and adventurous" },
-  { emoji: "📚", name: "The Traditionalist", color: "#6B7280", description: "Reliable and structured" },
-  { emoji: "🧠", name: "The Intellectual", color: "#7C3AED", description: "Analytical and thoughtful" },
-  { emoji: "👑", name: "The Leader", color: "#DC2626", description: "Confident and decisive" }
+  { image: Peacemaker, name: "The Peacemaker", color: "#10B981", description: "Harmonious and diplomatic" },
+  { image: caregiver, name: "The Caregiver", color: "#F59E0B", description: "Nurturing and supportive" },
+  { image: rebel, name: "The Rebel", color: "#EF4444", description: "Independent and bold" },
+  { image: achiever, name: "The Achiever", color: "#3B82F6", description: "Goal-oriented and driven" },
+  { image: explorer, name: "The Explorer", color: "#06B6D4", description: "Curious and adventurous" },
+  { image:traditionalist, name: "The Traditionalist", color: "#6B7280", description: "Reliable and structured" },
+  { image: intellectual, name: "The Intellectual", color: "#7C3AED", description: "Analytical and thoughtful" },
+  { image : leader, name: "The Leader", color: "#DC2626", description: "Confident and decisive" }
 ];
 
 // Landing page component
@@ -115,11 +122,11 @@ const Landing: React.FC = () => {
                   whileHover={{ scale: 1.02 }}
                   onClick={handleStartQuiz}
                 >
-                  <div className="text-4xl mb-3">
+                  <div className="h-[140px] flex items-center justify-center">
                      {type.image ? (
-                      <img src={type.image} alt={type.name} className="w-25 h-25 mx-auto" />
+                      <img src={type.image} alt={type.name} className="mx-auto h-[140px] w-auto object-contain" />
                     ) : (
-                      <span>{type.emoji}</span>
+                      <span>{type.image}</span>
                     )}
                   </div>
                   <p className="text-slate-600 text-sm">{type.description}</p>
