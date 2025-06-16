@@ -96,7 +96,7 @@ const IntakeForm: React.FC = () => {
 
   return (
     <motion.div 
-      className="h-screen flex flex-col bg-gradient-to-b from-fia-white to-fia-yellow/10 overflow-hidden"
+      className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-x-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -127,7 +127,7 @@ const IntakeForm: React.FC = () => {
           {/* Header */}
           <div className="text-center mb-4">
             <motion.h2 
-              className="text-2xl md:text-3xl font-bold mb-1"
+              className="text-3xl md:text-4xl font-bold text-slate-800 mb-2 leading-tight"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
@@ -135,7 +135,7 @@ const IntakeForm: React.FC = () => {
               Before we begin
             </motion.h2>
             <motion.p 
-              className="text-fia-textLight text-base"
+              className="text-slate-600 text-lg"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
@@ -151,7 +151,7 @@ const IntakeForm: React.FC = () => {
             transition={{ delay: 0.3 }}
             className="w-full"
           >
-            <Card className="bg-white border-0 shadow-md overflow-hidden">
+            <Card className="bg-white border border-slate-200 shadow-lg rounded-2xl p-6">
               <form onSubmit={handleSubmit} className="p-5">
                 {/* Two column grid for form inputs */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
@@ -287,7 +287,7 @@ const IntakeForm: React.FC = () => {
                 <div className="mt-4 flex flex-col sm:flex-row justify-center gap-3">
                   <Button 
                     type="submit" 
-                    className="bg-fia-charcoal hover:bg-fia-charcoal/90 text-white px-8 py-2 rounded-lg font-medium group"
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3 rounded-full font-semibold group shadow-lg"
                   >
                     Begin the Quiz
                     <ChevronRight className="ml-1 group-hover:translate-x-1 transition-transform" />
@@ -297,7 +297,7 @@ const IntakeForm: React.FC = () => {
                     type="button"
                     onClick={handleMBTIClick}
                     variant="outline"
-                    className="border-fia-teal text-fia-teal hover:bg-fia-teal hover:text-white px-6 py-2 rounded-lg font-medium group"
+                    className="border-slate-300 text-slate-700 hover:bg-slate-100 px-6 py-2 rounded-full font-semibold group"
                   >
                     <User className="mr-2 h-4 w-4" />
                     Already know your personality type?
