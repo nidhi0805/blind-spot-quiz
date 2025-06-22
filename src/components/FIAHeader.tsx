@@ -12,9 +12,13 @@ const FIAHeader: React.FC = () => {
     >
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          {/* FIA Logo placeholder - will need actual logo */}
-          <div className="w-12 h-12 bg-gradient-to-br from-fiaPink to-fiaBlue rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl">FIA</span>
+          {/* FIA Logo */}
+          <div className="w-12 h-12 flex items-center justify-center">
+            <img 
+              src="/lovable-uploads/symbol-square.png" 
+              alt="Feminine Intelligence Agency Logo" 
+              className="w-12 h-12 object-contain"
+            />
           </div>
           <div>
             <h1 className="text-xl font-bold text-fiaCharcoal font-karla">
