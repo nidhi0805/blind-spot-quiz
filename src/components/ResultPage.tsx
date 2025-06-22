@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useQuiz } from '../context/QuizContext';
 import { Button } from "@/components/ui/button";
@@ -22,12 +21,15 @@ import { useNavigate } from 'react-router-dom';
 import FIAHeader from './FIAHeader';
 import InteractiveChart from './InteractiveChart';
 import ResultsAnimation from './ResultsAnimation';
+import RedFlagRadar from './RedFlagRadar';
+import InsightRouting from './InsightRouting';
 
 const ResultPage: React.FC = () => {
   const { results, setCurrentStep } = useQuiz();
   const [activeSection, setActiveSection] = useState<string | null>('overview');
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showAnimation, setShowAnimation] = useState(true);
+  const [radarInteractions, setRadarInteractions] = useState(0);
   const navigate = useNavigate();
 
   // Handle case where results don't exist
@@ -94,6 +96,10 @@ const ResultPage: React.FC = () => {
 
   const handleCompleteAnimation = () => {
     setShowAnimation(false);
+  };
+
+  const handleRadarInteraction = (flagsExplored: number) => {
+    setRadarInteractions(flagsExplored);
   };
 
   return (
@@ -166,6 +172,34 @@ const ResultPage: React.FC = () => {
             </Card>
           </motion.div>
 
+          {/* Red Flag Radar Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+          >
+            <Card className="p-8">
+              <RedFlagRadar 
+                profile={dominantProfile} 
+                onInteraction={handleRadarInteraction}
+              />
+            </Card>
+          </motion.div>
+
+          {/* Insight Routing Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+          >
+            <Card className="p-8">
+              <InsightRouting 
+                profile={dominantProfile}
+                flagsExplored={radarInteractions}
+              />
+            </Card>
+          </motion.div>
+
           {/* Detailed Analysis Sections */}
           <div className="space-y-4">
             
@@ -173,7 +207,7 @@ const ResultPage: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
             >
               <Card className="overflow-hidden">
                 <button
@@ -233,7 +267,7 @@ const ResultPage: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
+              transition={{ delay: 1.0, duration: 0.6 }}
             >
               <Card className="overflow-hidden">
                 <button
@@ -293,7 +327,7 @@ const ResultPage: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.6 }}
+              transition={{ delay: 1.2, duration: 0.6 }}
             >
               <Card className="overflow-hidden">
                 <button
@@ -360,7 +394,7 @@ const ResultPage: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 0.6 }}
+            transition={{ delay: 1.4, duration: 0.6 }}
           >
             <Card className="bg-gradient-to-br from-fiaBlue/10 to-fiaPink/10 border-fiaBlue/20 p-8 text-center">
               <h3 className="text-3xl font-bold text-fiaCharcoal mb-4 font-karla">
