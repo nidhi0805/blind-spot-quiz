@@ -4,7 +4,6 @@ import { useQuiz } from '../context/QuizContext';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, 
@@ -16,24 +15,28 @@ import {
   ChevronDown,
   ChevronUp,
   ExternalLink,
-  ArrowUp
+  ArrowUp,
+  MessageSquare
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import FIAHeader from './FIAHeader';
 import InteractiveChart from './InteractiveChart';
-import RadialChart from './RadialChart';
-import CTAButton from './CTAButton';
+import ResultsAnimation from './ResultsAnimation';
 
 const ResultPage: React.FC = () => {
   const { results, setCurrentStep } = useQuiz();
   const [activeSection, setActiveSection] = useState<string | null>('overview');
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [showAnimation, setShowAnimation] = useState(true);
+  const navigate = useNavigate();
 
   // Handle case where results don't exist
   if (!results || results.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-slate-800 mb-4">No Results Available</h2>
-          <p className="text-slate-600 mb-6">Please take the quiz first to see your results.</p>
+          <h2 className="text-2xl font-bold text-fiaCharcoal mb-4">No Results Available</h2>
+          <p className="text-gray-600 mb-6">Please take the assessment first to see your results.</p>
           <Button onClick={() => setCurrentStep('landing')}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Home
@@ -48,22 +51,22 @@ const ResultPage: React.FC = () => {
     prev.percentage > current.percentage ? prev : current
   );
 
-  // Get profile caricature
-  const getProfileCaricature = (profileId: string) => {
-    const caricatureMap: {[key: string]: string} = {
-      dreamer: "🌟",
-      peacemaker: "🕊️", 
-      caregiver: "🤗",
-      rebel: "⚡",
-      achiever: "🏆",
-      explorer: "🗺️",
-      traditionalist: "📚",
-      intellectual: "🧠",
-      leader: "👑",
+  // Get profile emoji - FIA victim type emojis
+  const getProfileEmoji = (profileId: string) => {
+    const emojiMap: {[key: string]: string} = {
+      dreamer: "🎭", // The Player
+      peacemaker: "🕵️‍♂️", // The Investigator  
+      caregiver: "🤗", // The Caregiver
+      rebel: "💣", // The Saboteur
+      achiever: "🧛", // The Energy-Drainer
+      explorer: "🗺️", // The Explorer
+      traditionalist: "📚", // The Traditionalist
+      intellectual: "🧠", // The Intellectual
+      leader: "👑", // The Leader
       default: "🎭"
     };
     
-    return caricatureMap[profileId.toLowerCase()] || caricatureMap.default;
+    return emojiMap[profileId.toLowerCase()] || emojiMap.default;
   };
 
   // Handle scroll to top
@@ -85,43 +88,26 @@ const ResultPage: React.FC = () => {
     setActiveSection(activeSection === section ? null : section);
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
-      {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setCurrentStep('landing')}
-                className="text-slate-600 hover:text-slate-800"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Home
-              </Button>
-              <div>
-                <h1 className="text-xl font-bold text-slate-800">Your Blind Spot Profile</h1>
-                <p className="text-sm text-slate-600">Understanding your vulnerability patterns</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm">
-                <Share2 className="h-4 w-4 mr-2" />
-                Share
-              </Button>
-              <Button variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-2" />
-                Download
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+  const handleChatWithEva = () => {
+    navigate('/chat');
+  };
 
-      {/* Main Content - Scrollable */}
+  const handleCompleteAnimation = () => {
+    setShowAnimation(false);
+  };
+
+  return (
+    <div className="min-h-screen bg-white">
+      <FIAHeader />
+      
+      {/* Results Animation Overlay */}
+      <AnimatePresence>
+        {showAnimation && (
+          <ResultsAnimation onComplete={handleCompleteAnimation} />
+        )}
+      </AnimatePresence>
+
+      {/* Main Content */}
       <div className="w-full">
         <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
           
@@ -131,22 +117,34 @@ const ResultPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200 p-8">
-              <div className="text-center">
-                <div className="text-6xl mb-4">
-                  {getProfileCaricature(dominantProfile.id)}
-                </div>
-                <h2 className="text-3xl font-bold text-slate-800 mb-2">
-                  You are primarily: {dominantProfile.name}
-                </h2>
-                <p className="text-lg text-slate-600 mb-4">
-                  {dominantProfile.percentage}% match
+            <Card className="bg-gradient-to-br from-fiaPink/10 to-fiaBlue/10 border-fiaPink/20 p-8 text-center">
+              <div className="text-7xl mb-6" role="img" aria-label={`${dominantProfile.name} emoji`}>
+                {getProfileEmoji(dominantProfile.id)}
+              </div>
+              <h2 className="text-3xl lg:text-4xl font-bold text-fiaCharcoal mb-3 font-karla">
+                Your Primary Pattern: {dominantProfile.name}
+              </h2>
+              <p className="text-xl text-fiaPink font-semibold mb-4">
+                {dominantProfile.percentage}% match
+              </p>
+              <div className="max-w-3xl mx-auto">
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  {dominantProfile.summary}
                 </p>
-                <div className="max-w-2xl mx-auto">
-                  <p className="text-slate-700 leading-relaxed">
-                    {dominantProfile.summary}
-                  </p>
-                </div>
+              </div>
+              
+              {/* Chat with Eva CTA */}
+              <div className="mt-8">
+                <Button
+                  onClick={handleChatWithEva}
+                  className="fia-btn-secondary text-lg px-8 py-4"
+                >
+                  <MessageSquare className="mr-2 h-5 w-5" />
+                  💬 Chat with Eva – Your FIA Coach
+                </Button>
+                <p className="text-sm text-gray-600 mt-2">
+                  Get personalized guidance and support
+                </p>
               </div>
             </Card>
           </motion.div>
@@ -158,6 +156,9 @@ const ResultPage: React.FC = () => {
             transition={{ delay: 0.2, duration: 0.6 }}
           >
             <Card className="p-6">
+              <h3 className="text-2xl font-bold text-fiaCharcoal mb-6 font-karla text-center">
+                Your Complete Pattern Breakdown
+              </h3>
               <InteractiveChart 
                 profiles={results} 
                 dominantProfile={dominantProfile}
@@ -177,19 +178,21 @@ const ResultPage: React.FC = () => {
               <Card className="overflow-hidden">
                 <button
                   onClick={() => toggleSection('tactics')}
-                  className="w-full p-6 text-left hover:bg-slate-50 transition-colors"
+                  className="w-full p-6 text-left hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <AlertTriangle className="h-6 w-6 text-red-500" />
+                    <div className="flex items-center space-x-4">
+                      <AlertTriangle className="h-6 w-6 text-red-500" aria-label="Warning" />
                       <div>
-                        <h3 className="text-xl font-bold text-slate-800">Manipulation Tactics Targeting You</h3>
-                        <p className="text-slate-600">Learn what predators look for in your type</p>
+                        <h3 className="text-xl font-bold text-fiaCharcoal font-karla">
+                          ⚠️ Tactics That Target You
+                        </h3>
+                        <p className="text-gray-600">Learn what predators look for in your pattern</p>
                       </div>
                     </div>
                     {activeSection === 'tactics' ? 
-                      <ChevronUp className="h-5 w-5 text-slate-400" /> : 
-                      <ChevronDown className="h-5 w-5 text-slate-400" />
+                      <ChevronUp className="h-5 w-5 text-gray-400" /> : 
+                      <ChevronDown className="h-5 w-5 text-gray-400" />
                     }
                   </div>
                 </button>
@@ -203,18 +206,19 @@ const ResultPage: React.FC = () => {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-6 pb-6 border-t border-slate-200">
-                        <div className="pt-4">
-                          <p className="text-slate-700 leading-relaxed mb-4">
+                      <div className="px-6 pb-6 border-t border-gray-100">
+                        <div className="pt-6">
+                          <p className="text-gray-700 leading-relaxed mb-6 text-lg">
                             {dominantProfile.manipulativeTactics}
                           </p>
-                          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                            <h4 className="font-semibold text-red-800 mb-2">⚠️ Common Red Flags</h4>
-                            <ul className="space-y-1 text-sm text-red-700">
+                          <div className="bg-red-50 border-l-4 border-red-400 rounded-r-lg p-6">
+                            <h4 className="font-bold text-red-800 mb-3 font-karla">🚨 Common Red Flags</h4>
+                            <ul className="space-y-2 text-red-700">
                               <li>• Love bombing or excessive early attention</li>
                               <li>• Isolation from friends and family</li>
                               <li>• Gaslighting your perceptions</li>
                               <li>• Exploiting your helpful nature</li>
+                              <li>• Creating artificial urgency or scarcity</li>
                             </ul>
                           </div>
                         </div>
@@ -234,19 +238,21 @@ const ResultPage: React.FC = () => {
               <Card className="overflow-hidden">
                 <button
                   onClick={() => toggleSection('defenses')}
-                  className="w-full p-6 text-left hover:bg-slate-50 transition-colors"
+                  className="w-full p-6 text-left hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <Shield className="h-6 w-6 text-green-500" />
+                    <div className="flex items-center space-x-4">
+                      <Shield className="h-6 w-6 text-green-600" aria-label="Shield" />
                       <div>
-                        <h3 className="text-xl font-bold text-slate-800">Your Defense Strategies</h3>
-                        <p className="text-slate-600">Personalized protection methods</p>
+                        <h3 className="text-xl font-bold text-fiaCharcoal font-karla">
+                          🛡️ Your Protection Strategies
+                        </h3>
+                        <p className="text-gray-600">Personalized defense methods for your pattern</p>
                       </div>
                     </div>
                     {activeSection === 'defenses' ? 
-                      <ChevronUp className="h-5 w-5 text-slate-400" /> : 
-                      <ChevronDown className="h-5 w-5 text-slate-400" />
+                      <ChevronUp className="h-5 w-5 text-gray-400" /> : 
+                      <ChevronDown className="h-5 w-5 text-gray-400" />
                     }
                   </div>
                 </button>
@@ -260,18 +266,19 @@ const ResultPage: React.FC = () => {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-6 pb-6 border-t border-slate-200">
-                        <div className="pt-4">
-                          <p className="text-slate-700 leading-relaxed mb-4">
+                      <div className="px-6 pb-6 border-t border-gray-100">
+                        <div className="pt-6">
+                          <p className="text-gray-700 leading-relaxed mb-6 text-lg">
                             {dominantProfile.defenseStrategies}
                           </p>
-                          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                            <h4 className="font-semibold text-green-800 mb-2">🛡️ Key Protection Strategies</h4>
-                            <ul className="space-y-1 text-sm text-green-700">
-                              <li>• Trust your gut feelings</li>
+                          <div className="bg-green-50 border-l-4 border-green-400 rounded-r-lg p-6">
+                            <h4 className="font-bold text-green-800 mb-3 font-karla">✨ Key Protection Strategies</h4>
+                            <ul className="space-y-2 text-green-700">
+                              <li>• Trust your gut feelings — they're your superpower</li>
                               <li>• Maintain strong support networks</li>
                               <li>• Set and enforce clear boundaries</li>
                               <li>• Take time before making big decisions</li>
+                              <li>• Practice saying "no" without explanation</li>
                             </ul>
                           </div>
                         </div>
@@ -291,19 +298,21 @@ const ResultPage: React.FC = () => {
               <Card className="overflow-hidden">
                 <button
                   onClick={() => toggleSection('overview')}
-                  className="w-full p-6 text-left hover:bg-slate-50 transition-colors"
+                  className="w-full p-6 text-left hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <BookOpen className="h-6 w-6 text-blue-500" />
+                    <div className="flex items-center space-x-4">
+                      <BookOpen className="h-6 w-6 text-fiaBlue" aria-label="Book" />
                       <div>
-                        <h3 className="text-xl font-bold text-slate-800">Complete Profile Breakdown</h3>
-                        <p className="text-slate-600">All your personality dimensions</p>
+                        <h3 className="text-xl font-bold text-fiaCharcoal font-karla">
+                          📊 Complete Pattern Analysis
+                        </h3>
+                        <p className="text-gray-600">All your vulnerability dimensions</p>
                       </div>
                     </div>
                     {activeSection === 'overview' ? 
-                      <ChevronUp className="h-5 w-5 text-slate-400" /> : 
-                      <ChevronDown className="h-5 w-5 text-slate-400" />
+                      <ChevronUp className="h-5 w-5 text-gray-400" /> : 
+                      <ChevronDown className="h-5 w-5 text-gray-400" />
                     }
                   </div>
                 </button>
@@ -317,18 +326,23 @@ const ResultPage: React.FC = () => {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-6 pb-6 border-t border-slate-200">
-                        <div className="pt-4 space-y-4">
+                      <div className="px-6 pb-6 border-t border-gray-100">
+                        <div className="pt-6 space-y-4">
                           {results.map((profile, index) => (
-                            <div key={profile.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
-                              <div className="flex items-center space-x-3">
-                                <span className="text-2xl">{getProfileCaricature(profile.id)}</span>
+                            <div key={profile.id} className="flex items-center justify-between p-5 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                              <div className="flex items-center space-x-4">
+                                <span className="text-3xl" role="img" aria-label={`${profile.name} emoji`}>
+                                  {getProfileEmoji(profile.id)}
+                                </span>
                                 <div>
-                                  <h4 className="font-semibold text-slate-800">{profile.name}</h4>
-                                  <p className="text-sm text-slate-600">{profile.summary}</p>
+                                  <h4 className="font-bold text-fiaCharcoal font-karla text-lg">{profile.name}</h4>
+                                  <p className="text-gray-600">{profile.summary}</p>
                                 </div>
                               </div>
-                              <Badge variant={index === 0 ? "default" : "secondary"}>
+                              <Badge 
+                                variant={index === 0 ? "default" : "secondary"}
+                                className={index === 0 ? "bg-fiaPink text-white text-lg py-1 px-3" : "text-lg py-1 px-3"}
+                              >
                                 {profile.percentage}%
                               </Badge>
                             </div>
@@ -342,56 +356,39 @@ const ResultPage: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* Resources Section */}
+          {/* Final CTA Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.6 }}
           >
-            <Card className="p-6">
-              <h3 className="text-xl font-bold text-slate-800 mb-4">Recommended Resources</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {dominantProfile.tools?.map((tool, index) => (
-                  <div key={index} className="p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
-                    <div className="flex items-center justify-between">
-                      <span className="font-medium text-slate-800">{tool.name}</span>
-                      <ExternalLink className="h-4 w-4 text-slate-400" />
-                    </div>
-                  </div>
-                )) || (
-                  <div className="col-span-2 text-center py-8 text-slate-500">
-                    Resources will be available soon for your profile type.
-                  </div>
-                )}
-              </div>
-            </Card>
-          </motion.div>
-
-          {/* CTA Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 0.6 }}
-          >
-            <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200 p-8 text-center">
-              <h3 className="text-2xl font-bold text-slate-800 mb-4">
-                Ready to Build Your Defenses?
+            <Card className="bg-gradient-to-br from-fiaBlue/10 to-fiaPink/10 border-fiaBlue/20 p-8 text-center">
+              <h3 className="text-3xl font-bold text-fiaCharcoal mb-4 font-karla">
+                Ready to Build Stronger Defenses?
               </h3>
-              <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
-                Take the next step in protecting yourself with our comprehensive protection program.
+              <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
+                Take the next step in protecting yourself with personalized coaching from Eva, 
+                our AI coach trained in feminine intelligence principles.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <CTAButton 
-                  name="Get Protection Guide" 
-                  url="#" 
-                  isPrimary={true}
-                />
-                <CTAButton 
-                  name="Join Support Community" 
-                  url="#" 
-                  isPrimary={false}
-                />
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mobile-fix">
+                <Button 
+                  onClick={handleChatWithEva}
+                  className="fia-btn-primary text-lg px-8 py-4"
+                >
+                  <MessageSquare className="mr-2 h-5 w-5" />
+                  Start Coaching Session
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="fia-btn-secondary"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Download Results
+                </Button>
               </div>
+              <p className="text-sm text-gray-600 mt-4">
+                🔒 Your data is secure and never shared with third parties
+              </p>
             </Card>
           </motion.div>
         </div>
@@ -402,14 +399,15 @@ const ResultPage: React.FC = () => {
         {showScrollTop && (
           <motion.button
             onClick={scrollToTop}
-            className="fixed bottom-8 right-8 bg-slate-800 text-white p-3 rounded-full shadow-lg hover:bg-slate-700 transition-colors z-50"
+            className="fixed bottom-8 right-8 bg-fiaPink text-white p-4 rounded-full shadow-lg hover:bg-fiaPink/90 transition-colors z-50"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            aria-label="Scroll to top"
           >
-            <ArrowUp className="h-5 w-5" />
+            <ArrowUp className="h-6 w-6" />
           </motion.button>
         )}
       </AnimatePresence>

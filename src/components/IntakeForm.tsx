@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { useQuiz } from '../context/QuizContext';
 import { 
   ageRangeOptions, 
-  genderOptions, 
   relationshipOptions, 
   preTraitsOptions 
 } from '../utils/quizData';
@@ -15,8 +14,11 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ChevronRight, User } from "lucide-react";
+import { ChevronRight, User, Info } from "lucide-react";
 import { motion } from "framer-motion";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import FIAHeader from './FIAHeader';
+import GenderIdentitySelect from './GenderIdentitySelect';
 import MBTISelection from './MBTISelection';
 
 const IntakeForm: React.FC = () => {
@@ -34,6 +36,7 @@ const IntakeForm: React.FC = () => {
   
   // Email validation
   const validateEmail = (email: string) => {
+    if (!email) return true; // Optional field
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   };
@@ -49,35 +52,27 @@ const IntakeForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate email
-    if (!validateEmail(email)) {
+    // Validate email only if provided
+    if (email && !validateEmail(email)) {
       setEmailError('Please enter a valid email address');
       return;
     }
     
-    // Validate required fields
-    if (!ageRange || !genderIdentity || !relationshipStatus) {
-      toast.error("Please complete all required fields");
-      return;
-    }
-    
     if (hasTakenQuiz === 'yes') {
-      // Simulate quiz results or fetch from storage
       setCurrentStep('results');
       return;
     }
     
-    // Save intake data
+    // Save intake data (all fields are now optional)
     setIntake({
-      email,
-      ageRange,
-      genderIdentity,
-      relationshipStatus,
+      email: email || undefined,
+      ageRange: ageRange || undefined,
+      genderIdentity: genderIdentity || undefined,
+      relationshipStatus: relationshipStatus || undefined,
       emotionalSafety,
       preTraits
     });
     
-    // Move to quiz - THIS IS THE FIX: Explicitly set to 'quiz' step
     setCurrentStep('quiz');
   };
 
@@ -89,58 +84,59 @@ const IntakeForm: React.FC = () => {
     setShowMBTIFlow(false);
   };
 
-  // Show MBTI selection if that flow is active
   if (showMBTIFlow) {
     return <MBTISelection onBack={handleBackFromMBTI} />;
   }
 
   return (
     <motion.div 
-      className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-x-hidden"
+      className="min-h-screen bg-white"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
+      <FIAHeader />
+
       {/* Progress indicator */}
-      <div className="pt-4 pb-2 px-4">
-        <div className="max-w-4xl mx-auto flex items-center justify-center space-x-2 md:space-x-4">
+      <div className="pt-6 pb-4 px-4">
+        <div className="max-w-4xl mx-auto flex items-center justify-center space-x-4">
           <div className="flex items-center">
-            <div className="w-8 h-8 rounded-full bg-fia-charcoal text-white flex items-center justify-center text-sm font-medium">1</div>
-            <span className="ml-2 text-sm font-medium">Info</span>
+            <div className="w-10 h-10 rounded-full bg-fiaPink text-white flex items-center justify-center font-semibold">1</div>
+            <span className="ml-3 font-semibold text-fiaCharcoal">Information</span>
           </div>
-          <div className="w-8 h-1 bg-fia-border"></div>
+          <div className="w-12 h-1 bg-gray-200 rounded"></div>
           <div className="flex items-center opacity-50">
-            <div className="w-8 h-8 rounded-full bg-fia-border text-fia-textLight flex items-center justify-center text-sm font-medium">2</div>
-            <span className="ml-2 text-sm font-medium">Quiz</span>
+            <div className="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-semibold">2</div>
+            <span className="ml-3 font-semibold text-gray-500">Assessment</span>
           </div>
-          <div className="w-8 h-1 bg-fia-border"></div>
+          <div className="w-12 h-1 bg-gray-200 rounded"></div>
           <div className="flex items-center opacity-50">
-            <div className="w-8 h-8 rounded-full bg-fia-border text-fia-textLight flex items-center justify-center text-sm font-medium">3</div>
-            <span className="ml-2 text-sm font-medium">Results</span>
+            <div className="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-semibold">3</div>
+            <span className="ml-3 font-semibold text-gray-500">Results</span>
           </div>
         </div>
       </div>
 
       {/* Main form area */}
-      <div className="flex-1 flex flex-col justify-evenly px-4 py-2 overflow-hidden">
-        <div className="max-w-4xl mx-auto w-full">
+      <div className="flex-1 px-4 py-6">
+        <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-4">
+          <div className="text-center mb-8">
             <motion.h2 
-              className="text-3xl md:text-4xl font-bold text-slate-800 mb-2 leading-tight"
+              className="fia-heading"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
             >
-              Before we begin
+              Let's sharpen your social discernment
             </motion.h2>
             <motion.p 
-              className="text-slate-600 text-lg"
+              className="text-lg text-gray-600"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              Please share a bit about yourself before taking the quiz
+              Share a bit about yourself to get personalized insights. You've got this! 💪
             </motion.p>
           </div>
 
@@ -149,19 +145,31 @@ const IntakeForm: React.FC = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="w-full"
           >
-            <Card className="bg-white border border-slate-200 shadow-lg rounded-2xl p-6">
-              <form onSubmit={handleSubmit} className="p-5">
-                {/* Two column grid for form inputs */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+            <Card className="fia-card mobile-fix">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Left Column */}
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {/* Email */}
                     <div>
-                      <Label htmlFor="email" className="text-sm font-medium text-fia-charcoal">
-                        Email <span className="text-fia-burgundy">*</span>
-                      </Label>
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Label htmlFor="email" className="font-semibold text-fiaCharcoal">
+                          Email
+                        </Label>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Info className="h-4 w-4 text-gray-400" aria-label="Data usage information" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="text-xs max-w-xs">
+                                We use this data only for aggregate insights and never sell your information.
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
                       <Input
                         id="email"
                         type="email"
@@ -170,23 +178,36 @@ const IntakeForm: React.FC = () => {
                           setEmail(e.target.value);
                           setEmailError('');
                         }}
-                        className={`h-10 ${emailError ? 'border-fia-burgundy ring-1 ring-fia-burgundy' : 'focus:border-fia-yellow'}`}
+                        className={`h-12 border-gray-300 focus:border-fiaPink ${emailError ? 'border-red-500' : ''}`}
                         placeholder="your@email.com"
-                        required
                       />
-                      {emailError && <p className="text-xs text-fia-burgundy mt-1">{emailError}</p>}
+                      {emailError && <p className="text-xs text-red-500 mt-1">{emailError}</p>}
                     </div>
 
                     {/* Age Range */}
                     <div>
-                      <Label htmlFor="age-range" className="text-sm font-medium text-fia-charcoal">
-                        Age Range <span className="text-fia-burgundy">*</span>
-                      </Label>
-                      <Select value={ageRange} onValueChange={setAgeRange} required>
-                        <SelectTrigger id="age-range" className="h-10">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Label htmlFor="age-range" className="font-semibold text-fiaCharcoal">
+                          Age Range
+                        </Label>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Info className="h-4 w-4 text-gray-400" aria-label="Data usage information" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="text-xs max-w-xs">
+                                We use this data only for aggregate insights and never sell your information.
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                      <Select value={ageRange} onValueChange={setAgeRange}>
+                        <SelectTrigger id="age-range" className="h-12 border-gray-300 focus:border-fiaPink">
                           <SelectValue placeholder="Select age range" />
                         </SelectTrigger>
-                        <SelectContent className="border border-fia-border">
+                        <SelectContent className="border border-gray-200">
                           {ageRangeOptions.map(option => (
                             <SelectItem key={option.value} value={option.value}>
                               {option.label}
@@ -197,37 +218,39 @@ const IntakeForm: React.FC = () => {
                     </div>
 
                     {/* Gender Identity */}
-                    <div>
-                      <Label htmlFor="gender-identity" className="text-sm font-medium text-fia-charcoal">
-                        Gender Identity <span className="text-fia-burgundy">*</span>
-                      </Label>
-                      <Select value={genderIdentity} onValueChange={setGenderIdentity} required>
-                        <SelectTrigger id="gender-identity" className="h-10">
-                          <SelectValue placeholder="Select gender identity" />
-                        </SelectTrigger>
-                        <SelectContent className="border border-fia-border">
-                          {genderOptions.map(option => (
-                            <SelectItem key={option.value} value={option.value}>
-                              {option.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    <GenderIdentitySelect 
+                      value={genderIdentity}
+                      onChange={setGenderIdentity}
+                      isRequired={false}
+                    />
                   </div>
 
                   {/* Right Column */}
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {/* Relationship Status */}
                     <div>
-                      <Label htmlFor="relationship-status" className="text-sm font-medium text-fia-charcoal">
-                        Relationship Status <span className="text-fia-burgundy">*</span>
-                      </Label>
-                      <Select value={relationshipStatus} onValueChange={setRelationshipStatus} required>
-                        <SelectTrigger id="relationship-status" className="h-10">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Label htmlFor="relationship-status" className="font-semibold text-fiaCharcoal">
+                          Relationship Status
+                        </Label>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Info className="h-4 w-4 text-gray-400" aria-label="Data usage information" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="text-xs max-w-xs">
+                                We use this data only for aggregate insights and never sell your information.
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                      <Select value={relationshipStatus} onValueChange={setRelationshipStatus}>
+                        <SelectTrigger id="relationship-status" className="h-12 border-gray-300 focus:border-fiaPink">
                           <SelectValue placeholder="Select relationship status" />
                         </SelectTrigger>
-                        <SelectContent className="border border-fia-border">
+                        <SelectContent className="border border-gray-200">
                           {relationshipOptions.map(option => (
                             <SelectItem key={option.value} value={option.value}>
                               {option.label}
@@ -239,14 +262,14 @@ const IntakeForm: React.FC = () => {
 
                     {/* Previous Quiz */}
                     <div>
-                      <Label htmlFor="taken-quiz" className="text-sm font-medium text-fia-charcoal">
-                        Have you taken a personality quiz before?
+                      <Label htmlFor="taken-quiz" className="font-semibold text-fiaCharcoal mb-2 block">
+                        Have you taken a personality assessment before?
                       </Label>
                       <Select value={hasTakenQuiz} onValueChange={setHasTakenQuiz}>
-                        <SelectTrigger id="taken-quiz" className="h-10">
+                        <SelectTrigger id="taken-quiz" className="h-12 border-gray-300 focus:border-fiaPink">
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
-                        <SelectContent className="border border-fia-border">
+                        <SelectContent className="border border-gray-200">
                           <SelectItem value="yes">Yes</SelectItem>
                           <SelectItem value="no">No</SelectItem>
                         </SelectContent>
@@ -255,10 +278,10 @@ const IntakeForm: React.FC = () => {
 
                     {/* Emotional Safety Slider */}
                     <div>
-                      <Label className="text-sm font-medium text-fia-charcoal mb-2 block">
+                      <Label className="font-semibold text-fiaCharcoal mb-3 block">
                         How emotionally safe do you feel in close relationships?
                       </Label>
-                      <div className="px-1">
+                      <div className="px-2">
                         <Slider
                           value={[emotionalSafety]}
                           min={0}
@@ -267,9 +290,9 @@ const IntakeForm: React.FC = () => {
                           onValueChange={values => setEmotionalSafety(values[0])}
                           className="my-4"
                         />
-                        <div className="flex justify-between text-xs text-fia-textLight">
+                        <div className="flex justify-between text-sm text-gray-600">
                           <span>Not at all safe</span>
-                          <span className="font-medium">{emotionalSafety}</span>
+                          <span className="font-semibold text-fiaPink">{emotionalSafety}</span>
                           <span>Extremely safe</span>
                         </div>
                       </div>
@@ -277,30 +300,29 @@ const IntakeForm: React.FC = () => {
                   </div>
                 </div>
 
-            
-                {/* Consent message - simplified */}
-                <div className="mt-3 text-xs text-fia-blue/90 bg-fia-blue/5 border border-fia-blue/10 rounded-md p-2">
-                  This is not therapy or diagnosis — it's a mirror to help you reflect on how you show up in complex relationships.
+                {/* Consent message */}
+                <div className="mt-6 text-sm text-fiaBlue/90 bg-fiaBlue/5 border border-fiaBlue/10 rounded-lg p-4">
+                  This assessment is designed to help you understand your relationship patterns and build stronger boundaries. 
+                  It's not therapy or diagnosis — it's a tool for empowerment and self-awareness.
                 </div>
 
                 {/* Submit Buttons */}
-                <div className="mt-4 flex flex-col sm:flex-row justify-center gap-3">
+                <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4 mobile-fix">
                   <Button 
                     type="submit" 
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3 rounded-full font-semibold group shadow-lg"
+                    className="fia-btn-primary group"
                   >
-                    Begin the Quiz
-                    <ChevronRight className="ml-1 group-hover:translate-x-1 transition-transform" />
+                    Begin Assessment
+                    <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                   </Button>
                   
                   <Button 
                     type="button"
                     onClick={handleMBTIClick}
-                    variant="outline"
-                    className="border-slate-300 text-slate-700 hover:bg-slate-100 px-6 py-2 rounded-full font-semibold group"
+                    className="fia-btn-secondary group"
                   >
-                    <User className="mr-2 h-4 w-4" />
-                    Already know your personality type?
+                    <User className="mr-2 h-5 w-5" />
+                    Already know your type?
                   </Button>
                 </div>
               </form>

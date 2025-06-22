@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -63,28 +62,34 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// FIA Updated colors
+				// FIA Brand Colors - Primary
+				fiaPink: '#E86EB4',
+				fiaBlue: '#36A0D9', 
+				fiaCharcoal: '#222',
+				
+				// Legacy FIA colors (keeping for compatibility)
 				fia: {
-					yellow: '#F2BE29',    // Hero sections, result backgrounds
-					teal: '#246A73',      // Quiz flashcard background
-					burgundy: '#842E2E',  // CTA button hover, rebel profile
-					blue: '#1B3B6F',      // Info cards, secondary tone
-					white: '#FFFFFF',     // Background for cards
-					charcoal: '#121212',  // Headings and CTA text
+					yellow: '#F2BE29',
+					teal: '#246A73',      
+					burgundy: '#842E2E',  
+					blue: '#36A0D9',      // Updated to FIA blue
+					white: '#FFFFFF',     
+					charcoal: '#222',     // Updated to FIA charcoal
+					pink: '#E86EB4',      // New FIA pink
 					
 					// Original colors - keeping for compatibility
 					background: '#FFFFFF',
-					text: '#121212',
-					accent: '#F2BE29',
-					secondary: '#246A73',
+					text: '#222',
+					accent: '#E86EB4',    // Updated to FIA pink
+					secondary: '#36A0D9', // Updated to FIA blue
 					border: '#E0E0E0',
 					// Profile colors
-					dreamer: '#1B3B6F',    // Sapphire Blue
-					peacemaker: '#246A73',  // Deep Teal  
-					caregiver: '#F2BE29',   // FIA Yellow
-					rebel: '#842E2E',       // Burgundy
-					achiever: '#121212',    // Charcoal
-					textLight: '#444444',
+					dreamer: '#36A0D9',   
+					peacemaker: '#246A73',  
+					caregiver: '#E86EB4',   // Updated to FIA pink
+					rebel: '#842E2E',       
+					achiever: '#222',       // Updated to FIA charcoal
+					textLight: '#666',
 					offwhite: '#F9F9F9',
 				}
 			},
@@ -94,9 +99,10 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				sans: ['Inter', 'DM Sans', 'Work Sans', 'system-ui', 'sans-serif'],
+				sans: ['Karla', 'Inter', 'system-ui', 'sans-serif'],
+				karla: ['Karla', 'system-ui', 'sans-serif'],
 				inter: ['Inter', 'system-ui', 'sans-serif'],
-				heading: ['Circular Std', 'Futura PT', 'Helvetica Neue', 'Inter', 'sans-serif'],
+				heading: ['Karla', 'Inter', 'Helvetica Neue', 'sans-serif'],
 			},
 			keyframes: {
 				'accordion-down': {

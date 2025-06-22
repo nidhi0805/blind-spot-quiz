@@ -1,5 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Work+Sans:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,24 +9,24 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 7%;
+    --foreground: 0 0% 13%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 7%;
+    --card-foreground: 0 0% 13%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 7%;
+    --popover-foreground: 0 0% 13%;
 
-    --primary: 46 88% 55%;
+    --primary: 328 68% 65%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 190 53% 30%;
+    --secondary: 198 74% 53%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 0 0% 95%;
     --muted-foreground: 0 0% 40%;
 
-    --accent: 220 61% 27%;
+    --accent: 198 74% 53%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 63% 35%;
@@ -33,7 +34,7 @@
 
     --border: 0 0% 88%;
     --input: 0 0% 88%;
-    --ring: 46 88% 55%;
+    --ring: 328 68% 65%;
 
     --radius: 0.75rem;
   }
@@ -44,21 +45,22 @@
     word-wrap: break-word;
   }
 
-  body {
-    @apply bg-fia-white text-fia-charcoal font-sans;
-    line-height: 1.5;
+  html, body, #root {
+    @apply min-h-screen bg-white text-fiaCharcoal font-karla;
+    line-height: 1.6;
+    overflow-x: hidden;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading font-bold leading-tight;
+    @apply font-karla font-bold leading-tight text-fiaCharcoal;
   }
   
   h1 {
-    @apply text-4xl sm:text-5xl;
+    @apply text-4xl sm:text-5xl lg:text-6xl;
   }
   
   h2 {
-    @apply text-3xl sm:text-4xl;
+    @apply text-3xl sm:text-4xl lg:text-5xl;
   }
   
   h3 {
@@ -66,20 +68,26 @@
   }
   
   p {
-    @apply leading-relaxed;
+    @apply leading-relaxed text-fiaCharcoal;
   }
   
-  /* Allow normal scrolling */
-  html, body, #root {
-    @apply min-h-full;
+  /* Mobile padding fix */
+  body {
+    padding-bottom: 64px;
   }
   
-  /* Add text balance where needed */
+  @media (min-width: 768px) {
+    body {
+      padding-bottom: 0;
+    }
+  }
+  
+  /* Text balance where needed */
   .text-balance {
     text-wrap: balance;
   }
   
-  /* Custom scrollbar for answer options */
+  /* Custom scrollbar */
   .custom-scrollbar::-webkit-scrollbar {
     width: 4px;
   }
@@ -89,16 +97,11 @@
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-fia-border/60 rounded-full;
+    @apply bg-gray-300 rounded-full;
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-fia-border;
-  }
-  
-  /* Hide horizontal scroll */
-  .quiz-card, .quiz-content-container {
-    overflow-x: hidden;
+    @apply bg-gray-400;
   }
 }
 
@@ -107,287 +110,97 @@
     @apply w-full max-w-6xl mx-auto px-4 sm:px-6;
   }
   
-  .fia-split-container {
-    @apply flex flex-col md:flex-row w-full max-w-6xl mx-auto;
-  }
-
   .fia-heading {
-    @apply font-heading text-3xl sm:text-4xl font-bold text-fia-charcoal mb-6;
+    @apply font-karla text-3xl sm:text-4xl lg:text-5xl font-bold text-fiaCharcoal mb-6;
   }
 
   .fia-subheading {
-    @apply font-heading text-xl font-semibold text-fia-charcoal mb-4;
+    @apply font-karla text-xl sm:text-2xl font-semibold text-fiaCharcoal mb-4;
   }
   
   .fia-card {
-    @apply bg-fia-white rounded-xl border border-fia-border shadow-md p-8 transition-all hover:shadow-lg;
+    @apply bg-white rounded-2xl border border-gray-200 shadow-lg p-6 sm:p-8 transition-all hover:shadow-xl;
   }
   
   .fia-btn-primary {
-    @apply bg-fia-charcoal text-fia-white px-6 py-4 rounded-lg font-medium text-lg
-           hover:opacity-90 transition-all transform hover:scale-[1.03] shadow-md 
-           hover:shadow-lg hover:bg-fia-burgundy;
+    @apply bg-fiaPink text-white px-6 py-4 rounded-full font-karla font-semibold text-lg
+           hover:bg-fiaPink/90 transition-all transform hover:scale-[1.02] shadow-lg 
+           hover:shadow-xl;
   }
   
   .fia-btn-secondary {
-    @apply bg-fia-white text-fia-charcoal border border-fia-charcoal/20 px-6 py-4 
-           rounded-lg font-medium text-lg hover:bg-fia-yellow/10 transition-all 
-           transform hover:scale-[1.03] shadow-sm hover:shadow;
+    @apply bg-white text-fiaBlue border-2 border-fiaBlue px-6 py-4 
+           rounded-full font-karla font-semibold text-lg hover:bg-fiaBlue hover:text-white 
+           transition-all transform hover:scale-[1.02] shadow-md hover:shadow-lg;
   }
   
-  .fia-question {
-    @apply mb-8 p-8 bg-fia-white rounded-xl border border-fia-border shadow-md transition-all animate-card-flip;
-  }
-
-  .fia-input {
-    @apply p-4 border-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-fia-yellow/50 focus:border-fia-yellow shadow-sm
-           text-lg;
-  }
-  
-  .fia-label {
-    @apply block mb-3 text-base font-medium text-fia-charcoal;
-  }
-  
-  .fia-radio-group {
-    @apply space-y-4;
-  }
-  
-  .fia-radio-label {
-    @apply flex items-center space-x-3 p-5 border-2 border-fia-border rounded-lg cursor-pointer 
-           hover:bg-fia-teal/10 transition-all shadow-sm hover:shadow
-           max-w-full box-border;
-  }
-  
-  .fia-checkbox-label {
-    @apply flex items-start space-x-3 p-5 border-2 border-fia-border rounded-lg cursor-pointer 
-           hover:bg-fia-teal/10 transition-all shadow-sm hover:shadow
-           max-w-full box-border;
-  }
-
-  .fia-result-card {
-    @apply p-8 bg-fia-white rounded-xl border-2 border-fia-border shadow-md mb-8 transition-all hover:shadow-lg;
-  }
-  
-  .fia-result-section {
-    @apply p-6 border-2 border-fia-border rounded-lg bg-fia-white mb-6 shadow-sm;
-  }
-  
-  .fia-stepper {
-    @apply flex justify-center items-center space-x-4 mb-8 text-base text-fia-textLight;
-  }
-  
-  .fia-stepper-item {
-    @apply flex items-center;
-  }
-  
-  .fia-stepper-item-active {
-    @apply font-medium text-fia-yellow;
-  }
-  
-  .fia-profile-bar {
-    @apply h-10 rounded-lg overflow-hidden relative mb-5 bg-fia-border/30;
-  }
-  
-  .fia-tool-card {
-    @apply p-6 border-2 border-fia-border rounded-lg bg-white transition-all transform 
-           hover:scale-[1.02] hover:shadow-md;
-  }
-  
-  .fia-section-title {
-    @apply text-xl font-semibold mb-3;
-  }
-  
-  /* Profile colors updated */
-  .profile-dreamer {
-    @apply bg-fia-dreamer;
-  }
-  
-  .profile-peacemaker {
-    @apply bg-fia-peacemaker;
-  }
-  
-  .profile-caregiver {
-    @apply bg-fia-caregiver;
-  }
-  
-  .profile-rebel {
-    @apply bg-fia-rebel;
-  }
-  
-  .profile-achiever {
-    @apply bg-fia-achiever;
-  }
-  
-  /* Flashcard styles - enhanced */
-  .fia-flashcard {
-    @apply bg-fia-white rounded-xl border-2 border-fia-border shadow-2xl p-10 
-           transition-all transform hover:shadow-xl relative z-10
-           overflow-x-hidden;
-  }
-  
-  .fia-flashcard-container {
-    @apply py-16 px-4 sm:p-16 bg-fia-teal relative min-h-[60vh] flex items-center justify-center overflow-hidden
-           overflow-x-hidden;
-    perspective: 1500px;
-  }
-  
-  /* Split layout styles */
-  .fia-split-image {
-    @apply w-full md:w-1/2 h-64 md:h-auto bg-cover bg-center;
-  }
-  
-  .fia-split-content {
-    @apply w-full md:w-1/2 p-8 md:p-12;
-  }
-  
-  /* CTA styles - enhanced */
-  .fia-cta-button {
-    @apply bg-fia-charcoal text-fia-white text-lg font-medium rounded-lg px-8 py-5
-           transition-all transform hover:scale-105 hover:shadow-lg hover:bg-fia-burgundy;
-  }
-  
-  /* Visual indicators */
-  .fia-icon-card {
-    @apply w-16 h-16 rounded-xl flex items-center justify-center mb-6 text-fia-white;
-  }
-  
-  /* Progress bar styles - enhanced */
   .fia-progress {
-    @apply h-3 rounded-full bg-fia-border overflow-hidden;
+    @apply h-3 rounded-full bg-gray-200 overflow-hidden;
   }
   
   .fia-progress-bar {
-    @apply h-full transition-all duration-700 ease-out;
+    @apply h-full bg-gradient-to-r from-fiaPink to-fiaBlue transition-all duration-700 ease-out;
+  }
+
+  /* Mobile responsive fixes */
+  .mobile-fix {
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+  
+  @media (max-width: 390px) {
+    .mobile-fix {
+      padding: 0.75rem;
+    }
   }
 }
 
-/* Enhanced animations - added more dynamic effects */
-@keyframes slideUp {
+/* FIA Brand Animations */
+@keyframes fiaFadeIn {
   0% {
-    transform: translateY(30px);
     opacity: 0;
+    transform: translateY(20px);
   }
   100% {
+    opacity: 1;
     transform: translateY(0);
-    opacity: 1;
   }
 }
 
-@keyframes slideDown {
+@keyframes fiaScale {
   0% {
-    transform: translateY(-30px);
+    transform: scale(0.95);
     opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideLeft {
-  0% {
-    transform: translateX(30px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideRight {
-  0% {
-    transform: translateX(-30px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes cardFlipIn {
-  0% {
-    transform: rotateY(-10deg) translateY(20px);
-    opacity: 0;
-  }
-  100% {
-    transform: rotateY(0) translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes pulseOnce {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
-  }
-  50% {
-    transform: scale(1.05);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
   }
   100% {
     transform: scale(1);
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
+    opacity: 1;
   }
 }
 
-@keyframes floatAnimation {
+@keyframes fiaSpinLens {
   0% {
-    transform: translateY(0);
+    transform: rotate(0deg) scale(0.8);
+    opacity: 0;
   }
   50% {
-    transform: translateY(-10px);
+    transform: rotate(180deg) scale(1.1);
+    opacity: 1;
   }
   100% {
-    transform: translateY(0);
+    transform: rotate(360deg) scale(1);
+    opacity: 0;
   }
 }
 
-.animate-slide-up {
-  animation: slideUp 0.5s ease forwards;
+.animate-fia-fade-in {
+  animation: fiaFadeIn 0.6s ease-out forwards;
 }
 
-.animate-slide-down {
-  animation: slideDown 0.5s ease forwards;
+.animate-fia-scale {
+  animation: fiaScale 0.5s ease-out forwards;
 }
 
-.animate-slide-left {
-  animation: slideLeft 0.5s ease forwards;
-}
-
-.animate-slide-right {
-  animation: slideRight 0.5s ease forwards;
-}
-
-.animate-slide-up-delay-1 {
-  animation: slideUp 0.5s ease forwards;
-  animation-delay: 0.1s;
-  opacity: 0;
-}
-
-.animate-slide-up-delay-2 {
-  animation: slideUp 0.5s ease forwards;
-  animation-delay: 0.2s;
-  opacity: 0;
-}
-
-.animate-slide-up-delay-3 {
-  animation: slideUp 0.5s ease forwards;
-  animation-delay: 0.3s;
-  opacity: 0;
-}
-
-/* Enhanced flashcard transitions */
-.animate-card-flip {
-  animation: cardFlipIn 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-}
-
-.animate-pulse-once {
-  animation: pulseOnce 1s cubic-bezier(0.4, 0, 0.6, 1) forwards;
-  animation-delay: 0.2s;
-}
-
-.animate-float {
-  animation: floatAnimation 3s ease-in-out infinite;
+.animate-fia-spin-lens {
+  animation: fiaSpinLens 1.2s ease-in-out forwards;
 }
