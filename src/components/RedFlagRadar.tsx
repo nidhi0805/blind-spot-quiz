@@ -74,7 +74,7 @@ const RedFlagRadar: React.FC<RedFlagRadarProps> = ({ profile, onInteraction }) =
     <div className="relative">
       <div className="text-center mb-6">
         <h3 className="text-2xl font-bold text-fiaCharcoal mb-2 font-karla">
-          🧭 Red Flag Radar
+          Red Flag Radar
         </h3>
         <p className="text-gray-600">
           Tap each blip to reveal key warning signs for your pattern
@@ -117,31 +117,17 @@ const RedFlagRadar: React.FC<RedFlagRadarProps> = ({ profile, onInteraction }) =
               whileTap={{ scale: 0.9 }}
               aria-label={`Red flag: ${flag.message}`}
             >
-              <motion.div
+              <div
                 className={`w-4 h-4 rounded-full ${
                   isExplored ? 'bg-fiaCharcoal' : 'bg-red-500'
                 } relative`}
-                animate={{
-                  boxShadow: isExplored 
-                    ? '0 0 0 0 rgba(34, 34, 34, 0)'
-                    : [
-                        '0 0 0 0 rgba(239, 68, 68, 0.7)',
-                        '0 0 0 10px rgba(239, 68, 68, 0)',
-                        '0 0 0 0 rgba(239, 68, 68, 0)'
-                      ]
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: isExplored ? 0 : Infinity,
-                  ease: "easeInOut"
-                }}
               >
                 {isExplored && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-white text-xs">✓</span>
                   </div>
                 )}
-              </motion.div>
+              </div>
             </motion.div>
           );
         })}
@@ -182,7 +168,7 @@ const RedFlagRadar: React.FC<RedFlagRadarProps> = ({ profile, onInteraction }) =
             animate={{ opacity: 1, scale: 1 }}
             className="mt-2 text-fiaBlue font-medium"
           >
-            ✅ Nice work, Agent. Awareness is power.
+            Nice work, Agent. Awareness is power.
           </motion.div>
         )}
       </div>
