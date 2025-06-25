@@ -10,8 +10,7 @@ interface InteractiveChartProps {
 
 const InteractiveChart: React.FC<InteractiveChartProps> = ({ profiles, dominantProfile }) => {
   const [hoveredProfile, setHoveredProfile] = useState<string | null>(null);
-  const DreamerImage = "/img/Dreamer.png"; 
-  const Peacemaker="img/Peacemaker.png";
+
 
   // Colors for each profile
   const profileColors: {[key: string]: string} = {
@@ -29,8 +28,8 @@ const InteractiveChart: React.FC<InteractiveChartProps> = ({ profiles, dominantP
   // Caricature mapping
   const getProfileCaricature = (profileId: string) => {
     const caricatureMap: {[key: string]: string} = {
-      dreamer: DreamerImage,
-      peacemaker: Peacemaker, 
+      dreamer: "💭",
+      peacemaker: "🕊️", 
       caregiver: "🤗",
       rebel: "⚡",
       achiever: "🏆",

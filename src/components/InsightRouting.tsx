@@ -44,7 +44,7 @@ const InsightRouting: React.FC<InsightRoutingProps> = ({ profile, flagsExplored 
       dreamer: [
         {
           id: 'eva-chat',
-          title: 'Talk to Eva',
+          title: 'Talk to Chatbot',
           description: 'Decompress & plan your next move with our AI coach',
           icon: <MessageSquare className="h-5 w-5" />,
           action: 'Continue Your Journey',
@@ -71,7 +71,7 @@ const InsightRouting: React.FC<InsightRoutingProps> = ({ profile, flagsExplored 
       caregiver: [
         {
           id: 'eva-chat',
-          title: 'Talk to Eva',
+          title: 'Talk to Chatbot',
           description: 'Get support for setting healthy boundaries without guilt',
           icon: <MessageSquare className="h-5 w-5" />,
           action: 'Continue Your Journey',
@@ -98,7 +98,7 @@ const InsightRouting: React.FC<InsightRoutingProps> = ({ profile, flagsExplored 
       leader: [
         {
           id: 'eva-chat',
-          title: 'Talk to Eva',
+          title: 'Talk to Chatbot',
           description: 'Explore the strength that comes through vulnerability',
           icon: <MessageSquare className="h-5 w-5" />,
           action: 'Continue Your Journey',
@@ -125,7 +125,7 @@ const InsightRouting: React.FC<InsightRoutingProps> = ({ profile, flagsExplored 
       default: [
         {
           id: 'eva-chat',
-          title: 'Talk to Eva',
+          title: 'Talk to Chatbot',
           description: 'Get personalized guidance for your unique pattern',
           icon: <MessageSquare className="h-5 w-5" />,
           action: 'Continue Your Journey',

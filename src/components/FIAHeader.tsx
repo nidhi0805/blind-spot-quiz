@@ -10,12 +10,12 @@ const FIAHeader: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="max-w-6xl mx-auto flex items-center justify-between">
+      <div className="w-full flex items-center justify-between">
         <div className="flex items-center space-x-4">
           {/* FIA Logo */}
-          <div className="w-12 h-12 flex items-center justify-center">
+          <div className="w-12 h-12">
             <img 
-              src="/lovable-uploads/symbol-square.png" 
+              src="img/symbol-tiktok.png" 
               alt="Feminine Intelligence Agency Logo" 
               className="w-12 h-12 object-contain"
             />

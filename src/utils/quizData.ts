@@ -118,7 +118,7 @@ export const quizQuestions: Question[] = [
       {
         id: "q4a1",
         text: "A person standing on a mountaintop looking at the horizon",
-        imageSrc: "/placeholder.svg",
+        imageSrc: "/img/Mountain.png",
         profileWeights: [
           { profile: "explorer", weight: 3 },
           { profile: "dreamer", weight: 2 }

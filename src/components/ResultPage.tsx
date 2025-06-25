@@ -146,7 +146,7 @@ const ResultPage: React.FC = () => {
                   className="fia-btn-secondary text-lg px-8 py-4"
                 >
                   <MessageSquare className="mr-2 h-5 w-5" />
-                  💬 Chat with Eva – Your FIA Coach
+                  Chat with our Chatbot - Your FIA Coach
                 </Button>
                 <p className="text-sm text-gray-600 mt-2">
                   Get personalized guidance and support

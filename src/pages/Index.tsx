@@ -71,7 +71,7 @@ const Landing: React.FC = () => {
               
               <p className="text-xl md:text-2xl text-gray-600 mb-10 max-w-4xl mx-auto leading-relaxed">
                 Discover how you show up in emotionally complex relationships and learn to protect yourself from manipulation. 
-                <strong className="text-fiaCharcoal"> You've got this!</strong> 💪
+                <strong className="text-fiaCharcoal"> You've got this!</strong>
               </p>
 
               <MotionButton

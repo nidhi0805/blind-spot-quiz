@@ -69,7 +69,7 @@ const ResultsAnimation: React.FC<ResultsAnimationProps> = ({ onComplete, canSkip
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          You've got this! 💪
+          You've got this!
         </motion.p>
 
         {/* Skip button */}

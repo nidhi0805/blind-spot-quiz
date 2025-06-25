@@ -36,7 +36,7 @@ const FIAChatbot: React.FC = () => {
               </div>
               
               <h1 className="text-3xl font-bold text-fiaCharcoal mb-4 font-karla">
-                FIA Chatbot - Eva
+                FIA Chatbot
               </h1>
               
               <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">

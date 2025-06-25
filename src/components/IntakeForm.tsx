@@ -136,7 +136,7 @@ const IntakeForm: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              Share a bit about yourself to get personalized insights. You've got this! 💪
+              Share a bit about yourself to get personalized insights. You've got this!
             </motion.p>
           </div>
 
